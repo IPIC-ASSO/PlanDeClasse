@@ -2,24 +2,21 @@ package com.ipiccie.plandeclasse;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
@@ -76,16 +73,6 @@ public class NouvelleClasse extends AppCompatActivity {
                 grille.setVisibility(View.VISIBLE);
                 findViewById(R.id.enregistrer_salle).setVisibility(View.VISIBLE);
                 findViewById(R.id.txt_tableau).setVisibility(View.VISIBLE);
-
-                grille.setOnItemClickListener((a, v, position, id) -> {
-                    Log.d(TAG, "onCreate: "+"y");
-                    Toast.makeText(NouvelleClasse.this, "Selected :" + " " + position,Toast.LENGTH_LONG).show();
-                    if (places[position] == 1 ){
-                        places[position] = 0;
-                    }else{
-                        places[position] = 1;
-                    }
-                });
             }else{
                 Toast.makeText(this, "Remplissez tous les champs", Toast.LENGTH_SHORT).show();
             }
