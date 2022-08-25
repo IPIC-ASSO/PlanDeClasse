@@ -20,10 +20,115 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Nom de l'élève"
+                android:hint="Nom de l'élève *"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:text="" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Taille"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checkedButton="@id/radioButton6"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButton4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Grande" />
+
+                <RadioButton
+                    android:id="@+id/radioButton6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Moyenne" />
+
+                <RadioButton
+                    android:id="@+id/radioButton5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="petite" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Vue"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checkedButton="@id/radioButton8"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButton7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bonne" />
+
+                <RadioButton
+                    android:id="@+id/radioButton8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Moyenne" />
+
+                <RadioButton
+                    android:id="@+id/radioButton9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Mauvaise" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Placement: *"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/groupe_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="1er rang" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="dernier rang" />
+
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:checked="true"
+                    android:text="sans Importance" />
+            </RadioGroup>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -68,46 +173,129 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Placement:"
+                android:text="Sérieux de l'élève"
                 android:textStyle="bold" />
 
             <RadioGroup
-                android:id="@+id/groupe_radio"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:checkedButton="@id/radioButton12"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton"
+                    android:id="@+id/radioButton10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="devant" />
+                    android:layout_weight="1"
+                    android:text="en difficulté" />
 
                 <RadioButton
-                    android:id="@+id/radioButton2"
+                    android:id="@+id/radioButton11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="derrière" />
+                    android:layout_weight="1"
+                    android:text="à l'aise" />
 
                 <RadioButton
-                    android:id="@+id/radioButton3"
+                    android:id="@+id/radioButton12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:checked="true"
-                    android:text="sans Importance" />
+                    android:layout_weight="1"
+                    android:text="dans la moyenne" />
             </RadioGroup>
 
-            <RadioButton
-                android:id="@+id/isoler"
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checkedButton="@id/radioButton15"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButton13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="agité" />
+
+                <RadioButton
+                    android:id="@+id/radioButton14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="calme" />
+
+                <RadioButton
+                    android:id="@+id/radioButton15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="dans la moyenne" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Isoler l'élève" />
+                android:text="Genre *"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButton16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Fille" />
+
+                <RadioButton
+                    android:id="@+id/radioButton17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="garçon" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Autre"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBox4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="dyslexique" />
+
+                <CheckBox
+                    android:id="@+id/checkBox6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="isoler" />
+
+                <CheckBox
+                    android:id="@+id/checkBox5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="élève moteur" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -119,7 +307,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Niveau de priorité de l'élève" />
+                    android:text="Importance du traitement de l'élève" />
 
                 <SeekBar
                     android:id="@+id/priorite"
@@ -128,7 +316,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:max="4"
-                    android:progress="2" />
+                    android:progress="0" />
             </LinearLayout>
 
             <EditText
@@ -138,6 +326,7 @@
                 android:ems="10"
                 android:hint="Commentaires"
                 android:inputType="textPersonName"
+                android:minHeight="48dp"
                 android:text=""
                 android:textAlignment="gravity" />
 

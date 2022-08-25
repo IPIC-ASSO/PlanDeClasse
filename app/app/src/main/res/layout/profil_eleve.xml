@@ -35,5 +35,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="ELEVE BOF" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:tint="#FFFFFF00"
+            app:srcCompat="@drawable/ic_baseline_adjust_24"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

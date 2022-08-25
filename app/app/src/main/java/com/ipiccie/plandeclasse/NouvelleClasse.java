@@ -5,6 +5,10 @@ import static android.content.ContentValues.TAG;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,11 +16,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Arrays;
@@ -90,6 +96,7 @@ public class NouvelleClasse extends AppCompatActivity {
             prefs.edit().putString(nomDeClasse.getText().toString(),commentaires.getText().toString()).apply();
             config.edit().putString(nomDeClasse.getText().toString(), str.toString()).apply();
             ajouteClasse(nomDeClasse.getText().toString());
+            //dessine(places,Integer.parseInt(colonne.getText().toString()));
             Intent intention = new Intent(this, ListeEleves.class);
             intention.putExtra("classe",nomDeClasse.getText().toString());
             startActivity(intention);
@@ -132,5 +139,26 @@ public class NouvelleClasse extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void dessine (int[] matrix, int colonnes){
+        Bitmap bitmap = Bitmap.createBitmap(108, 108, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        int dimension = Math.min(108/colonnes,108/(matrix.length/colonnes));
+        Paint colors = new Paint();
+        colors.setARGB(255,255,255,255);
+        for (int x = 0; x<colonnes; x++){
+            for (int y = 0; y<matrix.length/colonnes; y++){
+
+                if (matrix[x+y*colonnes] == 1) canvas.drawRect(x*dimension+1F,-y*dimension+1F,(x+1F)*dimension,-y*dimension+dimension/2F,colors);
+                canvas.drawRect(100,100,200,200,colors);
+                Log.d(TAG, "dessine: "+(x*dimension+1F)+","+(y*dimension+1F)+","+((x+1F)*dimension)+","+(y*dimension+dimension/2F)+" "+dimension);
+            }
+        }
+        ImageView image = new ImageView(this);
+        image.setImageBitmap(bitmap);
+        AlertDialog.Builder cons = new AlertDialog.Builder(this);
+        cons.setView(image);
+        cons.show();
     }
 }
