@@ -75,4 +75,13 @@ public class MainActivity extends AppCompatActivity {
             liste.addView(vue);
         }
     }
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: "+prefs.getAll());
+        LinearLayout liste = findViewById(R.id.liste_classes);
+        liste.removeAllViews();
+        obtienClasse0();
+        inflation0(classes);
+        super.onResume();
+    }
 }
