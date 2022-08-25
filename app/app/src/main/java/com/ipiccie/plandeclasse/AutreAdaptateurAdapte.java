@@ -12,16 +12,21 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
+import java.util.Objects;
+
 public class AutreAdaptateurAdapte extends BaseAdapter {
     private final LayoutInflater layoutInflater;
     private final Context context;
     private final String[] eleves;
+    private final String eleveAct;
     private final boolean[] selection;
 
-    public AutreAdaptateurAdapte(Context aContext, String[] eleves, boolean[] selection) {
+    public AutreAdaptateurAdapte(Context aContext, String[] eleves, boolean[] selection, String eleveAct) {
+
         this.context = aContext;
         this.eleves = eleves;
         this.selection = selection;
+        this.eleveAct = eleveAct;
         layoutInflater = LayoutInflater.from(aContext);
     }
 
@@ -61,6 +66,12 @@ public class AutreAdaptateurAdapte extends BaseAdapter {
         holder.coche.setOnClickListener(v -> {
             selection[pos] = !selection[pos];
         });
+        if (Objects.equals(eleveAct, eleve)){
+            holder.coche.setVisibility(View.GONE);
+        }else{
+            holder.coche.setVisibility(View.VISIBLE);
+        }
+        Log.d(TAG, "getView: "+eleveAct+" "+eleve+ " "+holder.coche.getVisibility());
         return convertView;
     }
 

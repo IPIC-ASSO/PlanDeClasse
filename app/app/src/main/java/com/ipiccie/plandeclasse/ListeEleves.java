@@ -213,7 +213,7 @@ public class ListeEleves extends AppCompatActivity {
             AlertDialog.Builder constr = new AlertDialog.Builder(this);
             constr.setTitle("Doit éviter...");
             ListView liste = new ListView(this);
-            AutreAdaptateurAdapte customAdapter = new AutreAdaptateurAdapte(getApplicationContext(), eleves, selection);
+            AutreAdaptateurAdapte customAdapter = new AutreAdaptateurAdapte(getApplicationContext(), eleves, selection, nom.getText().toString());
             liste.setAdapter(customAdapter);
             constr.setView(liste);
             constr.setPositiveButton("Valider", (dialog, which) -> dialog.dismiss());
@@ -223,7 +223,7 @@ public class ListeEleves extends AppCompatActivity {
             AlertDialog.Builder constr = new AlertDialog.Builder(this);
             constr.setTitle("Devrait être avec...");
             ListView liste = new ListView(this);
-            AutreAdaptateurAdapte customAdapter = new AutreAdaptateurAdapte(getApplicationContext(), eleves, selection2);
+            AutreAdaptateurAdapte customAdapter = new AutreAdaptateurAdapte(getApplicationContext(), eleves, selection2, nom.getText().toString());
             liste.setAdapter(customAdapter);
             constr.setView(liste);
             constr.setPositiveButton("Valider", (dialog, which) -> dialog.dismiss());
