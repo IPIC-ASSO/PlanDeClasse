@@ -75,6 +75,7 @@
                 android:textStyle="bold" />
 
             <RadioGroup
+                android:id="@+id/groupe_radio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -103,7 +104,7 @@
             </RadioGroup>
 
             <RadioButton
-                android:id="@+id/radioButton4"
+                android:id="@+id/isoler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Isoler l'élève" />
@@ -121,7 +122,7 @@
                     android:text="Niveau de priorité de l'élève" />
 
                 <SeekBar
-                    android:id="@+id/seekBar"
+                    android:id="@+id/priorite"
                     style="@style/Widget.AppCompat.SeekBar.Discrete"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
