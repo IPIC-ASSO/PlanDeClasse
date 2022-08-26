@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <EditText
@@ -33,25 +33,26 @@
                 android:textStyle="bold" />
 
             <RadioGroup
+                android:id="@+id/taille"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checkedButton="@id/radioButton6"
+                android:checkedButton="@id/taille_2"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton4"
+                    android:id="@+id/taille_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Grande" />
 
                 <RadioButton
-                    android:id="@+id/radioButton6"
+                    android:id="@+id/taille_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Moyenne" />
 
                 <RadioButton
-                    android:id="@+id/radioButton5"
+                    android:id="@+id/taille_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="petite" />
@@ -67,30 +68,28 @@
                 android:textStyle="bold" />
 
             <RadioGroup
+                android:id="@+id/vue"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checkedButton="@id/radioButton8"
+                android:checkedButton="@id/vue_2"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton7"
+                    android:id="@+id/vue_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="Bonne" />
 
                 <RadioButton
-                    android:id="@+id/radioButton8"
+                    android:id="@+id/vue_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="Moyenne" />
 
                 <RadioButton
-                    android:id="@+id/radioButton9"
+                    android:id="@+id/vue_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="Mauvaise" />
             </RadioGroup>
 
@@ -102,32 +101,29 @@
                 android:textStyle="bold" />
 
             <RadioGroup
-                android:id="@+id/groupe_radio"
+                android:id="@+id/placement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checkedButton="@id/plac_3"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton"
+                    android:id="@+id/plac_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="1er rang" />
+                    android:text="devant" />
 
                 <RadioButton
-                    android:id="@+id/radioButton2"
+                    android:id="@+id/plac_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="dernier rang" />
+                    android:text="au fond" />
 
                 <RadioButton
-                    android:id="@+id/radioButton3"
+                    android:id="@+id/plac_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:checked="true"
-                    android:text="sans Importance" />
+                    android:text="sans importance" />
             </RadioGroup>
 
             <LinearLayout
@@ -147,7 +143,6 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
                     android:text="(liste)" />
             </LinearLayout>
 
@@ -180,58 +175,55 @@
                 android:textStyle="bold" />
 
             <RadioGroup
+                android:id="@+id/difficultes"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checkedButton="@id/radioButton12"
+                android:checkedButton="@id/diff_3"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton10"
+                    android:id="@+id/diff_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="en difficulté" />
+                    android:text="difficultés" />
 
                 <RadioButton
-                    android:id="@+id/radioButton11"
+                    android:id="@+id/diff_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="à l'aise" />
 
                 <RadioButton
-                    android:id="@+id/radioButton12"
+                    android:id="@+id/diff_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="dans la moyenne" />
             </RadioGroup>
 
             <RadioGroup
+                android:id="@+id/attitude"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checkedButton="@id/radioButton15"
+                android:checkedButton="@id/att_3"
+                android:gravity="fill_vertical"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton13"
+                    android:id="@+id/att_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="agité" />
 
                 <RadioButton
-                    android:id="@+id/radioButton14"
+                    android:id="@+id/att_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="calme" />
 
                 <RadioButton
-                    android:id="@+id/radioButton15"
+                    android:id="@+id/att_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="dans la moyenne" />
             </RadioGroup>
 
@@ -243,19 +235,20 @@
                 android:textStyle="bold" />
 
             <RadioGroup
+                android:id="@+id/genre"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton16"
+                    android:id="@+id/fille"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Fille" />
 
                 <RadioButton
-                    android:id="@+id/radioButton17"
+                    android:id="@+id/garcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -275,24 +268,26 @@
                 android:orientation="horizontal">
 
                 <CheckBox
-                    android:id="@+id/checkBox4"
+                    android:id="@+id/dys"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeTextType="uniform"
                     android:text="dyslexique" />
 
                 <CheckBox
-                    android:id="@+id/checkBox6"
+                    android:id="@+id/isoler"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
                     android:text="isoler" />
 
                 <CheckBox
-                    android:id="@+id/checkBox5"
+                    android:id="@+id/moteur"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
                     android:text="élève moteur" />
 
             </LinearLayout>
@@ -334,7 +329,8 @@
                 android:id="@+id/enregistrer_eleve"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enregistrer" />
+                android:text="Enregistrer"
+                android:layout_marginBottom="5dp"/>
 
 
         </LinearLayout>

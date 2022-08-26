@@ -3,6 +3,7 @@ package com.ipiccie.plandeclasse;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -68,6 +71,11 @@ public class ListeEleves extends AppCompatActivity {
         inflation();
         com.google.android.material.floatingactionbutton.FloatingActionButton plus = findViewById(R.id.nouv_eleve);
         plus.setOnClickListener(v->generateurEleve(-1));
+        findViewById(R.id.vers_realiser_plan).setOnClickListener(v -> {
+            Intent intention = new Intent(this, ParametresAlgorithme.class);
+            intention.putExtra("classe",classe);
+            startActivity(intention);
+        });
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -99,9 +107,12 @@ public class ListeEleves extends AppCompatActivity {
             TextView nom = vue.findViewById(R.id.nom);
             nom.setText(eleve);
             TextView sup = vue.findViewById(R.id.suplement);
-            sup.setText(donnees.get(indices.getInt(eleve+classe,0))[7]);
+            sup.setText(donnees.get(indices.getInt(eleve+classe,0))[14]);
             vue.setOnClickListener(v -> generateurEleve(indices.getInt(eleve+classe,0)));
             liste.addView(vue);
+        }
+        if (nbEleves == eleves.length) {
+            findViewById(R.id.vers_realiser_plan).setVisibility(View.VISIBLE);
         }
     }
     @Override
@@ -148,7 +159,7 @@ public class ListeEleves extends AppCompatActivity {
             e.printStackTrace();
         }
         if (dataList.isEmpty()) {
-            dataList.add(new String[]{"classe", "eleve", "evite", "n_evite_pas", "placement", "isoler", "priorite", "commentaire"});
+            dataList.add(new String[]{"classe", "eleve", "evite", "n_evite_pas","taille","vue", "placement", "difficultés","attitude","genre","dyslexique","isoler","moteur", "priorite", "commentaire"});
         }
         return dataList;
     }
@@ -165,8 +176,15 @@ public class ListeEleves extends AppCompatActivity {
         Button correcte = vue.findViewById(R.id.liste_correcte);
         EditText nom = vue.findViewById(R.id.nom_eleve);
         EditText commentaire = vue.findViewById(R.id.txt_commentaires);
-        RadioGroup plac = vue.findViewById(R.id.groupe_radio);
-        RadioButton iso = vue.findViewById(R.id.isoler);
+        RadioGroup taille = vue.findViewById(R.id.taille);
+        RadioGroup vision = vue.findViewById(R.id.vue);
+        RadioGroup plac = vue.findViewById(R.id.placement);
+        RadioGroup difficultes = vue.findViewById(R.id.difficultes);
+        RadioGroup attitude = vue.findViewById(R.id.attitude);
+        RadioGroup genre = vue.findViewById(R.id.genre);
+        CheckBox dys = vue.findViewById(R.id.dys);
+        CheckBox iso = vue.findViewById(R.id.isoler);
+        CheckBox moteur = vue.findViewById(R.id.moteur);
         SeekBar prio = vue.findViewById(R.id.priorite);
         int compte = 0; //nombre d'élèves enregistrés dans la classe
         for (String eleve: eleves){
@@ -177,20 +195,77 @@ public class ListeEleves extends AppCompatActivity {
         Arrays.fill(selection2,false);
         Arrays.fill(selection,false);
         if (indice>=0){ //chargement des données enregistrées sur l'élève
+            try{
+
+
             String[] d = donnees.get(indice);
             nom.setText(d[1]);
-            commentaire.setText(d[7]);
-            iso.setChecked(Boolean.parseBoolean(d[5]));
+            commentaire.setText(d[14]);
+            dys.setChecked(Boolean.parseBoolean(d[10]));
+            iso.setChecked(Boolean.parseBoolean(d[11]));
+            moteur.setChecked(Boolean.parseBoolean(d[12]));
             prio.setProgress(Integer.parseInt(d[6]));
-            switch (Integer.parseInt(d[4])){
+            switch (Integer.parseInt(d[4])){    //taille
                 case 0:
-                    plac.check(R.id.radioButton);
+                    plac.check(R.id.taille_1);
                     break;
-                case 1:
-                    plac.check(R.id.radioButton2);
+                case 2:
+                    plac.check(R.id.taille_3);
                     break;
                 default:
-                    plac.check(R.id.radioButton3);
+                    plac.check(R.id.taille_2);
+                    break;
+            }
+            switch (Integer.parseInt(d[5])){    //vue
+                case 0:
+                    plac.check(R.id.vue_1);
+                    break;
+                case 2:
+                    plac.check(R.id.vue_3);
+                    break;
+                default:
+                    plac.check(R.id.vue_2);
+                    break;
+            }
+            switch (Integer.parseInt(d[6])){    //placement
+                case 0:
+                    plac.check(R.id.plac_1);
+                    break;
+                case 1:
+                    plac.check(R.id.plac_2);
+                    break;
+                default:
+                    plac.check(R.id.plac_3);
+                    break;
+            }
+            switch (Integer.parseInt(d[7])){    //difficultés
+                case 0:
+                    plac.check(R.id.diff_1);
+                    break;
+                case 1:
+                    plac.check(R.id.diff_2);
+                    break;
+                default:
+                    plac.check(R.id.diff_3);
+                    break;
+            }
+            switch (Integer.parseInt(d[8])){    //attitude
+                case 0:
+                    plac.check(R.id.att_1);
+                    break;
+                case 1:
+                    plac.check(R.id.att_2);
+                    break;
+                default:
+                    plac.check(R.id.att_3);
+                    break;
+            }
+            switch (Integer.parseInt(d[9])){    //genre
+                case 0:
+                    plac.check(R.id.fille);
+                    break;
+                case 1:
+                    plac.check(R.id.garcon);
                     break;
             }
             StringTokenizer stEvite = new StringTokenizer(d[2], ",");
@@ -205,6 +280,10 @@ public class ListeEleves extends AppCompatActivity {
             }
             Log.d(TAG, "generateurEleve: "+Arrays.toString(selection));
             Log.d(TAG, "generateurEleve: "+Arrays.toString(selection2));
+            }catch (Exception e){
+                Log.e(TAG, "generateurEleve: ", e);
+                Toast.makeText(this,"incompatibilité de version. Désinstallez puis réinstallez l'application",Toast.LENGTH_LONG).show();
+            }
         }
         int[] eviteIndices = new int[compte];
         int[] correcteIndices = new int[compte];
@@ -230,7 +309,7 @@ public class ListeEleves extends AppCompatActivity {
             constr.show();
         });
         enregistrer.setOnClickListener(w ->{
-            if (nbEleves<eleves.length && !nom.getText().toString().equals("") &&! (Arrays.asList(eleves).contains(nom.getText().toString()) && indice<0)){
+            if (nbEleves<eleves.length && !nom.getText().toString().equals("") && !(genre.getCheckedRadioButtonId()!= R.id.fille && genre.getCheckedRadioButtonId()!=R.id.garcon) &&! (Arrays.asList(eleves).contains(nom.getText().toString()) && indice<0)){
                 if (indice>=0){ //élève déjà enregistré (modifications)
                     eleves[Arrays.asList(eleves).indexOf(donnees.get(indice)[1])] = nom.getText().toString();
                 }else{
@@ -251,21 +330,82 @@ public class ListeEleves extends AppCompatActivity {
                 for (int correcteI : correcteIndices) {
                     strCorrecte.append(correcteI).append(",");
                 }
-                String placement;     //enregiste le bouton sélectionné
+                String tailleE; //enregiste le bouton sélectionné
+                String vueE;
+                String placement;
+                String difE;
+                String attE;
+                String genE;
+                switch (taille.getCheckedRadioButtonId()){
+                    case R.id.taille_1:
+                        tailleE = "0";
+                        break;
+                    case R.id.taille_3:
+                        tailleE = "2";
+                        break;
+                    case R.id.taille_2:
+                    default:
+                        tailleE = "1";
+                        break;
+                }
+                switch (vision.getCheckedRadioButtonId()){
+                    case R.id.vue_1:
+                        vueE = "0";
+                        break;
+                    case R.id.vue_3:
+                        vueE = "2";
+                        break;
+                    case R.id.vue_2:
+                    default:
+                        vueE = "1";
+                        break;
+                }
                 switch (plac.getCheckedRadioButtonId()){
-                    case R.id.radioButton:
+                    case R.id.plac_1:
                         placement = "0";
                         break;
-                    case R.id.radioButton2:
+                    case R.id.plac_2:
                         placement = "1";
                         break;
-                    case R.id.radioButton3:
+                    case R.id.plac_3:
                     default:
                         placement = "2";
                         break;
                 }
+                switch (difficultes.getCheckedRadioButtonId()){
+                    case R.id.diff_1:
+                        difE = "0";
+                        break;
+                    case R.id.diff_2:
+                        difE = "1";
+                        break;
+                    case R.id.diff_3:
+                    default:
+                        difE = "2";
+                        break;
+                }
+                switch (attitude.getCheckedRadioButtonId()){
+                    case R.id.att_1:
+                        attE = "0";
+                        break;
+                    case R.id.att_2:
+                        attE = "1";
+                        break;
+                    case R.id.att_3:
+                    default:
+                        attE = "2";
+                        break;
+                }
+                switch (genre.getCheckedRadioButtonId()){
+                    case R.id.fille:
+                        genE = "0";
+                        break;
+                    default:
+                        genE = "1";
+                        break;
+                }
 
-                String[] d = new String[]{classe,nom.getText().toString(),strEvite.toString(),strCorrecte.toString(),placement,String.valueOf(iso.isChecked()),String.valueOf(prio.getProgress()),commentaire.getText().toString()};
+                String[] d = new String[]{classe,nom.getText().toString(),strEvite.toString(),strCorrecte.toString(),tailleE, vueE,placement,difE,attE,genE,String.valueOf(dys.isChecked()),String.valueOf(iso.isChecked()),String.valueOf(moteur.isChecked()),String.valueOf(prio.getProgress()),commentaire.getText().toString()};
                 Log.d(TAG, "generateurEleve: nouvelle ligne "+Arrays.toString(d));
                 if (indice>=0){
                     indices.edit().remove(donnees.get(indice)[1]+classe).apply();
@@ -275,6 +415,9 @@ public class ListeEleves extends AppCompatActivity {
                     indices.edit().putInt(nom.getText().toString()+classe,donnees.size()).apply();
                     donnees.add(d);
                 }
+                ProgressBar barre = new ProgressBar(this);
+                barre.setIndeterminate(true);
+                show.setView(barre);
                 writeToCSVFile(donnees);
                 inflation();
             }else if(nbEleves>=eleves.length) {
@@ -282,10 +425,9 @@ public class ListeEleves extends AppCompatActivity {
             }else if(Arrays.asList(eleves).contains(nom.getText().toString()) && indice <0){
                 Toast.makeText(this,"Enregistrement impossible. Un élève du même nom existe déjà dans cette classe.",Toast.LENGTH_LONG).show();
             }else{
-                Toast.makeText(this,"Enregistrement impossible. Veuillez renseigner le nom de l'élève.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Enregistrement impossible. Veuillez remplir tous les champs marqués d'une astérisque.",Toast.LENGTH_LONG).show();
             }
             show.dismiss();
-
         });
         show.show();
     }

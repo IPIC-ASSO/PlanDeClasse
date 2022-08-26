@@ -16,11 +16,11 @@
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ScrollView
+        android:id="@+id/defille"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/indications"
@@ -62,14 +62,14 @@
                     android:layout_height="match_parent">
 
                     <RadioButton
-                        android:id="@+id/radioButton23"
+                        android:id="@+id/affinites_e"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:text="affinités (exclusion)" />
 
                     <SeekBar
-                        android:id="@+id/seekBar7"
+                        android:id="@+id/affinites_e_niv"
                         style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -83,14 +83,14 @@
                     android:layout_height="match_parent">
 
                     <RadioButton
-                        android:id="@+id/radioButton24"
+                        android:id="@+id/affinites_i"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:text="affinités (inclusion)" />
 
                     <SeekBar
-                        android:id="@+id/seekBar9"
+                        android:id="@+id/affinites_i_niv"
                         style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -104,13 +104,13 @@
                     android:layout_height="match_parent">
 
                     <RadioButton
-                        android:id="@+id/radioButton25"
+                        android:id="@+id/vision"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="vue" />
 
                     <SeekBar
-                        android:id="@+id/seekBar8"
+                        android:id="@+id/vision_niv"
                         style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -124,13 +124,13 @@
                     android:layout_height="match_parent">
 
                     <RadioButton
-                        android:id="@+id/radioButton27"
+                        android:id="@+id/haut"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="taille" />
 
                     <SeekBar
-                        android:id="@+id/seekBar10"
+                        android:id="@+id/haut_niv"
                         style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -142,17 +142,16 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:layout_editor_absoluteY="144dp">
+                    android:layout_height="match_parent">
 
                     <RadioButton
-                        android:id="@+id/radioButton26"
+                        android:id="@+id/alternance_fg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="alternance F/G" />
 
                     <SeekBar
-                        android:id="@+id/seekBar13"
+                        android:id="@+id/alternance_fg_niv"
                         style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -167,15 +166,14 @@
                     android:layout_height="match_parent" >
 
                     <RadioButton
-                        android:id="@+id/radioButton28"
+                        android:id="@+id/alternance_ac"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:autoSizeTextType="none"
                         android:text="alternance agité/calme"
                         android:textSize="14sp" />
 
                     <SeekBar
-                        android:id="@+id/seekBar12"
+                        android:id="@+id/alternance_ac_niv"
                         style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -189,16 +187,14 @@
                     android:layout_height="match_parent" >
 
                     <RadioButton
-                        android:id="@+id/radioButton29"
+                        android:id="@+id/alternance_fd"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:autoSizeTextType="none"
-                        android:ellipsize="none"
                         android:text="alternance fort/en difficulté"
                         android:textSize="14sp" />
 
                     <SeekBar
-                        android:id="@+id/seekBar11"
+                        android:id="@+id/alternance_fd_niv"
                         style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -212,14 +208,34 @@
                     android:layout_height="match_parent" >
 
                     <RadioButton
-                        android:id="@+id/radioButton30"
+                        android:id="@+id/associer_dm"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:checked="true"
+                        android:checked="false"
                         android:text="Associer dislexiques/elèves moteurs" />
 
                     <SeekBar
-                        android:id="@+id/seekBar14"
+                        android:id="@+id/associer_dm_niv"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:max="4"
+                        android:progress="2" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <RadioButton
+                        android:id="@+id/ordre_alpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="ordre alphabétique" />
+
+                    <SeekBar
+                        android:id="@+id/ordre_alpha_niv"
                         style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -228,8 +244,10 @@
                         android:progress="2" />
                 </TableRow>
             </TableLayout>
+
+
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/realiser_plan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -243,8 +261,14 @@
                 android:text="differentes configurations vous seront proposées"
                 android:textStyle="italic"
                 android:textAlignment="center"/>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="100sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/defille" />
         </LinearLayout>
     </ScrollView>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

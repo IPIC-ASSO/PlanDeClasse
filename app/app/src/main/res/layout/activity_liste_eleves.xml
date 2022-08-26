@@ -5,11 +5,13 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".ListeEleves">
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/nouv_eleve"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="60dp"
         android:clickable="true"
         android:contentDescription="ajouter un élève"
         app:backgroundTint="#23FB27"
@@ -28,14 +30,15 @@ tools:context=".ListeEleves">
     </ScrollView>
 
     <Button
-        android:id="@+id/vers_plan"
+        android:id="@+id/vers_realiser_plan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Voir le plan de classe"
-        android:layout_margin="40dp"
+        android:layout_margin="20dp"
         android:backgroundTint="@color/rouge"
+        android:text="Réaliser un plan de classe"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 
