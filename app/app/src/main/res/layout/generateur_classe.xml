@@ -59,54 +59,6 @@
                     android:text="" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/appliquer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Appliquer" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <TextView
-                android:id="@+id/txt_tableau"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="tableau|devant de la salle"
-                android:textAlignment="center"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <GridView
-                        android:id="@+id/grille"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#757575"
-                        android:cacheColorHint="#777777"
-                        android:foregroundTint="#858585"
-                        android:gravity="center"
-                        android:numColumns="50"
-                        android:stretchMode="columnWidth"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
             <EditText
                 android:id="@+id/commentaires_classe_txt"
                 android:layout_width="match_parent"
@@ -116,12 +68,11 @@
                 android:inputType="textPersonName" />
 
             <Button
-                android:id="@+id/enregistrer_salle"
+                android:id="@+id/appliquer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Suivant"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:text="Voir" />
+
         </LinearLayout>
     </ScrollView>
 

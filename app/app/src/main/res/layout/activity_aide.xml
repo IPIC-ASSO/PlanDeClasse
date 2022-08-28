@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    tools:context=".Aide">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AIDE"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Créer une classe"
+                android:background="#94FFEA"
+                android:textAlignment="center"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:text="• Pour créer une classe, utilisez le bouton vert sur l'écran principal. Vous arriverez ainsi sur l'écran de configuration de la classe. \n• La liste des classes que vous avez créée apparaitra sur l'écran principal. \n• Il est possible de modifier les classes à tout moment. \n• Si vous souhaitez supprimer la classe, réinitialisez l'application." />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Configurer une classe"
+                android:background="#94FFEA"
+                android:textAlignment="center"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Commencez par donner un nom à votre classe, pour pouvoir l'identifier. Saisissez ensuite le nombre de rangées et de colonnes qui se trouvent dans votre salle. Le terme &quot;colonne&quot; désigne la longueur d'une rangée, en prenant une table pour unité de longueur.\nVous pouvez également ajouter un commentaire qui s'affichera sur l'écran principal à côté du nom de votre classe. Ce paramètre reste optionel.\nVous pouvez ensuite voir une représentation de la salle, sur laquelle il vous faut cocher les cases correspondant aux tables. Il n'est pas nécessaire de laisser un espace entre chaque rangée. \n• Vous pouvez modifier la configuration et le nom de la classe à tout moment" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ajouter des élèves"
+                android:background="#94FFEA"
+                android:textAlignment="center"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Vous pouvez ajouter autant d'élèves qu'il y a de places dans la classe. Un minimum de 3 élèves est nécessaire pour créer un plan de classe.\n• Pour créer un élève, remplissez les différents champs. Ceux marqués d'une astérisque sont obligatoires.\n• Il est possible de modifier le profil de chaque élève après sa création\n• Les choix &quot;Doit éviter&quot; et &quot;Devrait être avec&quot; sont à remplir lorsque tous les élèves sont créés. \n• Ne donnez pas le même nom à deux élèves, pour qu'ils puissent être identifiés séparement.\n• La liste d'élèves d'une classe n'impactera pas la liste d'élèves d'une autre classe." />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Configurer un plan de classe"
+                android:background="#94FFEA"
+                android:textAlignment="center"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Vous pouvez dans ce dernier écran configurer l'importance de chaque critère, sur une échelle de 1 à 5.\n• Vous pouvez activer/désactiver chaque critère en cochant/décochant le bouton associé." />
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Critères"
+                android:background="#94FFEA"
+                android:textAlignment="center"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/textView25"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cette version de l'application propose les critères suivants:\n• Nom de l'élève: permet d'identifier l'élève, et sera utilisé pour un classement par ordre alphabétique. \n• Taille: permet une configuration de classe avec les plus grands élèves derrière, et les plus petits devant. \n• Placement: renseigne le placement privilégié. Ce critère a par défaut la priorité maximale. \n• Doit éviter|affinités (exclusion): indique les élèves qui doivent être séparés. \n •Devrait être avec|Affinités (inclusion):  indique les élèves à réunir. \n •Sérieux de l'évève: renseigne l'attitude de l'élève et sera utilisé pour les alternances: agité/calme et fort/en difficultés. \n• dyslexique|élève moteur: permet l'association élève moteur/dyslexiques \n• Genre: information obligatoire, permet une configuration avec une alternance garçon/fille. \n• isoler: placera l'élève de façon à ce qu'il soit en contact avec le moins de condisciples possible. \n• Importance du traitement de l'élève: indique la priorité à donner à l'élève lors de la réalisation du plan de classe. \n• Commentaires: commentaires qui s'afficheront sur le profil de l'élève." />
+
+            <TextView
+                android:id="@+id/textView26"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Astuces"
+                android:background="#94FFEA"
+                android:textAlignment="center"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="•Il est possible de générer plusieurs plan de classe différents avec les mêmes critères. \n• Pour reconnaitre plus facilement votre classe, un schéma de sa configuration apparait devant son nom dans l'écran principal." />
+
+            <TextView
+                android:id="@+id/textView29"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Si vous avez besoin d'une aide supplémentaire ou rencontrez des problèmes, contactez nous!"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/nous_contacter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nous Contacter" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

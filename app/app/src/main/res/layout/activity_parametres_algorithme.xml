@@ -34,11 +34,13 @@
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:isScrollContainer="true"
                 android:stretchColumns="1">
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:divider="@drawable/ic_baseline_add_24">
 
                     <TextView
                         android:id="@+id/textView19"
@@ -61,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <RadioButton
+                    <CheckBox
                         android:id="@+id/affinites_e"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -82,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <RadioButton
+                    <CheckBox
                         android:id="@+id/affinites_i"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -103,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <RadioButton
+                    <CheckBox
                         android:id="@+id/vision"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -123,7 +125,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <RadioButton
+                    <CheckBox
                         android:id="@+id/haut"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -144,7 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <RadioButton
+                    <CheckBox
                         android:id="@+id/alternance_fg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -163,9 +165,9 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent">
 
-                    <RadioButton
+                    <CheckBox
                         android:id="@+id/alternance_ac"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -184,9 +186,9 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent">
 
-                    <RadioButton
+                    <CheckBox
                         android:id="@+id/alternance_fd"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -205,9 +207,9 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent">
 
-                    <RadioButton
+                    <CheckBox
                         android:id="@+id/associer_dm"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -223,11 +225,12 @@
                         android:max="4"
                         android:progress="2" />
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent">
 
-                    <RadioButton
+                    <CheckBox
                         android:id="@+id/ordre_alpha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -263,12 +266,9 @@
                 android:textAlignment="center"/>
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="100sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/defille" />
+                android:layout_height="100sp" />
         </LinearLayout>
     </ScrollView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

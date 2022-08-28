@@ -5,20 +5,25 @@ import static android.content.ContentValues.TAG;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +40,7 @@ import com.opencsv.CSVWriter;
 import com.opencsv.ICSVWriter;
 import com.opencsv.exceptions.CsvException;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
@@ -43,6 +49,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class ListeEleves extends AppCompatActivity {
@@ -87,12 +94,21 @@ public class ListeEleves extends AppCompatActivity {
         String savedString = prefListeEleve.getString(nomClasse, "");
         StringTokenizer st = new StringTokenizer(savedString, ",");
         StringTokenizer st2 = new StringTokenizer(config.getString(getIntent().getStringExtra("classe"),""), ",");
-        eleves = new String[st2.countTokens()-1];
         nbEleves = 0;
-        int w =st.countTokens();
-        for (int i = 0; i < w; i++) {
-            eleves[i] = st.nextToken();
-            nbEleves += 1;
+        int compte = 0;
+        int x = st2.countTokens();
+        int w = st.countTokens();
+        for (int i = 0; i< x-1; i++){
+            if (Objects.equals(st2.nextToken(), "1"))compte++;
+        }
+        eleves = new String[compte];
+        try {
+            for (int i = 0; i < w; i++) {
+                eleves[i] = st.nextToken();
+                nbEleves += 1;
+            }
+        }catch( Exception e){
+               Toast.makeText(this,"Erreur critique, contactez les développeurs.",Toast.LENGTH_LONG);
         }
     }
 
@@ -109,10 +125,25 @@ public class ListeEleves extends AppCompatActivity {
             TextView sup = vue.findViewById(R.id.suplement);
             sup.setText(donnees.get(indices.getInt(eleve+classe,0))[14]);
             vue.setOnClickListener(v -> generateurEleve(indices.getInt(eleve+classe,0)));
+            ImageView image = vue.findViewById(R.id.couleur);
+            if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10])&& Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
+                image.setColorFilter(Color.argb(255, 255, 255, 0));
+            } else if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10]) ||Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[11])||Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==0){
+                image.setColorFilter(Color.argb(255, 255, 0, 0));
+            }else if(Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[12])|| Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
+                image.setColorFilter(Color.argb(255, 0, 255, 0));
+            }else{
+                image.setColorFilter(Color.argb(255, 255, 255, 0));
+            }
             liste.addView(vue);
         }
         if (nbEleves == eleves.length) {
+            findViewById(R.id.nouv_eleve).setVisibility(View.GONE);
+        }else if(nbEleves >2){
             findViewById(R.id.vers_realiser_plan).setVisibility(View.VISIBLE);
+            Space space = new Space(this);
+            space.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,100));
+            liste.addView(space);
         }
     }
     @Override
@@ -125,15 +156,6 @@ public class ListeEleves extends AppCompatActivity {
         }
         prefListeEleve.edit().putString(classe,str.toString()).apply();
         super.onStop();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void writeToCSVFile (List<String[]> dataList) {
@@ -166,11 +188,9 @@ public class ListeEleves extends AppCompatActivity {
 
     public void generateurEleve (int indice){
         AlertDialog.Builder constructeur = new AlertDialog.Builder(this);
-        constructeur.setTitle("Nouvel élève");
         LayoutInflater inflater = this.getLayoutInflater();
         View vue = inflater.inflate(R.layout.generateur_eleve, null);
         constructeur.setView(vue);
-        AlertDialog show = constructeur.show();
         Button enregistrer = vue.findViewById(R.id.enregistrer_eleve);
         Button evite = vue.findViewById(R.id.liste_evite);
         Button correcte = vue.findViewById(R.id.liste_correcte);
@@ -195,9 +215,8 @@ public class ListeEleves extends AppCompatActivity {
         Arrays.fill(selection2,false);
         Arrays.fill(selection,false);
         if (indice>=0){ //chargement des données enregistrées sur l'élève
+            constructeur.setTitle("Modifier les informations");
             try{
-
-
             String[] d = donnees.get(indice);
             nom.setText(d[1]);
             commentaire.setText(d[14]);
@@ -207,24 +226,24 @@ public class ListeEleves extends AppCompatActivity {
             prio.setProgress(Integer.parseInt(d[6]));
             switch (Integer.parseInt(d[4])){    //taille
                 case 0:
-                    plac.check(R.id.taille_1);
+                    taille.check(R.id.taille_1);
                     break;
                 case 2:
-                    plac.check(R.id.taille_3);
+                    taille.check(R.id.taille_3);
                     break;
                 default:
-                    plac.check(R.id.taille_2);
+                    taille.check(R.id.taille_2);
                     break;
             }
             switch (Integer.parseInt(d[5])){    //vue
                 case 0:
-                    plac.check(R.id.vue_1);
+                    vision.check(R.id.vue_1);
                     break;
                 case 2:
-                    plac.check(R.id.vue_3);
+                    vision.check(R.id.vue_3);
                     break;
                 default:
-                    plac.check(R.id.vue_2);
+                    vision.check(R.id.vue_2);
                     break;
             }
             switch (Integer.parseInt(d[6])){    //placement
@@ -240,43 +259,40 @@ public class ListeEleves extends AppCompatActivity {
             }
             switch (Integer.parseInt(d[7])){    //difficultés
                 case 0:
-                    plac.check(R.id.diff_1);
+                    difficultes.check(R.id.diff_1);
                     break;
                 case 1:
-                    plac.check(R.id.diff_2);
+                    difficultes.check(R.id.diff_2);
                     break;
                 default:
-                    plac.check(R.id.diff_3);
+                    difficultes.check(R.id.diff_3);
                     break;
             }
             switch (Integer.parseInt(d[8])){    //attitude
                 case 0:
-                    plac.check(R.id.att_1);
+                    attitude.check(R.id.att_1);
                     break;
                 case 1:
-                    plac.check(R.id.att_2);
+                    attitude.check(R.id.att_2);
                     break;
                 default:
-                    plac.check(R.id.att_3);
+                    attitude.check(R.id.att_3);
                     break;
             }
-            switch (Integer.parseInt(d[9])){    //genre
-                case 0:
-                    plac.check(R.id.fille);
+            switch (d[9]){    //genre
+                case "0":
+                    genre.check(R.id.fille);
                     break;
-                case 1:
-                    plac.check(R.id.garcon);
+                case "1":
+                    genre.check(R.id.garcon);
                     break;
             }
             StringTokenizer stEvite = new StringTokenizer(d[2], ",");
             StringTokenizer stCorrecte = new StringTokenizer(d[3], ",");
             int x= stEvite.countTokens();
-            Log.d(TAG, "generateurEleve: "+x);
             for (int i= 0; i< x; i++){
-                String nom1 = donnees.get(Integer.parseInt(stEvite.nextToken()))[1];
-                String nom2 = donnees.get(Integer.parseInt(stCorrecte.nextToken()))[1];
-                if (Arrays.asList(eleves).contains(nom1))selection[Arrays.asList(eleves).indexOf(nom1)]=true;
-                if (Arrays.asList(eleves).contains(nom2))selection2[Arrays.asList(eleves).indexOf(nom2)]=true;
+                selection[i]=Boolean.parseBoolean(stEvite.nextToken());
+                selection2[i]=Boolean.parseBoolean(stCorrecte.nextToken());
             }
             Log.d(TAG, "generateurEleve: "+Arrays.toString(selection));
             Log.d(TAG, "generateurEleve: "+Arrays.toString(selection2));
@@ -284,11 +300,14 @@ public class ListeEleves extends AppCompatActivity {
                 Log.e(TAG, "generateurEleve: ", e);
                 Toast.makeText(this,"incompatibilité de version. Désinstallez puis réinstallez l'application",Toast.LENGTH_LONG).show();
             }
+        }else{
+            constructeur.setTitle("Nouvel élève");
         }
+        AlertDialog show = constructeur.show();
         int[] eviteIndices = new int[compte];
         int[] correcteIndices = new int[compte];
         evite.setOnClickListener(x ->{
-            Log.d(TAG, "generateur eleve"+ Arrays.toString(selection));
+
             AlertDialog.Builder constr = new AlertDialog.Builder(this);
             constr.setTitle("Doit éviter...");
             ListView liste = new ListView(this);
@@ -309,25 +328,24 @@ public class ListeEleves extends AppCompatActivity {
             constr.show();
         });
         enregistrer.setOnClickListener(w ->{
-            if (nbEleves<eleves.length && !nom.getText().toString().equals("") && !(genre.getCheckedRadioButtonId()!= R.id.fille && genre.getCheckedRadioButtonId()!=R.id.garcon) &&! (Arrays.asList(eleves).contains(nom.getText().toString()) && indice<0)){
+            Log.d(TAG, "generateurEleve: "+!(nbEleves>=eleves.length && indice<0)+ !nom.getText().toString().equals("") + !(genre.getCheckedRadioButtonId()!= R.id.fille && genre.getCheckedRadioButtonId()!=R.id.garcon) + !(Arrays.asList(eleves).contains(nom.getText().toString()) && indice<0));
+            if (!(nbEleves>=eleves.length && indice<0) &&  !nom.getText().toString().equals("") && !(genre.getCheckedRadioButtonId()!= R.id.fille && genre.getCheckedRadioButtonId()!=R.id.garcon) && !((Arrays.asList(eleves).contains(nom.getText().toString())) && (indice<0|| !Objects.equals(donnees.get(indice)[1], nom.getText().toString())))){
                 if (indice>=0){ //élève déjà enregistré (modifications)
                     eleves[Arrays.asList(eleves).indexOf(donnees.get(indice)[1])] = nom.getText().toString();
                 }else{
                     eleves[nbEleves] = nom.getText().toString();    //ajoute le nom du nouvel élève
                     nbEleves+=1;
                 }
-                Log.d(TAG, "generateurEleve: "+Arrays.toString(selection));
                 for(int i = 0; i<selection.length;i++){ //met à jour les affinités
-                    Log.d(TAG, "generateurEleve: "+prefListeEleve.getInt(eleves[i]+classe,10));
                     if (selection[i])eviteIndices[i]=indices.getInt(eleves[i]+classe,0);
                     if (selection2[i])correcteIndices[i] = indices.getInt(eleves[i] + classe, 0);
                 }
                 StringBuilder strEvite = new StringBuilder();   //convertit en chaine de cararctère les indices d'élèves à (!)éviter
-                for (int eviteI : eviteIndices) {
+                for (Boolean eviteI : selection) {
                     strEvite.append(eviteI).append(",");
                 }
                 StringBuilder strCorrecte = new StringBuilder();
-                for (int correcteI : correcteIndices) {
+                for (Boolean correcteI : selection2) {
                     strCorrecte.append(correcteI).append(",");
                 }
                 String tailleE; //enregiste le bouton sélectionné
@@ -420,9 +438,9 @@ public class ListeEleves extends AppCompatActivity {
                 show.setView(barre);
                 writeToCSVFile(donnees);
                 inflation();
-            }else if(nbEleves>=eleves.length) {
+            }else if(nbEleves>=eleves.length && indice<0) {
                 Toast.makeText(this, "Enregistrement impossible. Trop d'élèves pour cette classe. Veuillez d'abord modifier sa configuration.", Toast.LENGTH_LONG).show();
-            }else if(Arrays.asList(eleves).contains(nom.getText().toString()) && indice <0){
+            }else if((Arrays.asList(eleves).contains(nom.getText().toString())) && (indice<0|| !Objects.equals(donnees.get(indice)[1], nom.getText().toString()))){
                 Toast.makeText(this,"Enregistrement impossible. Un élève du même nom existe déjà dans cette classe.",Toast.LENGTH_LONG).show();
             }else{
                 Toast.makeText(this,"Enregistrement impossible. Veuillez remplir tous les champs marqués d'une astérisque.",Toast.LENGTH_LONG).show();
@@ -430,5 +448,64 @@ public class ListeEleves extends AppCompatActivity {
             show.dismiss();
         });
         show.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.détruire:
+                onExplose();
+                return true;
+            case R.id.reinit:
+                reinitialiser();
+                return true;
+            case R.id.nous_soutenir:
+                //soutient();
+                return true;
+            case R.id.infos:
+                infos();
+                return true;
+            case R.id.contact:
+                startActivity( new Intent(this, NousContacter.class));
+                return true;
+            case R.id.aide:
+                startActivity( new Intent(this, Aide.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onExplose(){this.finishAffinity();}
+
+    public void reinitialiser(){
+        SharedPreferences prefsAlgo = getBaseContext().getSharedPreferences("algo", Context.MODE_PRIVATE);//préférences de l'algorithme.
+        SharedPreferences prefListeEleve = getBaseContext().getSharedPreferences("liste_eleves", Context.MODE_PRIVATE);//élèves d'une classe  {"classe" -->"élève"}
+        SharedPreferences config = getBaseContext().getSharedPreferences("configuration", Context.MODE_PRIVATE);//config de la classe
+        SharedPreferences indices = getBaseContext().getSharedPreferences("eleves", Context.MODE_PRIVATE);//indice de l'élève dans la DB. {"eleve"+"classe" --> int}
+        SharedPreferences prefs = getBaseContext().getSharedPreferences("classes", Context.MODE_PRIVATE);//liste des classes et commentaires pour chaque classe
+        prefsAlgo.edit().clear().apply();
+        prefListeEleve.edit().clear().apply();
+        config.edit().clear().apply();
+        indices.edit().clear().apply();
+        prefs.edit().clear().apply();
+        File fich = new File((getExternalFilesDir(null) + "/donnees.csv"));
+        fich.delete();
+        onExplose();
+    }
+
+    public void infos(){
+        AlertDialog.Builder constr = new AlertDialog.Builder(this);
+        constr.setTitle("Informations");
+        constr.setMessage(String.format("Vous utilisez la %s de l'application. \nL'application a été développée par IPIC&cie.",getString(R.string.version)));
+        constr.show();
     }
 }
