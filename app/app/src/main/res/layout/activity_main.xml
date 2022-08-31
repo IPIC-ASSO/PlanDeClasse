@@ -19,6 +19,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/vers_gallerie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:layout_margin="40dp"
+        android:contentDescription="Voir les plans de classes enregistrés"
+        app:backgroundTint="@color/rouge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/ic_baseline_photo_library_24" />
+
+    <TextView
+        android:id="@+id/bienvenue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Bienvenue! \nCréez votre première classe en utilisant le petit bouton vert."
+        android:textAlignment="center" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

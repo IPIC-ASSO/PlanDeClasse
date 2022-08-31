@@ -2,11 +2,15 @@ package com.ipiccie.plandeclasse;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -24,10 +29,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -36,10 +44,12 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,6 +72,15 @@ public class ParametresAlgorithme extends AppCompatActivity {
     private int[] place;    //place assigné à chaque élève (indice: élève, valeur: place dans laMatrice)
     private String[] Rplace;   //place vide; indice: case de tampon, valeur: 1 si occupée
 
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (Boolean.FALSE.equals(isGranted)) {
+                    AlertDialog.Builder constructeur = new AlertDialog.Builder(this);
+                    constructeur.setTitle("Avertissement");
+                    constructeur.setMessage("Certaines fonctionnalités pourraient ne pas être disponible \nPour plus d'informations, contactez le service d'assistance IPIC&cie");
+                }
+            });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +95,6 @@ public class ParametresAlgorithme extends AppCompatActivity {
         prefsAlgo.edit().clear().apply();
 
         Button suivant = findViewById(R.id.realiser_plan);
-        CheckBox x = findViewById(R.id.affinites_e);
         CheckBox affinitesE = findViewById(R.id.affinites_e);
         CheckBox affinitesI = findViewById(R.id.affinites_i);
         CheckBox vue = findViewById(R.id.vision);
@@ -85,7 +103,7 @@ public class ParametresAlgorithme extends AppCompatActivity {
         CheckBox alternanceAC = findViewById(R.id.alternance_ac);
         CheckBox alternanceFD = findViewById(R.id.alternance_fd);
         CheckBox associerDM = findViewById(R.id.associer_dm);
-        CheckBox ordre_alpha = findViewById(R.id.ordre_alpha);
+        CheckBox ordreAlpha = findViewById(R.id.ordre_alpha);
         SeekBar affiniteEniv = findViewById(R.id.affinites_e_niv);
         SeekBar affiniteIniv = findViewById(R.id.affinites_i_niv);
         SeekBar vueNiv = findViewById(R.id.vision_niv);
@@ -94,7 +112,7 @@ public class ParametresAlgorithme extends AppCompatActivity {
         SeekBar alternanceACNiv = findViewById(R.id.alternance_ac_niv);
         SeekBar alternanceFDNiv = findViewById(R.id.alternance_fd_niv);
         SeekBar associerDMNiv = findViewById(R.id.associer_dm_niv);
-        SeekBar ordre_alphaNiv = findViewById(R.id.ordre_alpha_niv);
+        SeekBar ordreAlphaNiv = findViewById(R.id.ordre_alpha_niv);
 
 
         suivant.setOnClickListener(v -> {
@@ -138,8 +156,8 @@ public class ParametresAlgorithme extends AppCompatActivity {
             }else{
                 prefsAlgo.edit().putInt("associer_dm",-1).apply();
             }
-            if (ordre_alpha.isChecked()){
-                prefsAlgo.edit().putInt("ordre_alpha",ordre_alphaNiv.getProgress()).apply();
+            if (ordreAlpha.isChecked()){
+                prefsAlgo.edit().putInt("ordre_alpha",ordreAlphaNiv.getProgress()).apply();
             }else{
                 prefsAlgo.edit().putInt("ordre_alpha",-1).apply();
             }
@@ -186,15 +204,13 @@ public class ParametresAlgorithme extends AppCompatActivity {
         colonnes = Integer.parseInt(st.nextToken());
         matrice = new int[tampon.length/colonnes][colonnes];
         for (int y = 0; y< tampon.length/colonnes; y++){
-            for (int i = 0; i< colonnes; i++) {
-                matrice[y][i] = tampon[i+colonnes*(y)];
-            }
+            if (colonnes >= 0)
+                System.arraycopy(tampon, colonnes * (y), matrice[y], 0, colonnes);
         }
-        int[] matrix = new int[compte];
         importance = new int[eleves.length];
         for(int i =0;i<eleves.length;i++){
             importance[i] = Integer.parseInt(donnees.get(indices.getInt(eleves[i]+classe,0))[13])+1;
-            laMatrice.add(matrix.clone());
+            laMatrice.add(new int[compte]);
         }
         place = new int[eleves.length];
         Rplace= new String[compte];
@@ -231,7 +247,6 @@ public class ParametresAlgorithme extends AppCompatActivity {
             Log.d(TAG, "placement: "+x);
             for (int i = 0; i<compteXrang1;i++){
                 laMatrice.get(x)[i] += val * importance[x];
-                //TODO: prendre en compte dyslexie
             }
         }
         for (int x:compteRang2){    //remplit rangs de derriere
@@ -239,30 +254,28 @@ public class ParametresAlgorithme extends AppCompatActivity {
                 laMatrice.get(x)[laMatrice.get(x).length-i-1] += val * importance[x];
             }
         }
-        Log.d(TAG, "Informations placement: OK");
+        Log.i(TAG, "Informations placement: OK");
     }
 
     public void ordreAlpha(int val){
         String[] elevesAlpha = eleves.clone();
         Arrays.sort(elevesAlpha);
         for(int i = 0; i < eleves.length; i++){
-            laMatrice.get(i)[Arrays.asList(elevesAlpha).indexOf(eleves[i])] += val*5;
-            Log.d(TAG, "ordreAlpha: "+ Arrays.toString(laMatrice.get(i))+ val*3);
+            for(int j = 0; j<laMatrice.get(i).length; j++){
+                laMatrice.get(i)[j] = val*5 - (Math.abs(Arrays.asList(elevesAlpha).indexOf(eleves[i])-j))*val;
+            }
         }
-        Log.d(TAG, "Informations ordreAlpha: OK"+ Arrays.toString(elevesAlpha));
+        Log.i(TAG, "Informations ordreAlpha: OK"+ Arrays.toString(elevesAlpha));
     }
 
     public void taille (int val) {
         List<Integer> compteTaille1 = new ArrayList<>();
         List<Integer> compteTaille2 = new ArrayList<>();
-        List<Integer> compteTaille3 = new ArrayList<>();
         for (int i = 0; i < eleves.length; i++) {      //compte le nombre d'élève à placer
             if (Integer.parseInt(donnees.get(indices.getInt(eleves[i] + classe, 0))[4]) == 2) {
                 compteTaille1.add(i);
             } else if (Integer.parseInt(donnees.get(indices.getInt(eleves[i] + classe, 0))[4]) == 0) {
                 compteTaille2.add(i);
-            } else {
-                compteTaille3.add(i);
             }
         }
         int compteXrang1 = 0;       //détermine les places qui seront occupées
@@ -293,75 +306,105 @@ public class ParametresAlgorithme extends AppCompatActivity {
                 }
             } else {        //moyen
                 for (int j = compteXrang1; j < compteXrang2; j++) {
-                    Log.d(TAG, "taille: "+i+" "+j+" "+ compteXrang2);
                     laMatrice.get(i)[j] += val * importance[j];
                 }
-
             }
         }
+        Log.i(TAG, "Informations taille: OK");
     }
 
-    public void affinites(int indice, int affE, int affI, int FG, int AC, int FD, int DM){
+    public void isolement(){
+        int[] isoVal = new int[laMatrice.get(0).length];
+        int compte = 0;
+        for (int indiceTampon = 0; indiceTampon<tampon.length; indiceTampon++){    //détermine le nombre de places adjacentes
+            if(tampon[indiceTampon] == 1){
+                int x = 0;
+                if (indiceTampon/colonnes>0 && tampon[indiceTampon-colonnes]==1)x++;
+                if (indiceTampon<tampon.length-colonnes && tampon[indiceTampon+colonnes]==1)x++;
+                if (indiceTampon%colonnes>0 && tampon[indiceTampon-1]==1)x++;
+                if (indiceTampon%colonnes<colonnes-2 && tampon[indiceTampon+1]==1)x++;
+                isoVal[compte] = x;
+                compte++;
+            }
+        }
+        for(int i = 0; i < eleves.length; i++){
+            for(int j=0; j<isoVal.length;j++){
+                laMatrice.get(i)[j] += 5*importance[i]*(4-isoVal[j]);
+            }
+        }
+        Log.i(TAG, "Informations isolement: OK");
+
+    }
+
+    public void affinites(int indice, int affE, int affI, int fg, int ac, int fd, int dm){
         int indexAct =  place[indice];
         int compte = 0;
         int indiceTampon =-1;
+        int[] correspondance = new int[tampon.length];     // associe chaque élément de tampon qui est remplit à son indice dans Matrix
         while (compte < indexAct+1) {
             indiceTampon++;
-            if (tampon[indiceTampon] == 1) compte++;
+            if (tampon[indiceTampon] == 1){
+                correspondance[indiceTampon] = compte;
+                compte++;
+            }
         }
         Log.d(TAG, "affinites: ind "+Arrays.asList(donnees.get(indices.getInt(eleves[indice]+classe,0))));
         String genre = donnees.get(indices.getInt(eleves[indice]+classe,0))[9];
-        Boolean dys= Boolean.parseBoolean(donnees.get(indices.getInt(eleves[indice]+classe,0))[10]);
-        Boolean moteur= Boolean.parseBoolean(donnees.get(indices.getInt(eleves[indice]+classe,0))[12]);
+        boolean dys= Boolean.parseBoolean(donnees.get(indices.getInt(eleves[indice]+classe,0))[10]);
+        boolean isoler = Boolean.parseBoolean(donnees.get(indices.getInt(eleves[indice]+classe,0))[11]);
+        boolean moteur= Boolean.parseBoolean(donnees.get(indices.getInt(eleves[indice]+classe,0))[12]);
         int calme = Integer.parseInt(donnees.get(indices.getInt(eleves[indice]+classe,0))[8]);
         int fort = Integer.parseInt(donnees.get(indices.getInt(eleves[indice]+classe,0))[7]);
         int droite = indexAct;
         int gauche = indexAct;
-        //TODO: devant derrière
         int devant = indexAct;
         int derriere = indexAct;
-        //if (indiceTampon/colonnes>0 && tampon[indiceTampon-colonnes]==1)devant = indice-colonnes;
-        //if (indiceTampon>tampon.length-colonnes && tampon[indiceTampon+colonnes]==1)derriere = indice+colonnes;
+        if (indiceTampon/colonnes>0 && tampon[indiceTampon-colonnes]==1)devant = correspondance[indiceTampon-colonnes];
+        if (indiceTampon<tampon.length-colonnes && tampon[indiceTampon+colonnes]==1)derriere = correspondance[indiceTampon+colonnes];
         if (indiceTampon%colonnes>0 && tampon[indiceTampon-1]==1)gauche= indexAct-1;
         if (indiceTampon%colonnes<colonnes-2 && tampon[indiceTampon+1]==1)droite= indexAct+1;
 
-        StringTokenizer st = new StringTokenizer(donnees.get(indices.getInt(eleves[indice]+classe,0))[2], ",");
-        StringTokenizer st2 = new StringTokenizer(donnees.get(indices.getInt(eleves[indice]+classe,0))[3], ",");
-        int x= st.countTokens();
-        for (int i= 0; i< x; i++) {
-            String nom1 = st.nextToken();
-            String nom2 = st2.nextToken();
-            Log.d(TAG, "affinites: "+droite+" "+gauche+" "+devant+" "+derriere+" "+nom1);
-            if (Boolean.parseBoolean(nom1)) {//à éviter
+        List<Boolean[]> listeB = reciproque(indice);
+        Boolean[] evite = listeB.get(0);
+        Boolean[] evitePas = listeB.get(1);
+        for (int i= 0; i< eleves.length; i++) {
+            Log.d(TAG, "affinites: "+droite+" "+gauche+" "+devant+" "+derriere);
+            if (isoler){
+                laMatrice.get(i)[droite] -= 5* importance[i];
+                laMatrice.get(i)[gauche] -= 5* importance[i];
+                laMatrice.get(i)[devant] -= 5* importance[i]*0.75F;
+                laMatrice.get(i)[derriere] -= 5* importance[i]*0.75F;
+            }
+            if (Boolean.TRUE.equals(evite[i])) {//à éviter
                 laMatrice.get(i)[droite] -= affE* importance[i];
                 laMatrice.get(i)[gauche] -= affE* importance[i];
-                //laMatrice.get(Integer.parseInt(nom1))[devant] -= affE* importance[Integer.parseInt(nom1)]*0.75F;
-                //laMatrice.get(Integer.parseInt(nom1))[derriere] -= affE* importance[Integer.parseInt(nom1)]*0.75F;
-            }
-            if (Boolean.parseBoolean(nom2)) {// à !éviter
+                laMatrice.get(i)[devant] -= affE* importance[i]*0.75F;
+                laMatrice.get(i)[derriere] -= affE* importance[i]*0.75F;
+            }else if (Boolean.TRUE.equals(evitePas[i])) {// à !éviter
                 laMatrice.get(i)[droite] += affI* importance[i];
                 laMatrice.get(i)[gauche] += affI* importance[i];
             }
             if (!Objects.equals(donnees.get(indices.getInt(eleves[i] + classe, 0))[9], genre)){//alternance FG
-                laMatrice.get(i)[droite] += FG* importance[i];
-                laMatrice.get(i)[gauche] += FG* importance[i];
+                laMatrice.get(i)[droite] += fg* importance[i];
+                laMatrice.get(i)[gauche] += fg* importance[i];
             }else{
-                laMatrice.get(i)[droite] -= FG* importance[i];
-                laMatrice.get(i)[gauche] -= FG* importance[i];
+                laMatrice.get(i)[droite] -= fg* importance[i];
+                laMatrice.get(i)[gauche] -= fg* importance[i];
             }
             if((moteur && Boolean.parseBoolean(donnees.get(indices.getInt(eleves[i]+classe,0))[10])) ||(dys &&Boolean.parseBoolean(donnees.get(indices.getInt(eleves[i]+classe,0))[12]))){ //alternance DM
-                laMatrice.get(i)[droite] += DM* importance[i];
-                laMatrice.get(i)[gauche] += DM* importance[i];
+                laMatrice.get(i)[droite] += dm* importance[i];
+                laMatrice.get(i)[gauche] += dm* importance[i];
             }
             if (fort<2 && Integer.parseInt(donnees.get(indices.getInt(eleves[i]+classe,0))[7])<2 && Integer.parseInt(donnees.get(indices.getInt(eleves[i]+classe,0))[7]) != fort){ //alternance FD
-                laMatrice.get(i)[droite] += FD* importance[i];
-                laMatrice.get(i)[gauche] += FD* importance[i];
+                laMatrice.get(i)[droite] += fd* importance[i];
+                laMatrice.get(i)[gauche] += fd* importance[i];
             }
             if (calme<2 && Integer.parseInt(donnees.get(indices.getInt(eleves[i]+classe,0))[8])<2 && Integer.parseInt(donnees.get(indices.getInt(eleves[i]+classe,0))[8]) != calme){ //alternance AC
-                laMatrice.get(i)[droite] += AC* importance[i];
-                laMatrice.get(i)[gauche] += AC* importance[i];
+                laMatrice.get(i)[droite] += ac* importance[i];
+                laMatrice.get(i)[gauche] += ac* importance[i];
             }
         }
+        Log.i(TAG, "Informations affinités: OK");
     }
 
     public void obtienClasse3(String nomClasse){
@@ -374,14 +417,55 @@ public class ParametresAlgorithme extends AppCompatActivity {
         Log.d(TAG, "obtienClasse3: "+eleves.length);
     }
 
+    public List<Boolean[]> reciproque(int indice){
+        List<Boolean[]> liste = new ArrayList<>();
+        List<Boolean[]> liste2 = new ArrayList<>();
+        for (String eleve : eleves){
+            StringTokenizer st = new StringTokenizer(donnees.get(indices.getInt(eleve+classe,0))[2],",");
+            StringTokenizer st2 = new StringTokenizer(donnees.get(indices.getInt(eleve+classe,0))[3],",");
+            int w = st.countTokens();
+            int x = st2.countTokens();
+            Boolean[] evite = new Boolean[eleves.length];
+            Boolean[] evitePas = new Boolean[eleves.length];
+            Arrays.fill(evite,false);
+            Arrays.fill(evitePas,false);
+            for (int i =0; i<w; i++){
+                evite[i] = Boolean.parseBoolean(st.nextToken());
+            }
+            for (int i =0; i<x; i++){
+                evitePas[i] = Boolean.parseBoolean(st2.nextToken());
+            }
+            liste.add(evite);
+            liste2.add(evitePas);
+        }
+        for (int i=0;i< liste.size();i++){      //applique la réciprocité de l'éloignement
+            for(int j = 0; j< liste.get(i).length;j++){
+                if (Boolean.TRUE.equals(liste.get(i)[j])){
+                    liste.get(j)[i] = true;
+                    liste2.get(j)[i] = false;
+                }else if(Boolean.TRUE.equals(liste2.get(i)[j])){
+                    liste2.get(j)[i] = true;
+                }
+            }
+        }
+        List<Boolean[]> list3 = new ArrayList<>();
+        list3.add(liste.get(indice));
+        list3.add(liste2.get(indice));
+        return list3;
+    }
+
     private void laBoucle(){
         init();
         placement(5);
-        ordreAlpha(prefsAlgo.getInt("ordre_alpha",0)+1);
+        if (prefsAlgo.getInt("ordre_alpha",0)+1 >0)ordreAlpha(prefsAlgo.getInt("ordre_alpha",0)+1);
+        Log.d(TAG, "laBoucle: eleve4: "+ Arrays.toString(laMatrice.get(3)));
+        isolement();
+        Log.d(TAG, "laBoucle: eleve4: "+ Arrays.toString(laMatrice.get(3)));
         taille(prefsAlgo.getInt("taille",0)+1);
         String[] clone;
         clone = eleves.clone();
         for (int wse = 0; wse< eleves.length; wse++){
+            Log.d(TAG, "laBoucle: eleve: "+ Arrays.toString(laMatrice.get(wse)));
             int max=0;
             List<Integer> indicesE = new ArrayList<>();  //indices élèves
             List<Integer> indices2 = new ArrayList<>(); //indices place
@@ -411,11 +495,13 @@ public class ParametresAlgorithme extends AppCompatActivity {
             clone[indicesE.get(choix)] = null;
             Rplace[indices2.get(choix)] = eleves[indicesE.get(choix)];
             affinites(indicesE.get(choix),prefsAlgo.getInt("affinites_e",0)+1,prefsAlgo.getInt("affinites_i",0)+1,prefsAlgo.getInt("alternance_fg",0)+1,prefsAlgo.getInt("alternance_ac",0)+1,prefsAlgo.getInt("alternance_fd",0)+1, prefsAlgo.getInt("associer_dm",0)+1);
-            Log.d(TAG, "res: "+ Arrays.toString(laMatrice.get(indicesE.get(choix))));
-            Log.d(TAG, "res: "+ Arrays.toString(place));
-            Log.d(TAG, "res: "+ Arrays.toString(Rplace));
+            Log.d(TAG, "res: matrix"+ Arrays.toString(laMatrice.get(indicesE.get(choix))));
+            Log.d(TAG, "res: place"+ Arrays.toString(place));
+            Log.d(TAG, "res: Rplace"+ Arrays.toString(Rplace));
         }
+        Log.i(TAG, "Informations laBoucle: OK");
         affiche();
+        Log.i(TAG, "Informations affiche: OK");
     }
 
     public void affiche(){
@@ -426,6 +512,7 @@ public class ParametresAlgorithme extends AppCompatActivity {
         def.setScrollContainer(true);
         TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(ScrollView.LayoutParams.WRAP_CONTENT, ScrollView.LayoutParams.MATCH_PARENT);
         TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+
         TableLayout table = new TableLayout(this);
         table.setScrollContainer(true);
         table.setLayoutParams(tableParams);
@@ -459,6 +546,46 @@ public class ParametresAlgorithme extends AppCompatActivity {
             dialog.dismiss();
             laBoucle();
         });
+        constructeur.setNeutralButton("Enregistrer",(dialog,which) ->{
+            if (ContextCompat.checkSelfPermission(ParametresAlgorithme.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION);
+            }
+            AlertDialog.Builder cons = new AlertDialog.Builder(this);
+            cons.setTitle("Nom de l'image");
+            EditText edit = new EditText(this);
+            edit.setHint("nom de l'image (sans extension)");
+            cons.setView(edit);
+            cons.setPositiveButton("Valider", (dialog1, which1) -> {
+                try{
+                    def.setDrawingCacheEnabled(true);
+                    Bitmap bitmap = def.getDrawingCache();
+                    File file,f;
+                    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+                    {
+                        file =new File(Environment.getExternalStorageDirectory() + "/Download/Plans_de_classe/");
+                        if(!file.exists())
+                        {
+                            if(!file.mkdir()){
+                                Toast.makeText(this,"Erreur, veuillez réessayer.",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        f = new File(file.getAbsolutePath()+File.separator+edit.getText().toString()+".png");
+                        FileOutputStream ostream = new FileOutputStream(f);
+                        if(bitmap.compress(Bitmap.CompressFormat.PNG, 10, ostream))Toast.makeText(this,"Image enregistrée dans les téléchargements!",Toast.LENGTH_SHORT).show();
+                        else {Toast.makeText(this,"Erreur lors de l'enregistrement, réessayez plus tard",Toast.LENGTH_SHORT).show();}
+                        ostream.close();
+                    }else{
+                        Toast.makeText(this,"Impossible d'enregistrer l'images. Configuration système invalide",Toast.LENGTH_SHORT).show();
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.e(TAG, "enregistrement: ",e );
+                    Toast.makeText(this,"Impossible d'enregistrer l'image",Toast.LENGTH_LONG).show();
+                }
+            });
+            cons.show();
+        });
         try {
            constructeur.show();
         }catch (Exception e){
@@ -486,7 +613,7 @@ public class ParametresAlgorithme extends AppCompatActivity {
                 reinitialiser();
                 return true;
             case R.id.nous_soutenir:
-                //soutient();
+                soutient();
                 return true;
             case R.id.infos:
                 infos();
@@ -504,10 +631,6 @@ public class ParametresAlgorithme extends AppCompatActivity {
     public void onExplose(){this.finishAffinity();}
 
     public void reinitialiser(){
-        SharedPreferences prefsAlgo = getBaseContext().getSharedPreferences("algo", Context.MODE_PRIVATE);//préférences de l'algorithme.
-        SharedPreferences prefListeEleve = getBaseContext().getSharedPreferences("liste_eleves", Context.MODE_PRIVATE);//élèves d'une classe  {"classe" -->"élève"}
-        SharedPreferences config = getBaseContext().getSharedPreferences("configuration", Context.MODE_PRIVATE);//config de la classe
-        SharedPreferences indices = getBaseContext().getSharedPreferences("eleves", Context.MODE_PRIVATE);//indice de l'élève dans la DB. {"eleve"+"classe" --> int}
         SharedPreferences prefs = getBaseContext().getSharedPreferences("classes", Context.MODE_PRIVATE);//liste des classes et commentaires pour chaque classe
         prefsAlgo.edit().clear().apply();
         prefListeEleve.edit().clear().apply();
@@ -515,14 +638,22 @@ public class ParametresAlgorithme extends AppCompatActivity {
         indices.edit().clear().apply();
         prefs.edit().clear().apply();
         File fich = new File((getExternalFilesDir(null) + "/donnees.csv"));
-        fich.delete();
-        onExplose();
+        if (!fich.delete())Toast.makeText(this,"impossible d'effacer toutes les données",Toast.LENGTH_LONG).show();
+        else{
+            onExplose();
+        }
     }
 
     public void infos(){
         AlertDialog.Builder constr = new AlertDialog.Builder(this);
         constr.setTitle("Informations");
-        constr.setMessage(String.format("Vous utilisez la %s de l'application. \nL'application a été développée par IPIC&cie.",getString(R.string.version)));
+        constr.setMessage(String.format("Vous utilisez la %s de l'application.\n%s \nL'application a été développée par IPIC&cie.",getString(R.string.version),getString(R.string.notes_version)));
         constr.show();
+    }
+    public void soutient(){
+        AlertDialog.Builder construit = new AlertDialog.Builder(this);
+        construit.setTitle("Merci de votre soutient");
+        construit.setMessage(":)");
+        construit.show();
     }
 }

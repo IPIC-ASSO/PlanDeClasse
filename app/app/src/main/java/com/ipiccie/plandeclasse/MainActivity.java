@@ -45,10 +45,14 @@ public class MainActivity extends AppCompatActivity {
         inflation0(classes);
 
         com.google.android.material.floatingactionbutton.FloatingActionButton bouton1 = findViewById(R.id.nouv_classe);
+        com.google.android.material.floatingactionbutton.FloatingActionButton bouton2 = findViewById(R.id.vers_gallerie);
         bouton1.setOnClickListener(v -> {
             Intent intention = new Intent(this, NouvelleClasse.class);
             intention.putExtra("classe","-1");
             startActivity(intention);
+        });
+        bouton2.setOnClickListener(v -> {
+            startActivity(new Intent(this, Gallerie.class));
         });
 
 
@@ -66,57 +70,63 @@ public class MainActivity extends AppCompatActivity {
 
     public void inflation0(String[] classes){
         LinearLayout liste = findViewById(R.id.liste_classes);
+        if (classes.length !=0){
+            findViewById(R.id.bienvenue).setVisibility(View.GONE);
+            for (String classe: classes){
+                View vue = inflater.inflate(R.layout.profil_classe, null);
+                TextView nom = vue.findViewById(R.id.nom_classe);
+                TextView sup = vue.findViewById(R.id.commentaires_classe);
+                TextView nb = vue.findViewById(R.id.nombre_eleves);
+                ImageView apercu = vue.findViewById(R.id.apercu);
+                List<Integer> conf1 = obtienConfig(classe);
+                Log.d(TAG, "inflation0: "+conf1.size());
+                dessine(conf1,apercu);
 
-        for (String classe: classes){
-            View vue = inflater.inflate(R.layout.profil_classe, null);
-            TextView nom = vue.findViewById(R.id.nom_classe);
-            TextView sup = vue.findViewById(R.id.commentaires_classe);
-            TextView nb = vue.findViewById(R.id.nombre_eleves);
-            ImageView apercu = vue.findViewById(R.id.apercu);
-            List<Integer> conf1 = obtienConfig(classe);
-            Log.d(TAG, "inflation0: "+conf1.size());
-            dessine(conf1,apercu);
-
-            nom.setText("classe: "+classe);
-            sup.setText(prefs.getString(classe,"inconnu au bataillon"));
-            SharedPreferences listeEleves= getBaseContext().getSharedPreferences("liste_eleves", Context.MODE_PRIVATE);
-            StringTokenizer st = new StringTokenizer(listeEleves.getString(classe,""), ",");
-            nb.setText("élèves: "+st.countTokens());
-            vue.setOnClickListener(v -> {
-                AlertDialog.Builder constr = new AlertDialog.Builder(this);
-                constr.setTitle("Aller vers...");
-                Button versClasse = new Button(this);
-                Button versEleves = new Button(this);
-                Button versPlan = new Button(this);
-                versClasse.setText("Modifier la configuration");
-                versEleves.setText("Gérer les élèves");
-                versPlan.setText("Créer un plan de classe");
-                versClasse.setOnClickListener(w->{
-                    Intent intention = new Intent(this, NouvelleClasse.class);
-                    intention.putExtra("classe",classe);
-                    startActivity(intention);
+                nom.setText("classe: "+classe);
+                sup.setText(prefs.getString(classe,"inconnu au bataillon"));
+                SharedPreferences listeEleves= getBaseContext().getSharedPreferences("liste_eleves", Context.MODE_PRIVATE);
+                StringTokenizer st = new StringTokenizer(listeEleves.getString(classe,""), ",");
+                nb.setText("élèves: "+st.countTokens());
+                vue.setOnClickListener(v -> {
+                    AlertDialog.Builder constr = new AlertDialog.Builder(this);
+                    constr.setTitle("Aller vers...");
+                    Button versClasse = new Button(this);
+                    Button versEleves = new Button(this);
+                    Button versPlan = new Button(this);
+                    versClasse.setText("Modifier la configuration");
+                    versEleves.setText("Gérer les élèves");
+                    versPlan.setText("Créer un plan de classe");
+                    if(st.countTokens()<3){
+                        versPlan.setVisibility(View.GONE);
+                    }
+                    versClasse.setOnClickListener(w->{
+                        Intent intention = new Intent(this, NouvelleClasse.class);
+                        intention.putExtra("classe",classe);
+                        startActivity(intention);
+                    });
+                    versEleves.setOnClickListener(w->{
+                        Intent intention = new Intent(this, ListeEleves.class);
+                        intention.putExtra("classe",classe);
+                        startActivity(intention);
+                    });
+                    versPlan.setOnClickListener(w ->{
+                        Intent intention = new Intent(this, ParametresAlgorithme.class);
+                        intention.putExtra("classe",classe);
+                        startActivity(intention);
+                    });
+                    LinearLayout lay = new LinearLayout(this);
+                    lay.setOrientation(LinearLayout.VERTICAL);
+                    lay.setPadding(10,10,10,10);
+                    lay.addView(versClasse);
+                    lay.addView(versEleves);
+                    lay.addView(versPlan);
+                    constr.setView(lay);
+                    constr.show();
                 });
-                versEleves.setOnClickListener(w->{
-                    Intent intention = new Intent(this, ListeEleves.class);
-                    intention.putExtra("classe",classe);
-                    startActivity(intention);
-                });
-                versPlan.setOnClickListener(w ->{
-                    Intent intention = new Intent(this, ParametresAlgorithme.class);
-                    intention.putExtra("classe",classe);
-                    startActivity(intention);
-                });
-                LinearLayout lay = new LinearLayout(this);
-                lay.setOrientation(LinearLayout.VERTICAL);
-                lay.setPadding(10,10,10,10);
-                lay.addView(versClasse);
-                lay.addView(versEleves);
-                lay.addView(versPlan);
-                constr.setView(lay);
-                constr.show();
-            });
-            liste.addView(vue);
+                liste.addView(vue);
+            }
         }
+
     }
     @Override
     protected void onResume() {
@@ -145,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             color.setARGB(255,0,0,0);
             Bitmap bitmap = Bitmap.createBitmap(108, 108, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
+            canvas.drawColor(getResources().getColor(R.color.white));
             int colonnes = conf.get(conf.size()-1);
             if (conf.size()-1>0){
                 int dimension = Math.min(108/colonnes,108/((conf.size()-1)/colonnes));
@@ -176,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 reinitialiser();
                 return true;
             case R.id.nous_soutenir:
-                //soutient();
+                soutient();
                 return true;
             case R.id.infos:
                 infos();
@@ -212,8 +223,15 @@ public class MainActivity extends AppCompatActivity {
     public void infos(){
         AlertDialog.Builder constr = new AlertDialog.Builder(this);
         constr.setTitle("Informations");
-        constr.setMessage(String.format("Vous utilisez la %s de l'application. \nL'application a été développée par IPIC&cie.",getString(R.string.version)));
+        constr.setMessage(String.format("Vous utilisez la %s de l'application.\n%s \nL'application a été développée par IPIC&cie.",getString(R.string.version),getString(R.string.notes_version)));
         constr.show();
+    }
+
+    public void soutient(){
+        AlertDialog.Builder construit = new AlertDialog.Builder(this);
+        construit.setTitle("Merci de votre soutient");
+        construit.setMessage("Quelle générosité :.)");
+        construit.show();
     }
 
 }

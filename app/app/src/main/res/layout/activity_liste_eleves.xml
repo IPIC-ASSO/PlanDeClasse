@@ -19,6 +19,13 @@ tools:context=".ListeEleves">
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <TextView
+        android:id="@+id/bienvenue_eleve"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Il est temps de créer vos élèves.\nUtilisez le petit bouton vert pour commencer." />
+
     <Button
         android:id="@+id/vers_realiser_plan"
         android:layout_width="wrap_content"

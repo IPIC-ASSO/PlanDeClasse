@@ -314,6 +314,13 @@
                     android:progress="0" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Placer manuellement l'élève"
+                android:visibility="gone" />
+
             <EditText
                 android:id="@+id/txt_commentaires"
                 android:layout_width="match_parent"

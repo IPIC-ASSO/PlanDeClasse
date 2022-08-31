@@ -16,14 +16,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Space;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,9 +62,12 @@ public class ListeEleves extends AppCompatActivity {
     private SharedPreferences prefListeEleve;
     private SharedPreferences indices;
     private SharedPreferences config;
+    private SharedPreferences prefsAlgo;
     private List<String[]> donnees;
     private String classe;
-    int nbEleves;
+    private int[]tampon;
+    private int nbEleves;
+    private int colonnes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +76,7 @@ public class ListeEleves extends AppCompatActivity {
         prefListeEleve = getBaseContext().getSharedPreferences("liste_eleves", Context.MODE_PRIVATE);//élèves d'une classe  {"classe" -->"élève"}
         indices = getBaseContext().getSharedPreferences("eleves", Context.MODE_PRIVATE);//indice de l'élève dans la DB. {"eleve"+"classe" --> int}
         config = getBaseContext().getSharedPreferences("configuration", Context.MODE_PRIVATE);//config de la classe
+        prefsAlgo = getBaseContext().getSharedPreferences("algo", Context.MODE_PRIVATE);//préférences de l'algorithme.
         Log.d(TAG, "registre 1 "+prefListeEleve.getAll());
         Log.d(TAG, "registre 2"+indices.getAll());
         Log.d(TAG, "registre 3"+config.getAll());
@@ -98,9 +106,12 @@ public class ListeEleves extends AppCompatActivity {
         int compte = 0;
         int x = st2.countTokens();
         int w = st.countTokens();
+        tampon = new int[st2.countTokens()-1];
         for (int i = 0; i< x-1; i++){
-            if (Objects.equals(st2.nextToken(), "1"))compte++;
+            tampon[i] = Integer.parseInt(st2.nextToken());
+            if (tampon[i] == 1)compte++;
         }
+        colonnes = Integer.parseInt(st2.nextToken());
         eleves = new String[compte];
         try {
             for (int i = 0; i < w; i++) {
@@ -108,7 +119,7 @@ public class ListeEleves extends AppCompatActivity {
                 nbEleves += 1;
             }
         }catch( Exception e){
-               Toast.makeText(this,"Erreur critique, contactez les développeurs.",Toast.LENGTH_LONG);
+               Toast.makeText(this,"Erreur critique, contactez les développeurs.",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -116,35 +127,39 @@ public class ListeEleves extends AppCompatActivity {
         LinearLayout liste = findViewById(R.id.liste_eleve);
         LayoutInflater inflater = this.getLayoutInflater();
         liste.removeAllViews();
-
-        for (int i=0; i<nbEleves;i++){
-            String eleve = eleves[i];
-            View vue = inflater.inflate(R.layout.profil_eleve, null);
-            TextView nom = vue.findViewById(R.id.nom);
-            nom.setText(eleve);
-            TextView sup = vue.findViewById(R.id.suplement);
-            sup.setText(donnees.get(indices.getInt(eleve+classe,0))[14]);
-            vue.setOnClickListener(v -> generateurEleve(indices.getInt(eleve+classe,0)));
-            ImageView image = vue.findViewById(R.id.couleur);
-            if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10])&& Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
-                image.setColorFilter(Color.argb(255, 255, 255, 0));
-            } else if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10]) ||Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[11])||Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==0){
-                image.setColorFilter(Color.argb(255, 255, 0, 0));
-            }else if(Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[12])|| Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
-                image.setColorFilter(Color.argb(255, 0, 255, 0));
-            }else{
-                image.setColorFilter(Color.argb(255, 255, 255, 0));
+        if (nbEleves !=0) {
+            findViewById(R.id.bienvenue_eleve).setVisibility(View.GONE);
+            for (int i=0; i<nbEleves;i++){
+                String eleve = eleves[i];
+                View vue = inflater.inflate(R.layout.profil_eleve, null);
+                TextView nom = vue.findViewById(R.id.nom);
+                nom.setText(eleve);
+                TextView sup = vue.findViewById(R.id.suplement);
+                sup.setText(donnees.get(indices.getInt(eleve+classe,0))[14]);
+                vue.setOnClickListener(v -> generateurEleve(indices.getInt(eleve+classe,0)));
+                ImageView image = vue.findViewById(R.id.couleur);
+                if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10])&& Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
+                    image.setColorFilter(Color.argb(255, 255, 255, 0));
+                } else if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10]) ||Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[11])||Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==0){
+                    image.setColorFilter(Color.argb(255, 255, 0, 0));
+                }else if(Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[12])|| Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
+                    image.setColorFilter(Color.argb(255, 0, 255, 0));
+                }else{
+                    image.setColorFilter(Color.argb(255, 255, 255, 0));
+                }
+                liste.addView(vue);
             }
-            liste.addView(vue);
         }
         if (nbEleves == eleves.length) {
             findViewById(R.id.nouv_eleve).setVisibility(View.GONE);
-        }else if(nbEleves >2){
+        }
+        if(nbEleves >2){
             findViewById(R.id.vers_realiser_plan).setVisibility(View.VISIBLE);
             Space space = new Space(this);
             space.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,100));
             liste.addView(space);
         }
+        Log.d(TAG, "inflation: "+nbEleves);
     }
     @Override
     protected void onStop() {
@@ -206,6 +221,14 @@ public class ListeEleves extends AppCompatActivity {
         CheckBox iso = vue.findViewById(R.id.isoler);
         CheckBox moteur = vue.findViewById(R.id.moteur);
         SeekBar prio = vue.findViewById(R.id.priorite);
+        Button placer = vue.findViewById(R.id.place);
+        StringTokenizer st3 = new StringTokenizer(prefsAlgo.getString("places",""),",");
+        final int[] placeur = new int[eleves.length];//config
+        Arrays.fill(placeur,0);
+        int z = st3.countTokens();
+        for(int i= 0; i<z;i++){
+            placeur[i] = Integer.parseInt(st3.nextToken());
+        }
         int compte = 0; //nombre d'élèves enregistrés dans la classe
         for (String eleve: eleves){
             if (eleve != null)compte+=1;
@@ -298,14 +321,12 @@ public class ListeEleves extends AppCompatActivity {
             Log.d(TAG, "generateurEleve: "+Arrays.toString(selection2));
             }catch (Exception e){
                 Log.e(TAG, "generateurEleve: ", e);
-                Toast.makeText(this,"incompatibilité de version. Désinstallez puis réinstallez l'application",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Incompatibilités de versions détectées.Veuillez réinitialiser l'application",Toast.LENGTH_LONG).show();
             }
         }else{
             constructeur.setTitle("Nouvel élève");
         }
         AlertDialog show = constructeur.show();
-        int[] eviteIndices = new int[compte];
-        int[] correcteIndices = new int[compte];
         evite.setOnClickListener(x ->{
 
             AlertDialog.Builder constr = new AlertDialog.Builder(this);
@@ -337,8 +358,11 @@ public class ListeEleves extends AppCompatActivity {
                     nbEleves+=1;
                 }
                 for(int i = 0; i<selection.length;i++){ //met à jour les affinités
-                    if (selection[i])eviteIndices[i]=indices.getInt(eleves[i]+classe,0);
-                    if (selection2[i])correcteIndices[i] = indices.getInt(eleves[i] + classe, 0);
+                    if (selection[i] && selection2[i]){
+                        selection[i] = false;
+                        selection2[i] = false;
+                        Toast.makeText(this,"Incohérences dans les choix: un élève ne peut être éloigné et rapproché d'un même élève.",Toast.LENGTH_LONG).show();
+                    }
                 }
                 StringBuilder strEvite = new StringBuilder();   //convertit en chaine de cararctère les indices d'élèves à (!)éviter
                 for (Boolean eviteI : selection) {
@@ -348,6 +372,7 @@ public class ListeEleves extends AppCompatActivity {
                 for (Boolean correcteI : selection2) {
                     strCorrecte.append(correcteI).append(",");
                 }
+
                 String tailleE; //enregiste le bouton sélectionné
                 String vueE;
                 String placement;
@@ -447,6 +472,51 @@ public class ListeEleves extends AppCompatActivity {
             }
             show.dismiss();
         });
+        placer.setOnClickListener(zer ->{
+            AlertDialog.Builder constructeur2= new AlertDialog.Builder(this);
+            constructeur2.setTitle("Variante");
+            ScrollView def = new ScrollView(this);
+            HorizontalScrollView def2 = new HorizontalScrollView(this);
+            def.setScrollContainer(true);
+            TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(ScrollView.LayoutParams.WRAP_CONTENT, ScrollView.LayoutParams.MATCH_PARENT);
+            TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+            TableLayout table = new TableLayout(this);
+            table.setScrollContainer(true);
+            table.setLayoutParams(tableParams);
+            table.setStretchAllColumns(true);
+            table.setBackground(getDrawable(R.drawable.bords));
+            def2.addView(table);
+            def.addView(def2);
+            constructeur2.setView(def);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(50, TableRow.LayoutParams.WRAP_CONTENT);
+            params.setMargins(2,10,2,10);
+            int compte2 = 0;
+            for (int rang = 0; rang<tampon.length/colonnes;rang++){
+                TableRow ligne = new TableRow(this);
+                ligne.setLayoutParams(rowParams);
+                ligne.setMinimumWidth(30);
+                table.addView(ligne);
+                for (int x =0; x<colonnes;x++){
+                    Button nomEleve = new Button(this);
+                    nomEleve.setLayoutParams(params);
+                    nomEleve.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    nomEleve.setPadding(2,1,2,1);
+                    ligne.addView(nomEleve);
+                    if (tampon[rang*colonnes +x] == 1){
+                        nomEleve.setBackground(getDrawable(R.drawable.bords));
+                        compte2++;
+                        final int truc = compte2;
+                        nomEleve.setOnClickListener(v -> placeur[truc] =1);
+                    }
+                }
+            }
+            try {
+                constructeur2.show();
+            }catch (Exception e){
+                Log.e(TAG, "affiche: ",e );
+                Toast.makeText(this,"Erreur critique, contactez les développeurs",Toast.LENGTH_LONG).show();
+            }
+        });
         show.show();
     }
 
@@ -469,7 +539,7 @@ public class ListeEleves extends AppCompatActivity {
                 reinitialiser();
                 return true;
             case R.id.nous_soutenir:
-                //soutient();
+                soutient();
                 return true;
             case R.id.infos:
                 infos();
@@ -487,10 +557,6 @@ public class ListeEleves extends AppCompatActivity {
     public void onExplose(){this.finishAffinity();}
 
     public void reinitialiser(){
-        SharedPreferences prefsAlgo = getBaseContext().getSharedPreferences("algo", Context.MODE_PRIVATE);//préférences de l'algorithme.
-        SharedPreferences prefListeEleve = getBaseContext().getSharedPreferences("liste_eleves", Context.MODE_PRIVATE);//élèves d'une classe  {"classe" -->"élève"}
-        SharedPreferences config = getBaseContext().getSharedPreferences("configuration", Context.MODE_PRIVATE);//config de la classe
-        SharedPreferences indices = getBaseContext().getSharedPreferences("eleves", Context.MODE_PRIVATE);//indice de l'élève dans la DB. {"eleve"+"classe" --> int}
         SharedPreferences prefs = getBaseContext().getSharedPreferences("classes", Context.MODE_PRIVATE);//liste des classes et commentaires pour chaque classe
         prefsAlgo.edit().clear().apply();
         prefListeEleve.edit().clear().apply();
@@ -505,7 +571,14 @@ public class ListeEleves extends AppCompatActivity {
     public void infos(){
         AlertDialog.Builder constr = new AlertDialog.Builder(this);
         constr.setTitle("Informations");
-        constr.setMessage(String.format("Vous utilisez la %s de l'application. \nL'application a été développée par IPIC&cie.",getString(R.string.version)));
+        constr.setMessage(String.format("Vous utilisez la %s de l'application.\n%s \nL'application a été développée par IPIC&cie.",getString(R.string.version),getString(R.string.notes_version)));
         constr.show();
+    }
+
+    public void soutient(){
+        AlertDialog.Builder construit = new AlertDialog.Builder(this);
+        construit.setTitle("Merci de votre soutient");
+        construit.setMessage("Que vous êtes bon");
+        construit.show();
     }
 }

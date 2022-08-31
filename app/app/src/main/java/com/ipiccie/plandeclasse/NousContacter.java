@@ -74,7 +74,7 @@ public class NousContacter extends AppCompatActivity {
                 reinitialiser();
                 return true;
             case R.id.nous_soutenir:
-                //soutient();
+                soutient();
                 return true;
             case R.id.infos:
                 infos();
@@ -106,6 +106,13 @@ public class NousContacter extends AppCompatActivity {
         constr.setTitle("Informations");
         constr.setMessage(String.format("Vous utilisez la %s de l'application. \nL'application a été développée par IPIC&cie.",getString(R.string.version)));
         constr.show();
+    }
+
+    public void soutient(){
+        AlertDialog.Builder construit = new AlertDialog.Builder(this);
+        construit.setTitle("Merci de votre soutient");
+        construit.setMessage("Votre soutient nous rend plus fort");
+        construit.show();
     }
 
 }

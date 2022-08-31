@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Plan de Classe</string>
-    <string name="version">V 0.8 ALPHA</string>
+    <string name="version">V 1.1</string>
+    <string name="notes_version">Il s\'agit de la version de lancement, appelée à évoluer. De nombreuses améliorations sont en cours de développement.</string>
 </resources>

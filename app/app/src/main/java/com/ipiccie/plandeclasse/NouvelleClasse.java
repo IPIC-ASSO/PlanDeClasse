@@ -135,19 +135,24 @@ public class NouvelleClasse extends AppCompatActivity {
                 ligne.addView(esp2);
             }
             constructeur.setPositiveButton("Valider", (dialog, which) -> {
-
+                int compte = 0;
                 StringBuilder str = new StringBuilder();
                 for (int place : configuration2) {
                     str.append(place).append(",");
+                    if(place == 1)compte++;
                 }
-                str.append(colonne.getText().toString()).append(",");
-                prefs.edit().putString(nomDeClasse.getText().toString(),commentaires.getText().toString()).apply();
-                config.edit().putString(nomDeClasse.getText().toString(), str.toString()).apply();
-                ajouteClasse(nomDeClasse.getText().toString());
-                dialog.dismiss();
-                Intent intention = new Intent(this, ListeEleves.class);
-                intention.putExtra("classe",nomDeClasse.getText().toString());
-                startActivity(intention);
+                if(compte>2){
+                    str.append(colonne.getText().toString()).append(",");
+                    prefs.edit().putString(nomDeClasse.getText().toString(),commentaires.getText().toString()).apply();
+                    config.edit().putString(nomDeClasse.getText().toString(), str.toString()).apply();
+                    ajouteClasse(nomDeClasse.getText().toString());
+                    dialog.dismiss();
+                    Intent intention = new Intent(this, ListeEleves.class);
+                    intention.putExtra("classe",nomDeClasse.getText().toString());
+                    startActivity(intention);
+                }else{
+                    Toast.makeText(this,"Veillez placer au moins trois tables dans cette classe",Toast.LENGTH_SHORT).show();
+                }
             });
             constructeur.show();
             }else{
@@ -212,7 +217,7 @@ public class NouvelleClasse extends AppCompatActivity {
                 reinitialiser();
                 return true;
             case R.id.nous_soutenir:
-                //soutient();
+                soutient();
                 return true;
             case R.id.infos:
                 infos();
@@ -248,7 +253,13 @@ public class NouvelleClasse extends AppCompatActivity {
     public void infos(){
         AlertDialog.Builder constr = new AlertDialog.Builder(this);
         constr.setTitle("Informations");
-        constr.setMessage(String.format("Vous utilisez la %s de l'application. \nL'application a été développée par IPIC&cie.",getString(R.string.version)));
+        constr.setMessage(String.format("Vous utilisez la %s de l'application.\n%s \nL'application a été développée par IPIC&cie.",getString(R.string.version),getString(R.string.notes_version)));
         constr.show();
+    }
+    public void soutient(){
+        AlertDialog.Builder construit = new AlertDialog.Builder(this);
+        construit.setTitle("Merci de votre soutient");
+        construit.setMessage("IPIC&cie vous est reconnaissant");
+        construit.show();
     }
 }
