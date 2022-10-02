@@ -317,8 +317,6 @@ public class ListeEleves extends AppCompatActivity {
                 selection[i]=Boolean.parseBoolean(stEvite.nextToken());
                 selection2[i]=Boolean.parseBoolean(stCorrecte.nextToken());
             }
-            Log.d(TAG, "generateurEleve: "+Arrays.toString(selection));
-            Log.d(TAG, "generateurEleve: "+Arrays.toString(selection2));
             }catch (Exception e){
                 Log.e(TAG, "generateurEleve: ", e);
                 Toast.makeText(this,"Incompatibilités de versions détectées.Veuillez réinitialiser l'application",Toast.LENGTH_LONG).show();
@@ -350,7 +348,7 @@ public class ListeEleves extends AppCompatActivity {
         });
         enregistrer.setOnClickListener(w ->{
             Log.d(TAG, "generateurEleve: "+!(nbEleves>=eleves.length && indice<0)+ !nom.getText().toString().equals("") + !(genre.getCheckedRadioButtonId()!= R.id.fille && genre.getCheckedRadioButtonId()!=R.id.garcon) + !(Arrays.asList(eleves).contains(nom.getText().toString()) && indice<0));
-            if (!(nbEleves>=eleves.length && indice<0) &&  !nom.getText().toString().equals("") && !(genre.getCheckedRadioButtonId()!= R.id.fille && genre.getCheckedRadioButtonId()!=R.id.garcon) && !((Arrays.asList(eleves).contains(nom.getText().toString())) && (indice<0|| !Objects.equals(donnees.get(indice)[1], nom.getText().toString())))){
+            if (!(nbEleves>=eleves.length && indice<0) &&  !nom.getText().toString().equals("") && !((Arrays.asList(eleves).contains(nom.getText().toString())) && (indice<0|| !Objects.equals(donnees.get(indice)[1], nom.getText().toString())))){
                 if (indice>=0){ //élève déjà enregistré (modifications)
                     eleves[Arrays.asList(eleves).indexOf(donnees.get(indice)[1])] = nom.getText().toString();
                 }else{
@@ -443,8 +441,11 @@ public class ListeEleves extends AppCompatActivity {
                     case R.id.fille:
                         genE = "0";
                         break;
-                    default:
+                    case R.id.garcon:
                         genE = "1";
+                        break;
+                    default:
+                        genE = "2";
                         break;
                 }
 

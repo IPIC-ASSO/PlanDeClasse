@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
@@ -22,14 +21,14 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:hint="Nom de la classe"
+                android:hint="@string/hint_nom_de_la_classe"
                 android:text="" />
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="dimensions de la classe"
+                android:text="@string/txt_dimensions_classe"
                 android:textAlignment="center"
                 android:textSize="16sp" />
 
@@ -44,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="colonnes"
+                    android:hint="@string/hint_nb_colonnes"
                     android:inputType="number|text|phone"
                     android:text="" />
 
@@ -54,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="rangées"
+                    android:hint="@string/hint_nb_rangees"
                     android:inputType="number|text|phone"
                     android:text="" />
             </LinearLayout>
@@ -64,14 +63,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Commentaires"
+                android:hint="@string/hint_commentaires_classe"
                 android:inputType="textPersonName" />
 
             <Button
                 android:id="@+id/appliquer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Voir" />
+                android:text="@string/txt_btn_voir" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_exemple"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/salle_de_classe"
+                android:contentDescription="@string/dsc_img_exemple" />
 
         </LinearLayout>
     </ScrollView>

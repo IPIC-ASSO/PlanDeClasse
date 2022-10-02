@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             app:srcCompat="@drawable/ic_launcher_foreground"
-            android:contentDescription="aperçu de la classe" />
+            android:contentDescription="@string/dsc_apercu_classe" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -32,17 +32,17 @@
             <TextView
                 android:id="@+id/nom_classe"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="CLASSE X"
+                android:text="@string/defaut_nom_classe"
                 android:textColor="#424242" />
 
             <TextView
                 android:id="@+id/nombre_eleves"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="X ELEVES"
+                android:text="@string/defaut_nb_eleves"
                 android:textColor="#424242" />
         </LinearLayout>
 
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="COMMENTAIRES"
+            android:text="@string/defaut_txt_commentaires"
             android:textAlignment="center"
             android:textColor="#424242" />
 

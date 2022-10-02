@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.TableLayout;
@@ -88,73 +90,66 @@ public class NouvelleClasse extends AppCompatActivity {
                 Toast.makeText(this, "Remplissez tous les champs", Toast.LENGTH_SHORT).show();
             }*/
             if (!colonne.getText().toString().equals("") && !rang.getText().toString().equals("") &&!nomDeClasse.getText().toString().equals("") ){
-            AlertDialog.Builder constructeur= new AlertDialog.Builder(this);
-            constructeur.setTitle("Configuration");
-            ScrollView def = new ScrollView(this);
-            HorizontalScrollView def2 = new HorizontalScrollView(this);
-            def.setScrollContainer(true);
-            TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
-            TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-            TableLayout table = new TableLayout(this);
-            table.setScrollContainer(true);
-
-            table.setLayoutParams(tableParams);
-            table.setColumnStretchable(0,true);
-            table.setColumnStretchable(Integer.parseInt(colonne.getText().toString())+1,true);
-            table.setBackground(getDrawable(R.drawable.bords));
-            def2.addView(table);
-            def.addView(def2);
-            constructeur.setView(def);
-            configuration2 = new ArrayList<>();
-            for (int y = 0; y<Integer.parseInt(rang.getText().toString());y++){
-                final int yy = y;
-                TableRow ligne = new TableRow(this);
-                ligne.setLayoutParams(rowParams);
-                ligne.setMinimumWidth(40);
-                ligne.setPadding(1,1,1,1);
-                table.addView(ligne);
-                Space esp= new Space(this);
-                ligne.addView(esp);
-                for (int x =0; x<Integer.parseInt(colonne.getText().toString());x++){
-                    final int xx = x;
-                    ImageView posEleve = new ImageView(this);
-                    ligne.addView(posEleve);
-                    posEleve.setImageDrawable(getDrawable(R.drawable.ic_baseline_add_24));
-                    configuration2.add(0);
-                    posEleve.setOnClickListener(v ->{
-                        if(configuration2.get(yy*Integer.parseInt(colonne.getText().toString())+xx)==0) {
-                            posEleve.setBackgroundColor(Color.parseColor("#808080"));
-                            configuration2.set(yy * Integer.parseInt(colonne.getText().toString()) + xx, 1);
-                        }else{
-                            posEleve.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            configuration2.set(yy * Integer.parseInt(colonne.getText().toString()) + xx, 0);
-                        }
-                    });
+                LayoutInflater inflater = this.getLayoutInflater();
+                View vue = inflater.inflate(R.layout.emulateur_classe, null);
+                AlertDialog.Builder constructeur= new AlertDialog.Builder(this);
+                constructeur.setTitle("Configuration");
+                constructeur.setView(vue);
+                TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                TableLayout table = vue.findViewById(R.id.la_table);
+                table.setColumnStretchable(0,true);
+                table.setColumnStretchable(Integer.parseInt(colonne.getText().toString())+1,true);
+                table.setBackground(getDrawable(R.drawable.bords));
+                configuration2 = new ArrayList<>();
+                for (int y = 0; y<Integer.parseInt(rang.getText().toString());y++){
+                    final int yy = y;
+                    TableRow ligne = new TableRow(this);
+                    ligne.setLayoutParams(rowParams);
+                    ligne.setMinimumWidth(40);
+                    ligne.setPadding(1,1,1,1);
+                    table.addView(ligne);
+                    Space esp= new Space(this);
+                    ligne.addView(esp);
+                    for (int x =0; x<Integer.parseInt(colonne.getText().toString());x++){
+                        final int xx = x;
+                        ImageView posEleve = new ImageView(this);
+                        ligne.addView(posEleve);
+                        posEleve.setImageDrawable(getDrawable(R.drawable.ic_baseline_add_24));
+                        configuration2.add(0);
+                        posEleve.setOnClickListener(v ->{
+                            if(configuration2.get(yy*Integer.parseInt(colonne.getText().toString())+xx)==0) {
+                                posEleve.setBackgroundColor(Color.parseColor("#808080"));
+                                configuration2.set(yy * Integer.parseInt(colonne.getText().toString()) + xx, 1);
+                            }else{
+                                posEleve.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                configuration2.set(yy * Integer.parseInt(colonne.getText().toString()) + xx, 0);
+                            }
+                        });
+                    }
+                    Space esp2= new Space(this);
+                    ligne.addView(esp2);
                 }
-                Space esp2= new Space(this);
-                ligne.addView(esp2);
-            }
-            constructeur.setPositiveButton("Valider", (dialog, which) -> {
-                int compte = 0;
-                StringBuilder str = new StringBuilder();
-                for (int place : configuration2) {
-                    str.append(place).append(",");
-                    if(place == 1)compte++;
-                }
-                if(compte>2){
-                    str.append(colonne.getText().toString()).append(",");
-                    prefs.edit().putString(nomDeClasse.getText().toString(),commentaires.getText().toString()).apply();
-                    config.edit().putString(nomDeClasse.getText().toString(), str.toString()).apply();
-                    ajouteClasse(nomDeClasse.getText().toString());
-                    dialog.dismiss();
-                    Intent intention = new Intent(this, ListeEleves.class);
-                    intention.putExtra("classe",nomDeClasse.getText().toString());
-                    startActivity(intention);
-                }else{
-                    Toast.makeText(this,"Veillez placer au moins trois tables dans cette classe",Toast.LENGTH_SHORT).show();
-                }
-            });
-            constructeur.show();
+                constructeur.setPositiveButton("Valider", (dialog, which) -> {
+                    int compte = 0;
+                    StringBuilder str = new StringBuilder();
+                    for (int place : configuration2) {
+                        str.append(place).append(",");
+                        if(place == 1)compte++;
+                    }
+                    if(compte>2){
+                        str.append(colonne.getText().toString()).append(",");
+                        prefs.edit().putString(nomDeClasse.getText().toString(),commentaires.getText().toString()).apply();
+                        config.edit().putString(nomDeClasse.getText().toString(), str.toString()).apply();
+                        ajouteClasse(nomDeClasse.getText().toString());
+                        dialog.dismiss();
+                        Intent intention = new Intent(this, ListeEleves.class);
+                        intention.putExtra("classe",nomDeClasse.getText().toString());
+                        startActivity(intention);
+                    }else{
+                        Toast.makeText(this,"Veillez placer au moins trois tables dans cette classe",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                constructeur.show();
             }else{
                 Toast.makeText(this, "Remplissez tous les champs", Toast.LENGTH_SHORT).show();
             }

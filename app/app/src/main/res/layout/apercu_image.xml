@@ -16,6 +16,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/dsc_image_enr" />
 
 </androidx.cardview.widget.CardView>

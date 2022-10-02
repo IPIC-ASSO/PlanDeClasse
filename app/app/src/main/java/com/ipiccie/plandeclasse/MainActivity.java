@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         bouton2.setOnClickListener(v -> {
             startActivity(new Intent(this, Gallerie.class));
         });
-
-
     }
 
     public void obtienClasse0(){

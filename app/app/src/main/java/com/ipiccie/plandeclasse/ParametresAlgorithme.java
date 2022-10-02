@@ -3,15 +3,20 @@ package com.ipiccie.plandeclasse;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.media.VolumeShaper;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Space;
@@ -37,6 +43,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
@@ -95,72 +102,136 @@ public class ParametresAlgorithme extends AppCompatActivity {
         prefsAlgo.edit().clear().apply();
 
         Button suivant = findViewById(R.id.realiser_plan);
-        CheckBox affinitesE = findViewById(R.id.affinites_e);
-        CheckBox affinitesI = findViewById(R.id.affinites_i);
-        CheckBox vue = findViewById(R.id.vision);
-        CheckBox taille = findViewById(R.id.haut);
-        CheckBox alternanceFG = findViewById(R.id.alternance_fg);
-        CheckBox alternanceAC = findViewById(R.id.alternance_ac);
-        CheckBox alternanceFD = findViewById(R.id.alternance_fd);
-        CheckBox associerDM = findViewById(R.id.associer_dm);
-        CheckBox ordreAlpha = findViewById(R.id.ordre_alpha);
-        SeekBar affiniteEniv = findViewById(R.id.affinites_e_niv);
-        SeekBar affiniteIniv = findViewById(R.id.affinites_i_niv);
-        SeekBar vueNiv = findViewById(R.id.vision_niv);
-        SeekBar tailleNiv = findViewById(R.id.haut_niv);
-        SeekBar alternanceFGNiv = findViewById(R.id.alternance_fg_niv);
-        SeekBar alternanceACNiv = findViewById(R.id.alternance_ac_niv);
-        SeekBar alternanceFDNiv = findViewById(R.id.alternance_fd_niv);
-        SeekBar associerDMNiv = findViewById(R.id.associer_dm_niv);
-        SeekBar ordreAlphaNiv = findViewById(R.id.ordre_alpha_niv);
+        initBtn();
+        RadioGroup affinitesE = findViewById(R.id.affinites_e);
+        RadioGroup affinitesI = findViewById(R.id.affinites_i);
+        RadioGroup vue = findViewById(R.id.vision);
+        RadioGroup taille = findViewById(R.id.haut);
+        RadioGroup alternanceFG = findViewById(R.id.alternance_fg);
+        RadioGroup alternanceAC = findViewById(R.id.alternance_ac);
+        RadioGroup alternanceFD = findViewById(R.id.alternance_fd);
+        RadioGroup associerDM = findViewById(R.id.associer_dm);
+        RadioGroup ordreAlpha = findViewById(R.id.ordre_alpha);
 
 
         suivant.setOnClickListener(v -> {
-            if (affinitesE.isChecked()){
-                prefsAlgo.edit().putInt("affinites_e",affiniteEniv.getProgress()).apply();
-            }else{
-                prefsAlgo.edit().putInt("affinites_e",-1).apply();
+            int x;
+            switch (affinitesE.getCheckedRadioButtonId()){
+                case R.id.radioButton2:
+                    x=1;
+                    break;
+                case R.id.radioButton3:
+                    x=2;
+                    break;
+                default:
+                    x=0;
+                    break;
             }
-            if (affinitesI.isChecked()){
-                prefsAlgo.edit().putInt("affinites_i",affiniteIniv.getProgress()).apply();
-            }else{
-                prefsAlgo.edit().putInt("affinites_i",-1).apply();
+            prefsAlgo.edit().putInt("affinites_e",x).apply();
+
+            switch (affinitesI.getCheckedRadioButtonId()){
+                case R.id.radioButton5:
+                    x=1;
+                    break;
+                case R.id.radioButton6:
+                    x=2;
+                    break;
+                default:
+                    x=0;
+                    break;
             }
-            if (vue.isChecked()){
-                prefsAlgo.edit().putInt("vue",vueNiv.getProgress()).apply();
-            }else{
-                prefsAlgo.edit().putInt("vue",-1).apply();
+            prefsAlgo.edit().putInt("affinites_i",x).apply();
+
+            switch (vue.getCheckedRadioButtonId()){
+                case R.id.radioButton8:
+                    x=1;
+                    break;
+                case R.id.radioButton9:
+                    x=2;
+                    break;
+                default:
+                    x=0;
+                    break;
             }
-            if (taille.isChecked()){
-                prefsAlgo.edit().putInt("taille",tailleNiv.getProgress()).apply();
-            }else{
-                prefsAlgo.edit().putInt("taille",-1).apply();
+            prefsAlgo.edit().putInt("vue",x).apply();
+
+            switch (taille.getCheckedRadioButtonId()){
+                case R.id.radioButton11:
+                    x=1;
+                    break;
+                case R.id.radioButton12:
+                    x=2;
+                    break;
+                default:
+                    x=0;
+                    break;
             }
-            if (alternanceFG.isChecked()){
-                prefsAlgo.edit().putInt("alternance_fg",alternanceFGNiv.getProgress()).apply();
-            }else{
-                prefsAlgo.edit().putInt("alternance_fg",-1).apply();
+            prefsAlgo.edit().putInt("taille",x).apply();
+
+            switch (alternanceFG.getCheckedRadioButtonId()){
+                case R.id.radioButton14:
+                    x=1;
+                    break;
+                case R.id.radioButton15:
+                    x=2;
+                    break;
+                default:
+                    x=0;
+                    break;
             }
-            if (alternanceAC.isChecked()){
-                prefsAlgo.edit().putInt("alternance_ac",alternanceACNiv.getProgress()).apply();
-            }else{
-                prefsAlgo.edit().putInt("alternance_ac",-1).apply();
+            prefsAlgo.edit().putInt("alternance_fg",x).apply();
+
+            switch (alternanceAC.getCheckedRadioButtonId()){
+                case R.id.radioButton17:
+                    x=1;
+                    break;
+                case R.id.radioButton18:
+                    x=2;
+                    break;
+                default:
+                    x=0;
+                    break;
             }
-            if (alternanceFD.isChecked()){
-                prefsAlgo.edit().putInt("alternance_fd",alternanceFDNiv.getProgress()).apply();
-            }else{
-                prefsAlgo.edit().putInt("alternance_fd",-1).apply();
+            prefsAlgo.edit().putInt("alternance_ac",x).apply();
+
+            switch (alternanceFD.getCheckedRadioButtonId()){
+                case R.id.radioButton20:
+                    x=1;
+                    break;
+                case R.id.radioButton21:
+                    x=2;
+                    break;
+                default:
+                    x=0;
+                    break;
             }
-            if (associerDM.isChecked()){
-                prefsAlgo.edit().putInt("associer_dm",associerDMNiv.getProgress()).apply();
-            }else{
-                prefsAlgo.edit().putInt("associer_dm",-1).apply();
+            prefsAlgo.edit().putInt("alternance_fd",x).apply();
+
+            switch (associerDM.getCheckedRadioButtonId()){
+                case R.id.radioButton23:
+                    x=1;
+                    break;
+                case R.id.radioButton24:
+                    x=2;
+                    break;
+                default:
+                    x=0;
+                    break;
             }
-            if (ordreAlpha.isChecked()){
-                prefsAlgo.edit().putInt("ordre_alpha",ordreAlphaNiv.getProgress()).apply();
-            }else{
-                prefsAlgo.edit().putInt("ordre_alpha",-1).apply();
+            prefsAlgo.edit().putInt("associer_dm",x).apply();
+
+            switch (ordreAlpha.getCheckedRadioButtonId()){
+                case R.id.radioButton26:
+                    x=1;
+                    break;
+                case R.id.radioButton27:
+                    x=2;
+                    break;
+                default:
+                    x=0;
+                    break;
             }
+            prefsAlgo.edit().putInt("ordre_alpha",x).apply();
             laBoucle();
         });
 
@@ -169,6 +240,15 @@ public class ParametresAlgorithme extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         Log.d(TAG, "Infos: initialisation terminée");
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int orientation = this.getResources().getConfiguration().orientation;
+        if (width < 500 && orientation == Configuration.ORIENTATION_PORTRAIT){
+            new MaterialAlertDialogBuilder(this).setTitle("Recommandation").setMessage("Nous vous recommandons d'utiliser votre appareil en mode paysage sur cet écran, pour bénéficier d'une expérience optimale").show();
+        }
     }
 
     private List<String[]> readCsvFile2(){
@@ -314,6 +394,7 @@ public class ParametresAlgorithme extends AppCompatActivity {
     }
 
     public void isolement(){
+        //TODO:vérifier application uniquement sur les élèves  à isoler.
         int[] isoVal = new int[laMatrice.get(0).length];
         int compte = 0;
         for (int indiceTampon = 0; indiceTampon<tampon.length; indiceTampon++){    //détermine le nombre de places adjacentes
@@ -329,7 +410,7 @@ public class ParametresAlgorithme extends AppCompatActivity {
         }
         for(int i = 0; i < eleves.length; i++){
             for(int j=0; j<isoVal.length;j++){
-                laMatrice.get(i)[j] += 5*importance[i]*(4-isoVal[j]);
+                laMatrice.get(i)[j] += 2*importance[i]*(4-isoVal[j]);
             }
         }
         Log.i(TAG, "Informations isolement: OK");
@@ -372,8 +453,16 @@ public class ParametresAlgorithme extends AppCompatActivity {
             if (isoler){
                 laMatrice.get(i)[droite] -= 5* importance[i];
                 laMatrice.get(i)[gauche] -= 5* importance[i];
-                laMatrice.get(i)[devant] -= 5* importance[i]*0.75F;
-                laMatrice.get(i)[derriere] -= 5* importance[i]*0.75F;
+                laMatrice.get(i)[devant] -= 5* importance[i]*0.9;
+                laMatrice.get(i)[derriere] -= 5* importance[i]*0.9;
+                if (indiceTampon%colonnes>0){ //gauche
+                    if (indiceTampon/colonnes>0 && tampon[indiceTampon-colonnes -1]==1)laMatrice.get(i)[indiceTampon-colonnes -1] -= 5* importance[i]*0.8;//haut
+                    if (indiceTampon<tampon.length-colonnes && tampon[indiceTampon+colonnes -1]==1)laMatrice.get(i)[indiceTampon+colonnes -1] -= 5* importance[i]*0.8;//bas
+                }
+                if(indiceTampon%colonnes<colonnes-2){//droite
+                    if (indiceTampon/colonnes>0 && tampon[indiceTampon-colonnes -1]==1)laMatrice.get(i)[indiceTampon-colonnes +1] -= 5* importance[i]*0.8;//haut
+                    if (indiceTampon<tampon.length-colonnes && tampon[indiceTampon+colonnes -1]==1)laMatrice.get(i)[indiceTampon+colonnes +1] -= 5* importance[i]*0.8;//bas
+                }
             }
             if (Boolean.TRUE.equals(evite[i])) {//à éviter
                 laMatrice.get(i)[droite] -= affE* importance[i];
@@ -456,12 +545,10 @@ public class ParametresAlgorithme extends AppCompatActivity {
 
     private void laBoucle(){
         init();
-        placement(5);
-        if (prefsAlgo.getInt("ordre_alpha",0)+1 >0)ordreAlpha(prefsAlgo.getInt("ordre_alpha",0)+1);
-        Log.d(TAG, "laBoucle: eleve4: "+ Arrays.toString(laMatrice.get(3)));
+        placement(2);
+        if (prefsAlgo.getInt("ordre_alpha",0)>0)ordreAlpha(prefsAlgo.getInt("ordre_alpha",0));
         isolement();
-        Log.d(TAG, "laBoucle: eleve4: "+ Arrays.toString(laMatrice.get(3)));
-        taille(prefsAlgo.getInt("taille",0)+1);
+        taille(prefsAlgo.getInt("taille",0));
         String[] clone;
         clone = eleves.clone();
         for (int wse = 0; wse< eleves.length; wse++){
@@ -494,7 +581,7 @@ public class ParametresAlgorithme extends AppCompatActivity {
             place[indicesE.get(choix)] =indices2.get(choix);
             clone[indicesE.get(choix)] = null;
             Rplace[indices2.get(choix)] = eleves[indicesE.get(choix)];
-            affinites(indicesE.get(choix),prefsAlgo.getInt("affinites_e",0)+1,prefsAlgo.getInt("affinites_i",0)+1,prefsAlgo.getInt("alternance_fg",0)+1,prefsAlgo.getInt("alternance_ac",0)+1,prefsAlgo.getInt("alternance_fd",0)+1, prefsAlgo.getInt("associer_dm",0)+1);
+            affinites(indicesE.get(choix),prefsAlgo.getInt("affinites_e",0),prefsAlgo.getInt("affinites_i",0),prefsAlgo.getInt("alternance_fg",0),prefsAlgo.getInt("alternance_ac",0),prefsAlgo.getInt("alternance_fd",0), prefsAlgo.getInt("associer_dm",0));
             Log.d(TAG, "res: matrix"+ Arrays.toString(laMatrice.get(indicesE.get(choix))));
             Log.d(TAG, "res: place"+ Arrays.toString(place));
             Log.d(TAG, "res: Rplace"+ Arrays.toString(Rplace));
@@ -592,6 +679,18 @@ public class ParametresAlgorithme extends AppCompatActivity {
             Log.e(TAG, "affiche: ",e );
             Toast.makeText(this,"Erreur critique, contactez les développeurs",Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void initBtn(){
+        findViewById(R.id.btn_affinite_e).setOnClickListener(w-> new MaterialAlertDialogBuilder(this).setMessage(getString(R.string.aide_aff_e)).setTitle(R.string.btn_inf_aff_e).show());
+        findViewById(R.id.btn_affinite_i).setOnClickListener(w-> new MaterialAlertDialogBuilder(this).setMessage(getString(R.string.aide_aff_i)).setTitle(R.string.btn_infos_aff_i).show());
+        findViewById(R.id.btn_vue).setOnClickListener(w-> new MaterialAlertDialogBuilder(this).setMessage(getString(R.string.aide_vue)).setTitle(R.string.btn_infos_vue).show());
+        findViewById(R.id.btn_taille).setOnClickListener(w-> new MaterialAlertDialogBuilder(this).setMessage(getString(R.string.aide_taille)).setTitle(R.string.btn_infos_taille).show());
+        findViewById(R.id.btn_alt_fg).setOnClickListener(w-> new MaterialAlertDialogBuilder(this).setMessage(getString(R.string.aide_alt_fg)).setTitle(R.string.btn_infos_alt_fg).show());
+        findViewById(R.id.btn_alt_ac).setOnClickListener(w-> new MaterialAlertDialogBuilder(this).setMessage(getString(R.string.aide_alt_ac)).setTitle(R.string.btn_infos_alt_ac).show());
+        findViewById(R.id.btn_alt_fd).setOnClickListener(w-> new MaterialAlertDialogBuilder(this).setMessage(getString(R.string.aide_alt_df)).setTitle(R.string.btn_infos_alt_fd).show());
+        findViewById(R.id.btn_associer_dm).setOnClickListener(w-> new MaterialAlertDialogBuilder(this).setMessage(getString(R.string.aide_asso_dm)).setTitle(R.string.btn_infos_rep_moteurs).show());
+        findViewById(R.id.btn_ordre_alpha).setOnClickListener(w-> new MaterialAlertDialogBuilder(this).setMessage(getString(R.string.aide_ordre_alpha)).setTitle(R.string.btn_infos_ordre_alpha).show());
     }
 
     @Override

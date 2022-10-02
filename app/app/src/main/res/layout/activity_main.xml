@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
         android:clickable="true"
-        android:contentDescription="ajouter une classe"
+        android:contentDescription="@string/dsc_ajouter_classe"
         app:backgroundTint="#23FB27"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:layout_margin="40dp"
-        android:contentDescription="Voir les plans de classes enregistrés"
+        android:contentDescription="@string/dsc_btn_gallerie"
         app:backgroundTint="@color/rouge"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,10 +36,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Bienvenue! \nCréez votre première classe en utilisant le petit bouton vert."
+        android:text="@string/txt_bienvenue_liste_classes"
         android:textAlignment="center" />
 
     <ScrollView
+        android:contentDescription="@string/dsc_listes_classes"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

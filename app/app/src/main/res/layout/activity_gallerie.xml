@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:text="Aucune image enregistrée"
+        android:text="@string/txt_defaut_gallerie"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView

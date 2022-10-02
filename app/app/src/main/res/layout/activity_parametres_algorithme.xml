@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
+    android:layout_margin="7dp"
     tools:context=".ParametresAlgorithme">
 
 
@@ -12,7 +12,7 @@
         android:id="@+id/indications"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Indiquez l'importance de chaque critère dans la réalisation du plan de classe"
+        android:text="@string/txt_infos_critères"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -32,10 +32,12 @@
             android:orientation="vertical">
 
             <TableLayout
+                android:id="@+id/str"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:isScrollContainer="true"
-                android:stretchColumns="1">
+                android:shrinkColumns="0"
+                android:stretchColumns="*">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -46,7 +48,7 @@
                         android:id="@+id/textView19"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Activer ce critère"
+                        android:text="@string/txt_infos_activer_critere"
                         android:textAlignment="center"
                         android:textStyle="italic" />
 
@@ -54,51 +56,115 @@
                         android:id="@+id/textView20"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Importance du critère"
+                        android:text="@string/txt_infos_imp_critere"
                         android:textAlignment="center"
                         android:textStyle="italic" />
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:showDividers="middle">
 
-                    <CheckBox
-                        android:id="@+id/affinites_e"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="affinités (exclusion)" />
-
-                    <SeekBar
-                        android:id="@+id/affinites_e_niv"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                    <Button
+                        android:id="@+id/btn_affinite_e"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:max="4"
-                        android:progress="2" />
+                        android:singleLine="true"
+                        android:text="@string/btn_inf_aff_e"
+                        android:textAllCaps="false"
+                        android:textColor="#000000"
+                        android:textSize="14sp" />
+
+                    <RadioGroup
+                        android:id="@+id/affinites_e"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#D80A0A"
+                        android:checkedButton="@id/radioButton3"
+                        android:foregroundTint="#CF1313"
+                        android:orientation="horizontal"
+                        android:pointerIcon="arrow">
+
+                        <RadioButton
+                            android:id="@+id/radioButton1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#999"
+                            android:text="@string/off" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#0000FF"
+                            android:text="@string/secondaire" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#FF0000"
+                            android:text="@string/important" />
+                    </RadioGroup>
+
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <CheckBox
-                        android:id="@+id/affinites_i"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="affinités (inclusion)" />
-
-                    <SeekBar
-                        android:id="@+id/affinites_i_niv"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                    <Button
+                        android:id="@+id/btn_affinite_i"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:max="4"
-                        android:progress="2" />
+                        android:singleLine="true"
+                        android:text="@string/btn_infos_aff_i"
+                        android:textAllCaps="false"
+                        android:textColor="#000000" />
+
+                    <RadioGroup
+                        android:id="@+id/affinites_i"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#D80A0A"
+                        android:checkedButton="@id/radioButton6"
+                        android:foregroundTint="#CF1313"
+                        android:orientation="horizontal"
+                        android:pointerIcon="arrow">
+
+                        <RadioButton
+                            android:id="@+id/radioButton4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#999"
+                            android:text="@string/off" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#0000FF"
+                            android:text="@string/secondaire" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#FF0000"
+                            android:text="@string/important" />
+                    </RadioGroup>
+
                 </TableRow>
 
                 <TableRow
@@ -107,40 +173,106 @@
                     android:visibility="gone"
                     tools:visibility="visible">
 
-                    <CheckBox
+                    <Button
+                        android:id="@+id/btn_vue"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/btn_infos_vue"
+                        android:textAllCaps="false"
+                        android:textColor="#000000" />
+
+                    <RadioGroup
                         android:id="@+id/vision"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="vue" />
+                        android:backgroundTint="#D80A0A"
+                        android:checkedButton="@id/radioButton7"
+                        android:foregroundTint="#CF1313"
+                        android:orientation="horizontal"
+                        android:pointerIcon="arrow">
 
-                    <SeekBar
-                        android:id="@+id/vision_niv"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:max="4"
-                        android:progress="2" />
+                        <RadioButton
+                            android:id="@+id/radioButton7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#999"
+                            android:text="@string/off" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#0000FF"
+                            android:text="@string/secondaire" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#FF0000"
+                            android:text="@string/important" />
+                    </RadioGroup>
+
+
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <CheckBox
+                    <Button
+                        android:id="@+id/btn_taille"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/btn_infos_taille"
+                        android:textAllCaps="false"
+                        android:textColor="#000000" />
+
+                    <RadioGroup
                         android:id="@+id/haut"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="taille" />
+                        android:backgroundTint="#D80A0A"
+                        android:checkedButton="@id/radioButton10"
+                        android:foregroundTint="#CF1313"
+                        android:orientation="horizontal"
+                        android:pointerIcon="arrow">
 
-                    <SeekBar
-                        android:id="@+id/haut_niv"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:max="4"
-                        android:progress="2" />
+                        <RadioButton
+                            android:id="@+id/radioButton10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#999"
+                            android:text="@string/off" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton11"
+                            style="@android:style/Widget.Material.Light.CompoundButton.RadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:autoText="false"
+                            android:buttonTint="#0000FF"
+                            android:text="@string/secondaire" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#FF0000"
+                            android:text="@string/important" />
+                    </RadioGroup>
 
                 </TableRow>
 
@@ -148,20 +280,51 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <CheckBox
+                    <Button
+                        android:id="@+id/btn_alt_fg"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/btn_infos_alt_fg"
+                        android:textAllCaps="false"
+                        android:textColor="#000000" />
+
+                    <RadioGroup
                         android:id="@+id/alternance_fg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="alternance F/G" />
+                        android:backgroundTint="#D80A0A"
+                        android:checkedButton="@id/radioButton13"
+                        android:foregroundTint="#CF1313"
+                        android:orientation="horizontal"
+                        android:pointerIcon="arrow">
 
-                    <SeekBar
-                        android:id="@+id/alternance_fg_niv"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:max="4"
-                        android:progress="2" />
+                        <RadioButton
+                            android:id="@+id/radioButton13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#999"
+                            android:text="@string/off" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#0000FF"
+                            android:text="@string/secondaire" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#FF0000"
+                            android:text="@string/important" />
+                    </RadioGroup>
 
                 </TableRow>
 
@@ -169,84 +332,211 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <CheckBox
+                    <Button
+                        android:id="@+id/btn_alt_ac"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/btn_infos_alt_ac"
+                        android:textAllCaps="false"
+                        android:textColor="#000000"
+                        android:textSize="14sp" />
+
+                    <RadioGroup
                         android:id="@+id/alternance_ac"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="alternance agité/calme"
-                        android:textSize="14sp" />
-
-                    <SeekBar
-                        android:id="@+id/alternance_ac_niv"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:max="4"
-                        android:progress="2" />
+                        android:backgroundTint="#D80A0A"
+                        android:checkedButton="@id/radioButton17"
+                        android:foregroundTint="#CF1313"
+                        android:orientation="horizontal"
+                        android:pointerIcon="arrow">
+
+                        <RadioButton
+                            android:id="@+id/radioButton16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#999"
+                            android:text="@string/off" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton17"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#0000FF"
+                            android:text="@string/secondaire" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton18"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#FF0000"
+                            android:text="@string/important" />
+                    </RadioGroup>
+
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <CheckBox
+                    <Button
+                        android:id="@+id/btn_alt_fd"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/btn_infos_alt_fd"
+                        android:textAllCaps="false"
+                        android:textColor="#000000" />
+
+                    <RadioGroup
                         android:id="@+id/alternance_fd"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="alternance fort/en difficulté"
-                        android:textSize="14sp" />
-
-                    <SeekBar
-                        android:id="@+id/alternance_fd_niv"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:max="4"
-                        android:progress="2" />
+                        android:backgroundTint="#D80A0A"
+                        android:checkedButton="@id/radioButton19"
+                        android:foregroundTint="#CF1313"
+                        android:orientation="horizontal"
+                        android:pointerIcon="arrow">
+
+                        <RadioButton
+                            android:id="@+id/radioButton19"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#999"
+                            android:text="@string/off" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton20"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#0000FF"
+                            android:text="@string/secondaire" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton21"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#FF0000"
+                            android:text="@string/important" />
+                    </RadioGroup>
+
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <CheckBox
-                        android:id="@+id/associer_dm"
+                    <Button
+                        android:id="@+id/btn_associer_dm"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:checked="false"
-                        android:text="Associer dislexiques/elèves moteurs" />
+                        android:insetTop="0dp"
+                        android:singleLine="true"
+                        android:text="@string/btn_infos_rep_moteurs"
+                        android:textAllCaps="false"
+                        android:textColor="#000000" />
 
-                    <SeekBar
-                        android:id="@+id/associer_dm_niv"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                    <RadioGroup
+                        android:id="@+id/associer_dm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:max="4"
-                        android:progress="2" />
+                        android:backgroundTint="#D80A0A"
+                        android:checkedButton="@id/radioButton22"
+                        android:foregroundTint="#CF1313"
+                        android:orientation="horizontal"
+                        android:pointerIcon="arrow">
+
+                        <RadioButton
+                            android:id="@+id/radioButton22"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#999"
+                            android:text="@string/off" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton23"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#0000FF"
+                            android:text="@string/secondaire" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton24"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#FF0000"
+                            android:text="@string/important" />
+                    </RadioGroup>
+
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <CheckBox
+                    <Button
+                        android:id="@+id/btn_ordre_alpha"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/btn_infos_ordre_alpha"
+                        android:textAllCaps="false"
+                        android:textColor="#000000" />
+
+                    <RadioGroup
                         android:id="@+id/ordre_alpha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="ordre alphabétique" />
+                        android:backgroundTint="#D80A0A"
+                        android:checkedButton="@id/radioButton26"
+                        android:foregroundTint="#CF1313"
+                        android:orientation="horizontal"
+                        android:pointerIcon="arrow">
 
-                    <SeekBar
-                        android:id="@+id/ordre_alpha_niv"
-                        style="@style/Widget.AppCompat.SeekBar.Discrete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:max="4"
-                        android:progress="2" />
+                        <RadioButton
+                            android:id="@+id/radioButton25"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#999"
+                            android:text="@string/off" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton26"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#0000FF"
+                            android:text="@string/secondaire" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton27"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="#FF0000"
+                            android:text="@string/important" />
+                    </RadioGroup>
+
                 </TableRow>
             </TableLayout>
 
@@ -256,14 +546,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Créer un plan de classe"
+                android:text="@string/btn_gerer_eleves"
                 />
 
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="differentes configurations vous seront proposées"
+                android:text="@string/btn_details_criteres"
                 android:textStyle="italic"
                 android:textAlignment="center"/>
             <Space

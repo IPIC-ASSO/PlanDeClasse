@@ -11,6 +11,7 @@
         android:id="@+id/idIVImage"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/dsc_image_enr" />
 
 </RelativeLayout>

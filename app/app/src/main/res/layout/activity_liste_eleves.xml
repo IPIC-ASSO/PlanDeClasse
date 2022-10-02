@@ -13,7 +13,7 @@ tools:context=".ListeEleves">
         android:layout_marginStart="30dp"
         android:layout_marginBottom="60dp"
         android:clickable="true"
-        android:contentDescription="ajouter un élève"
+        android:contentDescription="@string/dsc_btn_ajouter_eleve"
         app:backgroundTint="#23FB27"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,22 @@ tools:context=".ListeEleves">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Il est temps de créer vos élèves.\nUtilisez le petit bouton vert pour commencer." />
+        android:text="@string/txt_bienvenue_liste_eleves" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="top"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/liste_eleve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"></LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/vers_realiser_plan"
@@ -32,28 +47,12 @@ tools:context=".ListeEleves">
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:backgroundTint="@color/rouge"
-        android:text="Réaliser un plan de classe"
+        android:text="@string/btn_fin_liste_eleves"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:visibility="visible" />
-
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vers_realiser_plan"
-        >
-
-        <LinearLayout
-            android:id="@+id/liste_eleve"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-        </LinearLayout>
-    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

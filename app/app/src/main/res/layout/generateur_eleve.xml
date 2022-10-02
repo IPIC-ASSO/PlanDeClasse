@@ -20,84 +20,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Nom de l'élève *"
+                android:hint="@string/hint_nom_eleve"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
+
                 android:text="" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Taille"
-                android:textStyle="bold" />
-
-            <RadioGroup
-                android:id="@+id/taille"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:checkedButton="@id/taille_2"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/taille_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Grande" />
-
-                <RadioButton
-                    android:id="@+id/taille_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Moyenne" />
-
-                <RadioButton
-                    android:id="@+id/taille_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="petite" />
-
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Vue"
-                android:textStyle="bold" />
-
-            <RadioGroup
-                android:id="@+id/vue"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:checkedButton="@id/vue_2"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/vue_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bonne" />
-
-                <RadioButton
-                    android:id="@+id/vue_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Moyenne" />
-
-                <RadioButton
-                    android:id="@+id/vue_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mauvaise" />
-            </RadioGroup>
 
             <TextView
                 android:id="@+id/textView10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Placement: *"
+                android:text="@string/txt_placement"
                 android:textStyle="bold" />
 
             <RadioGroup
@@ -111,19 +44,54 @@
                     android:id="@+id/plac_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="devant" />
+                    android:text="@string/radio_plac_1" />
 
                 <RadioButton
                     android:id="@+id/plac_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="au fond" />
+                    android:text="@string/radio_plac_2" />
 
                 <RadioButton
                     android:id="@+id/plac_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="sans importance" />
+                    android:text="@string/radio_plac_3" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTintMode="src_over"
+                android:foregroundTintMode="src_over"
+                android:text="@string/txt_genre"
+                android:textStyle="bold"
+                android:visibility="visible"
+                tools:visibility="gone" />
+
+            <RadioGroup
+                android:id="@+id/genre"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                tools:visibility="gone">
+
+                <RadioButton
+                    android:id="@+id/fille"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#EC0D0D"
+                    android:text="@string/radio_genre_f"
+                    app:useMaterialThemeColors="false" />
+
+                <RadioButton
+                    android:id="@+id/garcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/radio_genre_g" />
             </RadioGroup>
 
             <LinearLayout
@@ -133,17 +101,19 @@
 
                 <TextView
                     android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Doit éviter:" />
+                    android:background="#FF7479"
+                    android:text="@string/txt_doit_eviter"
+                    android:textColor="#3E2723" />
 
                 <Button
                     android:id="@+id/liste_evite"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(liste)" />
+                    android:text="@string/btn_liste" />
             </LinearLayout>
 
             <LinearLayout
@@ -156,7 +126,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Devrait être avec:" />
+                    android:background="#FF7479"
+                    android:text="@string/btn_devrait_etre_avec"
+                    android:textColor="#3E2723" />
 
                 <Button
                     android:id="@+id/liste_correcte"
@@ -164,14 +136,87 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="(LISTE)" />
+                    android:text="@string/btn_liste" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_taille"
+                android:textStyle="bold"
+                tools:visibility="gone" />
+
+            <RadioGroup
+                android:id="@+id/taille"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checkedButton="@id/taille_2"
+                android:orientation="horizontal"
+                tools:visibility="gone">
+
+                <RadioButton
+                    android:id="@+id/taille_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_taille_1" />
+
+                <RadioButton
+                    android:id="@+id/taille_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_taille_2" />
+
+                <RadioButton
+                    android:id="@+id/taille_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_taille_3" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/txt_vue"
+                android:textStyle="bold"
+                tools:visibility="gone" />
+
+            <RadioGroup
+                android:id="@+id/vue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:checkedButton="@id/vue_2"
+                android:orientation="horizontal"
+                tools:visibility="gone">
+
+                <RadioButton
+                    android:id="@+id/vue_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_vue_1" />
+
+                <RadioButton
+                    android:id="@+id/vue_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_vue_2" />
+
+                <RadioButton
+                    android:id="@+id/vue_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio_vue_3" />
+            </RadioGroup>
+
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sérieux de l'élève"
+                android:text="@string/txt_serieux"
                 android:textStyle="bold" />
 
             <RadioGroup
@@ -179,26 +224,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:checkedButton="@id/diff_3"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:visibility="gone">
 
                 <RadioButton
                     android:id="@+id/diff_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="difficultés" />
+                    android:text="@string/radio_diff_1" />
 
                 <RadioButton
                     android:id="@+id/diff_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="à l'aise" />
+                    android:text="@string/radio_diff_2" />
 
                 <RadioButton
                     android:id="@+id/diff_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dans la moyenne" />
+                    android:text="@string/radio_diff3" />
             </RadioGroup>
+
 
             <RadioGroup
                 android:id="@+id/attitude"
@@ -212,54 +259,27 @@
                     android:id="@+id/att_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="agité" />
+                    android:text="@string/radio_calme_1" />
 
                 <RadioButton
                     android:id="@+id/att_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="calme" />
+                    android:text="@string/radio_calme_2" />
 
                 <RadioButton
                     android:id="@+id/att_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dans la moyenne" />
+                    android:text="@string/radio_calme_3" />
             </RadioGroup>
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Genre *"
-                android:textStyle="bold" />
-
-            <RadioGroup
-                android:id="@+id/genre"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/fille"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Fille" />
-
-                <RadioButton
-                    android:id="@+id/garcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="garçon" />
-            </RadioGroup>
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Autre"
+                android:text="@string/txt_autre"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -274,21 +294,22 @@
                     android:layout_weight="0"
                     android:autoSizeMaxTextSize="14sp"
                     android:autoSizeTextType="uniform"
-                    android:text="dyslexique" />
+                    android:text="@string/check_dys"
+                    android:visibility="gone" />
 
                 <CheckBox
                     android:id="@+id/isoler"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="isoler" />
+                    android:layout_weight="1"
+                    android:text="@string/check_iso" />
 
                 <CheckBox
                     android:id="@+id/moteur"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="élève moteur" />
+                    android:layout_weight="1"
+                    android:text="@string/check_moteur" />
 
             </LinearLayout>
 
@@ -302,7 +323,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Importance du traitement de l'élève" />
+                    android:text="@string/txt_importance_eleve" />
 
                 <SeekBar
                     android:id="@+id/priorite"
@@ -318,15 +339,27 @@
                 android:id="@+id/place"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Placer manuellement l'élève"
+                android:text="@string/btn_placement_manuel"
                 android:visibility="gone" />
+
+            <Button
+                android:id="@+id/button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/btn_plus_param"
+                android:textColor="#535353"
+                app:icon="@android:drawable/arrow_down_float"
+                app:iconTint="#575757" />
 
             <EditText
                 android:id="@+id/txt_commentaires"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Commentaires"
+                android:hint="@string/hint_commentaires_eleve"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:text=""
@@ -336,7 +369,7 @@
                 android:id="@+id/enregistrer_eleve"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enregistrer"
+                android:text="@string/btn_enr"
                 android:layout_marginBottom="5dp"/>
 
 
