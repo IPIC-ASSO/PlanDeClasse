@@ -1,0 +1,23 @@
+
+g
+java:S1301±"KReplace this "switch" statement by "if" statements to increase readability.(×ö³–úÿÿÿÿ
+s
+java:S1450&"]Remove the "imageRVAdapter" field and declare it as a local variable in the relevant methods.(ß‡àŞ
+Y
+java:S1155b">Use isEmpty() to check whether the collection is empty or not.(™œ¶ùøÿÿÿÿ
+i
+java:S3252Š"MUse static access with "android.provider.MediaStore$MediaColumns" for "DATA".(êµÊñùÿÿÿÿ
+\
+java:S3252Š"@Use static access with "android.provider.BaseColumns" for "_ID".(êµÊñùÿÿÿÿ
+W
+java:S3252"@Use static access with "android.provider.BaseColumns" for "_ID".(íÿ¬
+c
+java:S3252Ÿ"MUse static access with "android.provider.MediaStore$MediaColumns" for "DATA".(ğşé
+R	java:S125¦"<This block of commented-out lines of code should be removed.(àæ…ö
+a
+java:S1874®"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(¯ÜÑñ
+A
+java:S1197®"*Move the array designators [] to the type.(¯ÜÑñ
+=	java:S131±""Add a default case to this switch.(×ö³–úÿÿÿÿ
+M
+java:S1144€"1Remove this unused private "getImagePath" method.(Á³úûÿÿÿÿ
