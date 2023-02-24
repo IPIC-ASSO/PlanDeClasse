@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Plan de Classe</string>
-    <string name="version">V 1.2</string>
+    <string name="version">V 1.3</string>
     <string name="notes_version">Il s\'agit de la version de lancement, appelée à évoluer. De nombreuses améliorations sont en cours de développement.</string>
     <string name="hint_nom_de_la_classe">Nom de la classe</string>
     <string name="txt_dimensions_classe">dimensions de la classe</string>
@@ -38,9 +38,9 @@
     <string name="btn_infos_rep_moteurs">Répartir élèves moteurs dans la classe</string>
     <string name="btn_infos_ordre_alpha">ordre alphabétique</string>
     <string name="btn_gerer_eleves">Gérer les élèves classe</string>
-    <string name="btn_details_criteres">Il est possible de revenir plus tard sur cette page \n \n Une description de chaque critère est dispoible en appuyant quelques secondes sur le texte</string>
+    <string name="btn_details_criteres">Il est possible de revenir plus tard sur cette page \n \n Une description de chaque critère est disponible en appuyant quelques secondes sur le texte</string>
     <string name="hint_nom_eleve">Nom de l\'élève *</string>
-    <string name="txt_placement">Placement: *</string>
+    <string name="txt_placement">Placement:</string>
     <string name="radio_plac_1">devant</string>
     <string name="radio_plac_2">au fond</string>
     <string name="radio_plac_3">sans importance</string>
@@ -91,4 +91,8 @@
     <string name="aide_alt_df">Le plan associera les élèves en difficultés avec ceux qui sont le plus à l\'aise</string>
     <string name="aide_asso_dm">Les élèves indiqués comme "moteur" seront répartis dans la classe, pour la dynamiser</string>
     <string name="aide_ordre_alpha">Les élèves seront classés par ordre alphabétique.</string>
+    <string name="btn_liste_eleve_suivant">paramétrer la classe</string>
+    <string name="txt_niveau">Niveau de l\'élève</string>
+    <string name="txt_valider">Valider</string>
+    <string name="txt_annuler">Annuler</string>
 </resources>

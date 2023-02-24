@@ -23,6 +23,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     Button versPlan = new Button(this);
                     versClasse.setText("Modifier la configuration");
                     versEleves.setText("Gérer les élèves");
-                    versPlan.setText("Créer un plan de classe");
+                    versPlan.setText("Paramètres du plan de classe");
                     if(st.countTokens()<3){
                         versPlan.setVisibility(View.GONE);
                     }
@@ -116,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
                     lay.setOrientation(LinearLayout.VERTICAL);
                     lay.setPadding(10,10,10,10);
                     lay.addView(versClasse);
-                    lay.addView(versEleves);
                     lay.addView(versPlan);
+                    lay.addView(versEleves);
                     constr.setView(lay);
                     constr.show();
                 });
@@ -182,13 +185,14 @@ public class MainActivity extends AppCompatActivity {
                 onExplose();
                 return true;
             case R.id.reinit:
-                reinitialiser();
+                new MesOutils(this).reinitialiser();
+                onExplose();
                 return true;
             case R.id.nous_soutenir:
-                soutient();
+                new MesOutils(this).soutient();
                 return true;
             case R.id.infos:
-                infos();
+                new MesOutils(this).infos();
                 return true;
             case R.id.contact:
                 startActivity( new Intent(this, NousContacter.class));
@@ -202,34 +206,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void onExplose(){this.finishAffinity();}
 
-    public void reinitialiser(){
-        SharedPreferences prefsAlgo = getBaseContext().getSharedPreferences("algo", Context.MODE_PRIVATE);//préférences de l'algorithme.
-        SharedPreferences prefListeEleve = getBaseContext().getSharedPreferences("liste_eleves", Context.MODE_PRIVATE);//élèves d'une classe  {"classe" -->"élève"}
-        SharedPreferences config = getBaseContext().getSharedPreferences("configuration", Context.MODE_PRIVATE);//config de la classe
-        SharedPreferences indices = getBaseContext().getSharedPreferences("eleves", Context.MODE_PRIVATE);//indice de l'élève dans la DB. {"eleve"+"classe" --> int}
-        SharedPreferences prefs = getBaseContext().getSharedPreferences("classes", Context.MODE_PRIVATE);//liste des classes et commentaires pour chaque classe
-        prefsAlgo.edit().clear().apply();
-        prefListeEleve.edit().clear().apply();
-        config.edit().clear().apply();
-        indices.edit().clear().apply();
-        prefs.edit().clear().apply();
-        File fich = new File((getExternalFilesDir(null) + "/donnees.csv"));
-        fich.delete();
-        onExplose();
-    }
 
-    public void infos(){
-        AlertDialog.Builder constr = new AlertDialog.Builder(this);
-        constr.setTitle("Informations");
-        constr.setMessage(String.format("Vous utilisez la %s de l'application.\n%s \nL'application a été développée par IPIC&cie.",getString(R.string.version),getString(R.string.notes_version)));
-        constr.show();
-    }
 
-    public void soutient(){
-        AlertDialog.Builder construit = new AlertDialog.Builder(this);
-        construit.setTitle("Merci de votre soutient");
-        construit.setMessage("Quelle générosité :.)");
-        construit.show();
-    }
+
+
+
 
 }

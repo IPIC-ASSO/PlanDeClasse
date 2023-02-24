@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 
-public class AdaptateurAdapte extends BaseAdapter {
+public class  AdaptateurAdapte extends BaseAdapter {
     private final LayoutInflater layoutInflater;
     private final Context context;
     private final int[] places;

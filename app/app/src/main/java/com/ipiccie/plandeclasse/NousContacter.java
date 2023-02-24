@@ -71,48 +71,19 @@ public class NousContacter extends AppCompatActivity {
                 onExplose();
                 return true;
             case R.id.reinit:
-                reinitialiser();
+                new MesOutils(this).reinitialiser();
+                onExplose();
                 return true;
             case R.id.nous_soutenir:
-                soutient();
+                new MesOutils(this).soutient();
                 return true;
             case R.id.infos:
-                infos();
+                new MesOutils(this).infos();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void onExplose(){this.finishAffinity();}
-
-    public void reinitialiser(){
-        SharedPreferences prefsAlgo = getBaseContext().getSharedPreferences("algo", Context.MODE_PRIVATE);//préférences de l'algorithme.
-        SharedPreferences prefListeEleve = getBaseContext().getSharedPreferences("liste_eleves", Context.MODE_PRIVATE);//élèves d'une classe  {"classe" -->"élève"}
-        SharedPreferences config = getBaseContext().getSharedPreferences("configuration", Context.MODE_PRIVATE);//config de la classe
-        SharedPreferences indices = getBaseContext().getSharedPreferences("eleves", Context.MODE_PRIVATE);//indice de l'élève dans la DB. {"eleve"+"classe" --> int}
-        SharedPreferences prefs = getBaseContext().getSharedPreferences("classes", Context.MODE_PRIVATE);//liste des classes et commentaires pour chaque classe
-        prefsAlgo.edit().clear().apply();
-        prefListeEleve.edit().clear().apply();
-        config.edit().clear().apply();
-        indices.edit().clear().apply();
-        prefs.edit().clear().apply();
-        File fich = new File((getExternalFilesDir(null) + "/donnees.csv"));
-        fich.delete();
-        onExplose();
-    }
-
-    public void infos(){
-        AlertDialog.Builder constr = new AlertDialog.Builder(this);
-        constr.setTitle("Informations");
-        constr.setMessage(String.format("Vous utilisez la %s de l'application. \nL'application a été développée par IPIC&cie.",getString(R.string.version)));
-        constr.show();
-    }
-
-    public void soutient(){
-        AlertDialog.Builder construit = new AlertDialog.Builder(this);
-        construit.setTitle("Merci de votre soutient");
-        construit.setMessage("Votre soutient nous rend plus fort");
-        construit.show();
-    }
 
 }

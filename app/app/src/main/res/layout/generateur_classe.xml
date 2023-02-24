@@ -15,19 +15,25 @@
             android:layout_margin="5dp"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/nom_classe"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="@string/hint_nom_de_la_classe"
-                android:text="" />
+                android:hint="@string/hint_nom_de_la_classe">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nom_classe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:text="@string/txt_dimensions_classe"
                 android:textAlignment="center"
                 android:textSize="16sp" />
@@ -35,36 +41,57 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
-                <EditText
-                    android:id="@+id/colonnes"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
+                    android:layout_marginEnd="5dp"
                     android:hint="@string/hint_nb_colonnes"
-                    android:inputType="number|text|phone"
-                    android:text="" />
+                    android:inputType="number">
 
-                <EditText
-                    android:id="@+id/rangees"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/colonnes"
+                        android:layout_width="match_parent"
+                        android:inputType="number"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
                     android:hint="@string/hint_nb_rangees"
-                    android:inputType="number|text|phone"
-                    android:text="" />
+                    android:inputType="number">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/rangees"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/commentaires_classe_txt"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:hint="@string/hint_commentaires_classe"
-                android:inputType="textPersonName" />
+                android:inputType="number"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/commentaires_classe_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/appliquer"
@@ -86,8 +113,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                app:srcCompat="@drawable/salle_de_classe"
-                android:contentDescription="@string/dsc_img_exemple" />
+                android:contentDescription="@string/dsc_img_exemple"
+                android:cropToPadding="false"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/salle_de_classe" />
 
         </LinearLayout>
     </ScrollView>

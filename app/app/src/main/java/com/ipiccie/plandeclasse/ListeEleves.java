@@ -2,6 +2,7 @@ package com.ipiccie.plandeclasse;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
@@ -35,21 +35,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.opencsv.CSVWriter;
 import com.opencsv.ICSVWriter;
-import com.opencsv.exceptions.CsvException;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,6 +61,8 @@ public class ListeEleves extends AppCompatActivity {
     private int[]tampon;
     private int nbEleves;
     private int colonnes;
+    private boolean phaseFinale = false;
+    private List<Button> boutonsPlacement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +75,67 @@ public class ListeEleves extends AppCompatActivity {
         Log.d(TAG, "registre 1 "+prefListeEleve.getAll());
         Log.d(TAG, "registre 2"+indices.getAll());
         Log.d(TAG, "registre 3"+config.getAll());
-        donnees = readCsvFile();
+        donnees = new MesOutils(this).litFichierCsv();
         classe = getIntent().getStringExtra("classe");
         obtienClasse2(classe);
+        phaseFinale = indices.getBoolean("phasefinale"+classe,false);
+
+        if (phaseFinale){
+            Button creerPlan = findViewById(R.id.vers_realiser_plan);
+            creerPlan.setText("Creer un plan de Classe");
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Parametrage des élèves")
+                    .setMessage("Cliquez sur chaque élève et définissez ses carctéristiques, puis passez à la réalisation du plan de classe")
+                    .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.dismiss())
+                    .show();
+        }
         inflation();
         com.google.android.material.floatingactionbutton.FloatingActionButton plus = findViewById(R.id.nouv_eleve);
-        plus.setOnClickListener(v->generateurEleve(-1));
+        plus.setOnClickListener(v->{
+            if (phaseFinale)generateurEleve(-1, "","",true);
+            else generateurNomEleve();
+        });
         findViewById(R.id.vers_realiser_plan).setOnClickListener(v -> {
-            Intent intention = new Intent(this, ParametresAlgorithme.class);
-            intention.putExtra("classe",classe);
-            startActivity(intention);
+            if (phaseFinale){
+                boolean drapeau = false;
+                for (String eleve:eleves){
+                    if (eleve!= null && indices.getInt(eleve+classe,-1)==-1){
+                        drapeau = true;     //un élève n'est pas entièrement configuré
+                        Log.d(TAG, "onCreate: "+ Arrays.toString(eleves));
+                    }
+                }
+                if (drapeau){
+                    new MaterialAlertDialogBuilder(this).setMessage("Liste incomplète")
+                            .setMessage("Vous n'avez pas rempli les caractéristiques de certains élèves (fond coloré). \nSouhaitez vous quand même réaliser un plan de classe?")
+                            .setPositiveButton("Réaliser",((dialogInterface, i) -> {
+                                for (String eleve:eleves){
+                                    if (eleve!= null && indices.getInt(eleve+classe,-1)==-1){
+                                        String[] d = new String[]{classe,eleve,"","","2", "1","2","2","2","2","false","false","false","0"};
+                                        indices.edit().putInt(eleve+classe,donnees.size()).apply();
+                                        donnees.add(d);
+                                    }
+                                }
+                                Log.d(TAG, "onCreate: donnees"+donnees);
+                                writeToCSVFile(donnees);
+                                Intent intention = new Intent(this, AlgorithmeContraingnant.class);
+                                intention.putExtra("classe",classe);
+                                startActivity(intention);
+                            }))
+                            .setNegativeButton(getString(R.string.txt_annuler),((dialogInterface, i) -> dialogInterface.dismiss()))
+                            .show();
+                }else{
+                    Log.d(TAG, "onCreate: donnees"+ Arrays.toString(donnees.toArray()));
+                    Intent intention = new Intent(this, AlgorithmeContraingnant.class);
+                    intention.putExtra("classe",classe);
+                    startActivity(intention);
+                }
+            }else{
+
+                Intent intention = new Intent(this, ParametresAlgorithme.class);
+                intention.putExtra("classe",classe);
+                indices.edit().putBoolean("phasefinale"+classe,true).apply();
+                startActivity(intention);
+            }
         });
 
         ActionBar actionBar = getSupportActionBar();
@@ -135,17 +181,23 @@ public class ListeEleves extends AppCompatActivity {
                 TextView nom = vue.findViewById(R.id.nom);
                 nom.setText(eleve);
                 TextView sup = vue.findViewById(R.id.suplement);
-                sup.setText(donnees.get(indices.getInt(eleve+classe,0))[14]);
-                vue.setOnClickListener(v -> generateurEleve(indices.getInt(eleve+classe,0)));
+                sup.setText(prefListeEleve.getString(classe+eleve," "));
+                if (phaseFinale)vue.setOnClickListener(v -> generateurEleve(indices.getInt(eleve+classe,-1),eleve, prefListeEleve.getString(classe+eleve,""),false));   //modifier l'élève
                 ImageView image = vue.findViewById(R.id.couleur);
-                if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10])&& Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
-                    image.setColorFilter(Color.argb(255, 255, 255, 0));
-                } else if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10]) ||Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[11])||Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==0){
-                    image.setColorFilter(Color.argb(255, 255, 0, 0));
-                }else if(Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[12])|| Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
-                    image.setColorFilter(Color.argb(255, 0, 255, 0));
-                }else{
-                    image.setColorFilter(Color.argb(255, 255, 255, 0));
+                if (indices.getInt(eleve+classe,-1) != -1){ //élève enregistré dans la DB
+                    Log.d(TAG, "inflation: "+indices.getInt(eleve+classe,-1)+" "+donnees.size());
+                    if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10])&& Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
+                        image.setColorFilter(Color.argb(255, 255, 255, 0));
+                    } else if (Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[10]) ||Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[11])||Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==0){
+                        image.setColorFilter(Color.argb(255, 255, 0, 0));
+                    }else if(Boolean.parseBoolean(donnees.get(indices.getInt(eleve+classe,0))[12])|| Integer.parseInt(donnees.get(indices.getInt(eleve+classe,0))[7])==1){
+                        image.setColorFilter(Color.argb(255, 0, 255, 0));
+                    }else{
+                        image.setColorFilter(Color.argb(255, 255, 255, 0));
+                    }
+                }else {  //nouvel élève pas encore enregistré dans la DB
+                    Log.d(TAG, "inflation: "+"OKOKOK");
+                    vue.findViewById(R.id.fond_profil_eleve).setBackgroundColor(Color.argb(255,150,200,200));
                 }
                 liste.addView(vue);
             }
@@ -154,13 +206,16 @@ public class ListeEleves extends AppCompatActivity {
             findViewById(R.id.nouv_eleve).setVisibility(View.GONE);
         }
         if(nbEleves >2){
-            findViewById(R.id.vers_realiser_plan).setVisibility(View.VISIBLE);
+            Button realise = findViewById(R.id.vers_realiser_plan);
+            realise.setVisibility(View.VISIBLE);
+            if (!phaseFinale) realise.setText(R.string.btn_liste_eleve_suivant);
             Space space = new Space(this);
             space.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,100));
             liste.addView(space);
         }
         Log.d(TAG, "inflation: "+nbEleves);
     }
+
     @Override
     protected void onStop() {
         StringBuilder str = new StringBuilder();
@@ -179,33 +234,15 @@ public class ListeEleves extends AppCompatActivity {
                 ICSVWriter.DEFAULT_ESCAPE_CHARACTER, ICSVWriter.RFC4180_LINE_END)) {
             writer.writeAll(dataList);
         } catch (IOException e) {
+            Toast.makeText(this,"erreur d'écriture des données",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
 
-    private List<String[]> readCsvFile(){
-        List<String[]> dataList = new ArrayList<>();
-        String csv = (getExternalFilesDir(null) + "/donnees.csv");
-        CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
-        try (Reader br = Files.newBufferedReader(Paths.get(csv)); CSVReader reader =
-                new CSVReaderBuilder(br).withCSVParser(parser).build()) {
-            List<String[]> rows = reader.readAll();
-            dataList.addAll(rows);
-
-        } catch (IOException | CsvException e) {
-            e.printStackTrace();
-        }
-        if (dataList.isEmpty()) {
-            dataList.add(new String[]{"classe", "eleve", "evite", "n_evite_pas","taille","vue", "placement", "difficultés","attitude","genre","dyslexique","isoler","moteur", "priorite", "commentaire"});
-        }
-        return dataList;
-    }
-
-    public void generateurEleve (int indice){
-        AlertDialog.Builder constructeur = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View vue = inflater.inflate(R.layout.generateur_eleve, null);
-        constructeur.setView(vue);
+    public void generateurEleve (int indice, String nomDeEleve, String commentaireDeEleve, boolean nouveau){
+        Dialog constructeur = new Dialog(this);
+        View vue = genereVue();
+        constructeur.setContentView(vue,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         Button enregistrer = vue.findViewById(R.id.enregistrer_eleve);
         Button evite = vue.findViewById(R.id.liste_evite);
         Button correcte = vue.findViewById(R.id.liste_correcte);
@@ -222,13 +259,12 @@ public class ListeEleves extends AppCompatActivity {
         CheckBox moteur = vue.findViewById(R.id.moteur);
         SeekBar prio = vue.findViewById(R.id.priorite);
         Button placer = vue.findViewById(R.id.place);
-        StringTokenizer st3 = new StringTokenizer(prefsAlgo.getString("places",""),",");
-        final int[] placeur = new int[eleves.length];//config
-        Arrays.fill(placeur,0);
-        int z = st3.countTokens();
-        for(int i= 0; i<z;i++){
-            placeur[i] = Integer.parseInt(st3.nextToken());
-        }
+
+        vue.findViewById(R.id.afficher_plus_de_parametre).setOnClickListener(v -> {
+            if (vue.findViewById(R.id.plus_de_parametres).getVisibility()==View.VISIBLE)vue.findViewById(R.id.plus_de_parametres).setVisibility(View.GONE);
+            else vue.findViewById(R.id.plus_de_parametres).setVisibility(View.VISIBLE);
+        });
+
         int compte = 0; //nombre d'élèves enregistrés dans la classe
         for (String eleve: eleves){
             if (eleve != null)compte+=1;
@@ -237,12 +273,12 @@ public class ListeEleves extends AppCompatActivity {
         boolean[] selection2 = new boolean[compte];
         Arrays.fill(selection2,false);
         Arrays.fill(selection,false);
+        nom.setText(nomDeEleve);
+        commentaire.setText(commentaireDeEleve);
         if (indice>=0){ //chargement des données enregistrées sur l'élève
             constructeur.setTitle("Modifier les informations");
             try{
             String[] d = donnees.get(indice);
-            nom.setText(d[1]);
-            commentaire.setText(d[14]);
             dys.setChecked(Boolean.parseBoolean(d[10]));
             iso.setChecked(Boolean.parseBoolean(d[11]));
             moteur.setChecked(Boolean.parseBoolean(d[12]));
@@ -302,14 +338,10 @@ public class ListeEleves extends AppCompatActivity {
                     attitude.check(R.id.att_3);
                     break;
             }
-            switch (d[9]){    //genre
-                case "0":
-                    genre.check(R.id.fille);
-                    break;
-                case "1":
-                    genre.check(R.id.garcon);
-                    break;
-            }
+                //genre
+            if (d[9].equals("0"))genre.check(R.id.fille);
+            else genre.check(R.id.garcon);
+
             StringTokenizer stEvite = new StringTokenizer(d[2], ",");
             StringTokenizer stCorrecte = new StringTokenizer(d[3], ",");
             int x= stEvite.countTokens();
@@ -322,18 +354,17 @@ public class ListeEleves extends AppCompatActivity {
                 Toast.makeText(this,"Incompatibilités de versions détectées.Veuillez réinitialiser l'application",Toast.LENGTH_LONG).show();
             }
         }else{
-            constructeur.setTitle("Nouvel élève");
+            constructeur.setTitle("Configurer l'élève");
         }
-        AlertDialog show = constructeur.show();
-        evite.setOnClickListener(x ->{
 
+        evite.setOnClickListener(x ->{
             AlertDialog.Builder constr = new AlertDialog.Builder(this);
             constr.setTitle("Doit éviter...");
             ListView liste = new ListView(this);
             AutreAdaptateurAdapte customAdapter = new AutreAdaptateurAdapte(getApplicationContext(), eleves, selection, nom.getText().toString());
             liste.setAdapter(customAdapter);
             constr.setView(liste);
-            constr.setPositiveButton("Valider", (dialog, which) -> dialog.dismiss());
+            constr.setPositiveButton(R.string.txt_valider, (dialog, which) -> dialog.dismiss());
             constr.show();
         });
         correcte.setOnClickListener(x ->{
@@ -343,20 +374,21 @@ public class ListeEleves extends AppCompatActivity {
             AutreAdaptateurAdapte customAdapter = new AutreAdaptateurAdapte(getApplicationContext(), eleves, selection2, nom.getText().toString());
             liste.setAdapter(customAdapter);
             constr.setView(liste);
-            constr.setPositiveButton("Valider", (dialog, which) -> dialog.dismiss());
+            constr.setPositiveButton(getString(R.string.txt_valider), (dialog, which) -> dialog.dismiss());
             constr.show();
         });
         enregistrer.setOnClickListener(w ->{
-            Log.d(TAG, "generateurEleve: "+!(nbEleves>=eleves.length && indice<0)+ !nom.getText().toString().equals("") + !(genre.getCheckedRadioButtonId()!= R.id.fille && genre.getCheckedRadioButtonId()!=R.id.garcon) + !(Arrays.asList(eleves).contains(nom.getText().toString()) && indice<0));
-            if (!(nbEleves>=eleves.length && indice<0) &&  !nom.getText().toString().equals("") && !((Arrays.asList(eleves).contains(nom.getText().toString())) && (indice<0|| !Objects.equals(donnees.get(indice)[1], nom.getText().toString())))){
-                if (indice>=0){ //élève déjà enregistré (modifications)
-                    eleves[Arrays.asList(eleves).indexOf(donnees.get(indice)[1])] = nom.getText().toString();
+            Log.d(TAG, "generateurEleve: "+!(nbEleves>=eleves.length && nouveau)+ !nom.getText().toString().equals("") + !(genre.getCheckedRadioButtonId()!= R.id.fille && genre.getCheckedRadioButtonId()!=R.id.garcon) + !(Arrays.asList(eleves).contains(nom.getText().toString()) && indice<0));
+            if (!(nbEleves>=eleves.length && nouveau) &&  !nom.getText().toString().equals("") && !((Arrays.asList(eleves).contains(nom.getText().toString())) && (nomDeEleve.equals("") || !Objects.equals(nomDeEleve, nom.getText().toString())))){
+                if (!Objects.equals(nomDeEleve, "")){  //élève déjà enregistré (modifications)
+                    eleves[Arrays.asList(eleves).indexOf(nomDeEleve)] = nom.getText().toString();
                 }else{
                     eleves[nbEleves] = nom.getText().toString();    //ajoute le nom du nouvel élève
                     nbEleves+=1;
                 }
                 for(int i = 0; i<selection.length;i++){ //met à jour les affinités
                     if (selection[i] && selection2[i]){
+                        Log.d(TAG, "generateurEleve: Incohérence");
                         selection[i] = false;
                         selection2[i] = false;
                         Toast.makeText(this,"Incohérences dans les choix: un élève ne peut être éloigné et rapproché d'un même élève.",Toast.LENGTH_LONG).show();
@@ -449,7 +481,7 @@ public class ListeEleves extends AppCompatActivity {
                         break;
                 }
 
-                String[] d = new String[]{classe,nom.getText().toString(),strEvite.toString(),strCorrecte.toString(),tailleE, vueE,placement,difE,attE,genE,String.valueOf(dys.isChecked()),String.valueOf(iso.isChecked()),String.valueOf(moteur.isChecked()),String.valueOf(prio.getProgress()),commentaire.getText().toString()};
+                String[] d = new String[]{classe,nom.getText().toString(),strEvite.toString(),strCorrecte.toString(),tailleE, vueE,placement,difE,attE,genE,String.valueOf(dys.isChecked()),String.valueOf(iso.isChecked()),String.valueOf(moteur.isChecked()),String.valueOf(prio.getProgress())};
                 Log.d(TAG, "generateurEleve: nouvelle ligne "+Arrays.toString(d));
                 if (indice>=0){
                     indices.edit().remove(donnees.get(indice)[1]+classe).apply();
@@ -461,64 +493,179 @@ public class ListeEleves extends AppCompatActivity {
                 }
                 ProgressBar barre = new ProgressBar(this);
                 barre.setIndeterminate(true);
-                show.setView(barre);
+                constructeur.setContentView(barre);
                 writeToCSVFile(donnees);
                 inflation();
-            }else if(nbEleves>=eleves.length && indice<0) {
+                constructeur.dismiss();
+            }else if(nbEleves>=eleves.length && nouveau) {
                 Toast.makeText(this, "Enregistrement impossible. Trop d'élèves pour cette classe. Veuillez d'abord modifier sa configuration.", Toast.LENGTH_LONG).show();
-            }else if((Arrays.asList(eleves).contains(nom.getText().toString())) && (indice<0|| !Objects.equals(donnees.get(indice)[1], nom.getText().toString()))){
+            }else if((Arrays.asList(eleves).contains(nom.getText().toString())) && (nouveau || Objects.equals(donnees.get(Math.max(indice,0))[1], nom.getText().toString()))){
                 Toast.makeText(this,"Enregistrement impossible. Un élève du même nom existe déjà dans cette classe.",Toast.LENGTH_LONG).show();
             }else{
                 Toast.makeText(this,"Enregistrement impossible. Veuillez remplir tous les champs marqués d'une astérisque.",Toast.LENGTH_LONG).show();
             }
-            show.dismiss();
         });
-        placer.setOnClickListener(zer ->{
-            AlertDialog.Builder constructeur2= new AlertDialog.Builder(this);
-            constructeur2.setTitle("Variante");
-            ScrollView def = new ScrollView(this);
-            HorizontalScrollView def2 = new HorizontalScrollView(this);
-            def.setScrollContainer(true);
-            TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(ScrollView.LayoutParams.WRAP_CONTENT, ScrollView.LayoutParams.MATCH_PARENT);
-            TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-            TableLayout table = new TableLayout(this);
-            table.setScrollContainer(true);
-            table.setLayoutParams(tableParams);
-            table.setStretchAllColumns(true);
-            table.setBackground(getDrawable(R.drawable.bords));
-            def2.addView(table);
-            def.addView(def2);
-            constructeur2.setView(def);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(50, TableRow.LayoutParams.WRAP_CONTENT);
-            params.setMargins(2,10,2,10);
-            int compte2 = 0;
-            for (int rang = 0; rang<tampon.length/colonnes;rang++){
-                TableRow ligne = new TableRow(this);
-                ligne.setLayoutParams(rowParams);
-                ligne.setMinimumWidth(30);
-                table.addView(ligne);
-                for (int x =0; x<colonnes;x++){
-                    Button nomEleve = new Button(this);
-                    nomEleve.setLayoutParams(params);
-                    nomEleve.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    nomEleve.setPadding(2,1,2,1);
-                    ligne.addView(nomEleve);
-                    if (tampon[rang*colonnes +x] == 1){
-                        nomEleve.setBackground(getDrawable(R.drawable.bords));
-                        compte2++;
-                        final int truc = compte2;
-                        nomEleve.setOnClickListener(v -> placeur[truc] =1);
-                    }
+        placer.setOnClickListener(zer -> placeManuel(nomDeEleve, constructeur));
+
+        constructeur.show();
+    }
+
+    public void generateurNomEleve(){
+        AlertDialog.Builder constr = new AlertDialog.Builder(this);
+        constr.setTitle("Nouvel élève");
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        EditText nomEleve = new EditText(this);
+        EditText commentaire = new EditText(this);
+        nomEleve.setHint("Nom de l'élève");
+        nomEleve.setAllCaps(true);
+        commentaire.setHint("Commentaire");
+        linearLayout.addView(nomEleve);
+        linearLayout.addView(commentaire);
+        constr.setView(linearLayout);
+        constr.setPositiveButton("Valider", (dialogInterface, i) -> {
+            if (!Arrays.asList(eleves).contains(nomEleve.getText().toString())){
+                prefListeEleve.edit().putString(classe,prefListeEleve.getString(classe,"")+nomEleve.getText().toString()+",").apply();
+                prefListeEleve.edit().putString(classe+nomEleve.getText().toString(), commentaire.getText().toString()).apply();
+                eleves[nbEleves] = nomEleve.getText().toString();    //ajoute le nom du nouvel élève
+                nbEleves+=1;
+                dialogInterface.dismiss();
+                inflation();
+            }else{
+                Toast.makeText(this, "Un élève du même nom existe déjà", Toast.LENGTH_SHORT).show();
+            }
+        });
+        constr.setNeutralButton("Annuler",((dialogInterface, i) -> dialogInterface.dismiss()));
+        constr.show();
+    }
+
+    public void placeManuel(String eleve, Dialog constr) {
+        StringTokenizer st3 = new StringTokenizer(prefsAlgo.getString(classe+"places", ""), ",");
+        final String[] placeur = new String[eleves.length];//config
+        Arrays.fill(placeur, " ");
+        Log.d(TAG, "placeur man: "+eleves.length);
+        int z = st3.countTokens();
+        for (int i = 0; i < z; i++) {
+            placeur[i] = st3.nextToken();
+        }
+
+        AlertDialog.Builder constructeur2 = new AlertDialog.Builder(this);
+        constructeur2.setTitle("Variante");
+        boutonsPlacement = new ArrayList<>();
+        ScrollView def = new ScrollView(this);
+        HorizontalScrollView def2 = new HorizontalScrollView(this);
+        def.setScrollContainer(true);
+        TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(ScrollView.LayoutParams.WRAP_CONTENT, ScrollView.LayoutParams.MATCH_PARENT);
+        TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+        TableLayout table = new TableLayout(this);
+        table.setScrollContainer(true);
+        table.setLayoutParams(tableParams);
+        table.setStretchAllColumns(true);
+        def2.addView(table);
+        def.addView(def2);
+        constructeur2.setView(def);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(50, TableRow.LayoutParams.WRAP_CONTENT);
+        params.setMargins(2, 10, 2, 10);
+        int compte2 = -1;
+        for (int rang = 0; rang < tampon.length / colonnes; rang++) {
+            TableRow ligne = new TableRow(this);
+            ligne.setLayoutParams(rowParams);
+            ligne.setMinimumWidth(30);
+            table.addView(ligne);
+            for (int x = 0; x < colonnes; x++) {
+                Button nomEleve = new Button(this);
+                nomEleve.setLayoutParams(params);
+                nomEleve.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                nomEleve.setPadding(2, 1, 2, 1);
+                ligne.addView(nomEleve);
+                if (tampon[rang * colonnes + x] == 1) {
+                    boutonsPlacement.add(nomEleve);
+                    nomEleve.setBackground(AppCompatResources.getDrawable(this,R.drawable.bords));
+                    compte2++;
+                    final int truc = compte2;
+                    if (!Objects.equals(placeur[compte2], " ")) nomEleve.setText(placeur[compte2]);
+                    else nomEleve.setOnClickListener(v -> {
+                        if (Arrays.asList(placeur).contains(eleve)){
+                            boutonsPlacement.get(Arrays.asList(placeur).indexOf(eleve)).setText(" ");
+                            placeur[Arrays.asList(placeur).indexOf(eleve)]= " ";
+                        }
+                        placeur[truc] = eleve;
+                        nomEleve.setText(eleve);
+                    });
                 }
             }
-            try {
-                constructeur2.show();
-            }catch (Exception e){
-                Log.e(TAG, "affiche: ",e );
-                Toast.makeText(this,"Erreur critique, contactez les développeurs",Toast.LENGTH_LONG).show();
+        }
+        constructeur2.setPositiveButton("Enregistrer", (dialogInterface, i) -> {
+            StringBuilder strPlacement = new StringBuilder();
+            for (String place : placeur) {
+                strPlacement.append(place).append(",");
             }
+            prefsAlgo.edit().putString(classe+"places", strPlacement.toString()).apply();
+            dialogInterface.dismiss();
+            constr.show();
         });
-        show.show();
+        constructeur2.setNeutralButton("Annuler", ((dialogInterface, i) -> {
+            dialogInterface.dismiss();
+            constr.show();
+        }));
+        try {
+            constructeur2.show();
+        } catch (Exception e) {
+            Log.e(TAG, "affiche: ", e);
+            Toast.makeText(this, "Erreur critique, contactez les développeurs", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public View genereVue(){
+        LayoutInflater inflater = this.getLayoutInflater();
+        View vue = inflater.inflate(R.layout.generateur_eleve, null);
+        LinearLayout cache = vue.findViewById(R.id.plus_de_parametres);
+        LinearLayout autreParams = vue.findViewById(R.id.autre_params);
+        RadioGroup taille = vue.findViewById(R.id.taille);
+        RadioGroup vision = vue.findViewById(R.id.vue);
+        RadioGroup difficultes = vue.findViewById(R.id.difficultes);
+        RadioGroup attitude = vue.findViewById(R.id.attitude);
+        RadioGroup genre = vue.findViewById(R.id.genre);
+        TextView txtVue = vue.findViewById(R.id.txt_vue);
+        TextView txtTaille = vue.findViewById(R.id.txt_taille);
+        TextView txtGenre = vue.findViewById(R.id.txt_genre);
+        TextView txtSerieux = vue.findViewById(R.id.txt_serieux);
+        TextView txtNiveau = vue.findViewById(R.id.txt_niveau);
+
+        for (int i = 2; i>0; i--){
+            if (prefsAlgo.getInt("vue",0)==i){
+                cache.removeView(txtVue);
+                autreParams.addView(txtVue);
+                cache.removeView(vision);
+                autreParams.addView(vision);
+            }
+            if (prefsAlgo.getInt("taille",0)==i){
+                cache.removeView(txtTaille);
+                autreParams.addView(txtTaille);
+                cache.removeView(taille);
+                autreParams.addView(taille);
+            }
+
+            if (prefsAlgo.getInt("alternance_fg",0)==i){
+                cache.removeView(txtGenre);
+                autreParams.addView(txtGenre);
+                cache.removeView(genre);
+                autreParams.addView(genre);
+            }
+            if (prefsAlgo.getInt("alternance_ac",0)==i){
+                cache.removeView(txtSerieux);
+                autreParams.addView(txtSerieux);
+                cache.removeView(attitude);
+                autreParams.addView(attitude);
+            }
+            if (prefsAlgo.getInt("alternance_fd",0)==i){
+                cache.removeView(txtNiveau);
+                autreParams.addView(txtNiveau);
+                cache.removeView(difficultes);
+                autreParams.addView(difficultes);
+            }
+        }
+        return vue;
     }
 
     @Override
@@ -537,13 +684,14 @@ public class ListeEleves extends AppCompatActivity {
                 onExplose();
                 return true;
             case R.id.reinit:
-                reinitialiser();
+                new MesOutils(this).reinitialiser();
+                onExplose();
                 return true;
             case R.id.nous_soutenir:
-                soutient();
+                new MesOutils(this).soutient();
                 return true;
             case R.id.infos:
-                infos();
+                new MesOutils(this).infos();
                 return true;
             case R.id.contact:
                 startActivity( new Intent(this, NousContacter.class));
@@ -551,35 +699,10 @@ public class ListeEleves extends AppCompatActivity {
             case R.id.aide:
                 startActivity( new Intent(this, Aide.class));
                 return true;
+            default:
+                return false;
         }
-        return super.onOptionsItemSelected(item);
     }
 
     public void onExplose(){this.finishAffinity();}
-
-    public void reinitialiser(){
-        SharedPreferences prefs = getBaseContext().getSharedPreferences("classes", Context.MODE_PRIVATE);//liste des classes et commentaires pour chaque classe
-        prefsAlgo.edit().clear().apply();
-        prefListeEleve.edit().clear().apply();
-        config.edit().clear().apply();
-        indices.edit().clear().apply();
-        prefs.edit().clear().apply();
-        File fich = new File((getExternalFilesDir(null) + "/donnees.csv"));
-        fich.delete();
-        onExplose();
-    }
-
-    public void infos(){
-        AlertDialog.Builder constr = new AlertDialog.Builder(this);
-        constr.setTitle("Informations");
-        constr.setMessage(String.format("Vous utilisez la %s de l'application.\n%s \nL'application a été développée par IPIC&cie.",getString(R.string.version),getString(R.string.notes_version)));
-        constr.show();
-    }
-
-    public void soutient(){
-        AlertDialog.Builder construit = new AlertDialog.Builder(this);
-        construit.setTitle("Merci de votre soutient");
-        construit.setMessage("Que vous êtes bon");
-        construit.show();
-    }
 }

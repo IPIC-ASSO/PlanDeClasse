@@ -117,7 +117,8 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
 
                     <Button
                         android:id="@+id/btn_affinite_i"
@@ -170,8 +171,7 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
-                    tools:visibility="visible">
+                    android:visibility="gone">
 
                     <Button
                         android:id="@+id/btn_vue"
@@ -435,7 +435,8 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
 
                     <Button
                         android:id="@+id/btn_associer_dm"
