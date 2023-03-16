@@ -1,0 +1,45 @@
+
+n
+java:S1192¼"KDefine a constant instead of duplicating this literal "laBoucle: " 3 times.(š Óşÿÿÿÿ8ßÎ‚Ÿç0
+Q
+java:S1066t"/Merge this if statement with the enclosing one.(á‘”úÿÿÿÿ8ïÎ‚Ÿç0
+r	java:S116C"QRename this field "Rplace" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(æîõÁøÿÿÿÿ8ğğ‚Ÿç0
+t
+java:S3776O"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(¨Œşÿÿÿÿ8ëñ‚Ÿç0
+]	java:S125T"<This block of commented-out lines of code should be removed.(Ù–òüøÿÿÿÿ8ûñ‚Ÿç0
+X	java:S125V"<This block of commented-out lines of code should be removed.(Ä½¿8ûñ‚Ÿç0
+L
+java:S1874_"/Remove this use of "execute"; it is deprecated.(óúÆÕ8Šò‚Ÿç0
+A
+java:S1659n"Declare "f" on a separate line.(ŞÚÿ’ûÿÿÿÿ8ªò‚Ÿç0
+N
+java:S1874‹"1Remove this use of "AsyncTask"; it is deprecated.(Ôéäz8ßò‚Ÿç0
+m
+java:S1874”"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(éè‹¿úÿÿÿÿ8ßò‚Ÿç0
+u
+java:S3776š"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(­ûº€ûÿÿÿÿ8ó‚Ÿç0
+Y	java:S125 "<This block of commented-out lines of code should be removed.(‡÷ò—8ó‚Ÿç0
+L
+java:S2140¿")Use "java.util.Random.nextInt()" instead.(¡óƒëúÿÿÿÿ8ó‚Ÿç0
+n
+java:S3252Ï"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸8­ó‚Ÿç0
+n
+java:S3252Ï"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸8´ó‚Ÿç0
+s
+java:S3252Ğ"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(±îõüÿÿÿÿ8´ó‚Ÿç0
+p
+java:S3776¯"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ƒìƒ8ãó‚Ÿç0
+p
+java:S3776â"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(ù‡Äî8ãó‚Ÿç0
+U
+java:S1135ã"2Complete the task associated to this TODO comment.(äÊâ»ÿÿÿÿÿ8ãó‚Ÿç0
+p
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(Ùõò§8‚ô‚Ÿç0
+P
+java:S1135‘"2Complete the task associated to this TODO comment.(¬İ£œ8‚ô‚Ÿç0
+u
+java:S3776¨"RRefactor this method to reduce its Cognitive Complexity from 57 to the 15 allowed.(Í”ƒ™ùÿÿÿÿ8‚ô‚Ÿç0
+q
+java:S4042Ş"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(Ê›æ°ÿÿÿÿÿ8×ô‚Ÿç0
+H
+java:S3398š"%Move this method into "CreationPlan".(­ûº€ûÿÿÿÿ8×ô‚Ÿç0

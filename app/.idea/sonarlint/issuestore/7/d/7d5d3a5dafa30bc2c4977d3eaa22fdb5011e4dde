@@ -1,0 +1,33 @@
+
+c
+java:S1192¼"LDefine a constant instead of duplicating this literal "inflation: " 3 times.(•Ã€ê
+]
+java:S1192O"GDefine a constant instead of duplicating this literal "classe" 5 times.(Ÿí×¨
+\
+java:S1192q"FDefine a constant instead of duplicating this literal "false" 3 times.(Ì¸çü
+u
+java:S1450A"_Remove the "boutonsPlacement" field and declare it as a local variable in the relevant methods.(ìù±Š
+m
+java:S3776D"RRefactor this method to reduce its Cognitive Complexity from 32 to the 15 allowed.(¨Œşÿÿÿÿ
+V	java:S125G"<This block of commented-out lines of code should be removed.(Ù–òüøÿÿÿÿ
+Q	java:S125H"<This block of commented-out lines of code should be removed.(Ä½¿
+n
+java:S3776¬"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(Í—¨Äûÿÿÿÿ
+i
+java:S3776ò"RRefactor this method to reduce its Cognitive Complexity from 80 to the 15 allowed.(º¯¾Ü
+n
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(‡„‚¨ÿÿÿÿÿ
+l
+java:S3252®"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(õˆùÙşÿÿÿÿ
+c
+java:S3252®"GUse static access with "android.widget.FrameLayout" for "LayoutParams".(õˆùÙşÿÿÿÿ
+l
+java:S3252®"PUse static access with "android.view.ViewGroup$LayoutParams" for "MATCH_PARENT".(õˆùÙşÿÿÿÿ
+c
+java:S3252®"GUse static access with "android.widget.FrameLayout" for "LayoutParams".(õˆùÙşÿÿÿÿ
+g
+java:S3252¯"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸
+g
+java:S3252¯"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸
+l
+java:S3252·"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(±îõüÿÿÿÿ

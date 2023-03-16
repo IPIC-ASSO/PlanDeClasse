@@ -1,0 +1,51 @@
+
+\
+java:S1192P"GDefine a constant instead of duplicating this literal "taille" 3 times.(—¯‰
+a
+java:S13018"KReplace this "switch" statement by "if" statements to increase readability.(°±¢›
+f
+java:S1301@"KReplace this "switch" statement by "if" statements to increase readability.(²Œøµøÿÿÿÿ
+f
+java:S1301H"KReplace this "switch" statement by "if" statements to increase readability.(¶“Áàúÿÿÿÿ
+`
+java:S1301P"KReplace this "switch" statement by "if" statements to increase readability.(—¯‰
+f
+java:S1301X"KReplace this "switch" statement by "if" statements to increase readability.(‹¾¹÷ÿÿÿÿÿ
+f
+java:S1301`"KReplace this "switch" statement by "if" statements to increase readability.(‰×§Áıÿÿÿÿ
+f
+java:S1301h"KReplace this "switch" statement by "if" statements to increase readability.(‹Ü“ÿÿÿÿÿ
+a
+java:S1301p"KReplace this "switch" statement by "if" statements to increase readability.(€ë…¥
+a
+java:S1301x"KReplace this "switch" statement by "if" statements to increase readability.(­Õ”Ø
+
+java:S1186š"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ê‹Àşÿÿÿÿ
+w
+java:S1450"URemove the "config" field and declare it as a local variable in the relevant methods.(ïÅÛÌşÿÿÿÿ8®×¥ç0
+s
+java:S1450"VRemove the "indices" field and declare it as a local variable in the relevant methods.(ıÌ»ˆ8®×¥ç0
+
+java:S1450"]Remove the "prefListeEleve" field and declare it as a local variable in the relevant methods.(Â’‘Œùÿÿÿÿ8®×¥ç0
+u
+java:S1450"XRemove the "prefsAlgo" field and declare it as a local variable in the relevant methods.(£„øñ8’®×¥ç0
+m
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(¨Œşÿÿÿÿ
+V	java:S125#"<This block of commented-out lines of code should be removed.(Ù–òüøÿÿÿÿ
+Q	java:S125%"<This block of commented-out lines of code should be removed.(Ä½¿
+7	java:S1318""Add a default case to this switch.(°±¢›
+<	java:S131@""Add a default case to this switch.(²Œøµøÿÿÿÿ
+<	java:S131H""Add a default case to this switch.(¶“Áàúÿÿÿÿ
+6	java:S131P""Add a default case to this switch.(—¯‰
+<	java:S131X""Add a default case to this switch.(‹¾¹÷ÿÿÿÿÿ
+<	java:S131`""Add a default case to this switch.(‰×§Áıÿÿÿÿ
+<	java:S131h""Add a default case to this switch.(‹Ü“ÿÿÿÿÿ
+7	java:S131p""Add a default case to this switch.(€ë…¥
+7	java:S131x""Add a default case to this switch.(­Õ”Ø
+U
+java:S1874ƒ"9Remove this use of "getDefaultDisplay"; it is deprecated.(Ä¸¬Ìıÿÿÿÿ
+K
+java:S1874…"/Remove this use of "getSize"; it is deprecated.(¯ÊÃÙøÿÿÿÿ
+=	java:S131¦""Add a default case to this switch.(øå´¡ÿÿÿÿÿ
+T
+java:S1068"2Remove this unused "prefListeEleve" private field.(Â’‘Œùÿÿÿÿ8Ê®×¥ç0
