@@ -7,12 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 
-public class AdaptateurAdapte extends BaseAdapter {
-    private LayoutInflater layoutInflater;
-    private Context context;
-    private int[] places;
+public class  AdaptateurAdapte extends BaseAdapter {
+    private final LayoutInflater layoutInflater;
+    private final Context context;
+    private final int[] places;
 
     public AdaptateurAdapte(Context aContext, int[] places) {
         this.context = aContext;
@@ -42,15 +41,22 @@ public class AdaptateurAdapte extends BaseAdapter {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.case_grille, null);
             holder = new ViewHolder();
-            holder.coche = (CheckBox) convertView.findViewById(R.id.coche);
+            holder.coche = convertView.findViewById(R.id.coche);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        //holder.populationView.setText("" + country.getPopulation());
-        if (place ==1){
+        if (place == 1){
             holder.coche.setChecked(true);
         }
+        holder.coche.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                places[position] = 1;
+            }else{
+                places[position] = 0;
+            }
+            
+        });
         return convertView;
     }
 

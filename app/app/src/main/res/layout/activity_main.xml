@@ -13,13 +13,34 @@
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
         android:clickable="true"
-        android:contentDescription="ajouter une classe"
+        android:contentDescription="@string/dsc_ajouter_classe"
         app:backgroundTint="#23FB27"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/vers_gallerie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:layout_margin="40dp"
+        android:contentDescription="@string/dsc_btn_gallerie"
+        app:backgroundTint="@color/rouge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/ic_baseline_photo_library_24" />
+
+    <TextView
+        android:id="@+id/bienvenue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/txt_bienvenue_liste_classes"
+        android:textAlignment="center" />
+
     <ScrollView
+        android:contentDescription="@string/dsc_listes_classes"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
@@ -16,112 +15,109 @@
             android:layout_margin="5dp"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/nom_classe"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="Nom de la classe"
-                android:text="" />
+                android:hint="@string/hint_nom_de_la_classe">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nom_classe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="dimensions de la classe"
+                android:layout_margin="5dp"
+                android:text="@string/txt_dimensions_classe"
                 android:textAlignment="center"
                 android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
-                <EditText
-                    android:id="@+id/colonnes"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="colonnes"
-                    android:inputType="number|text|phone"
-                    android:text="" />
+                    android:layout_marginEnd="5dp"
+                    android:hint="@string/hint_nb_colonnes"
+                    android:inputType="number">
 
-                <EditText
-                    android:id="@+id/rangees"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/colonnes"
+                        android:layout_width="match_parent"
+                        android:inputType="number"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="rangées"
-                    android:inputType="number|text|phone"
-                    android:text="" />
+                    android:hint="@string/hint_nb_rangees"
+                    android:inputType="number">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/rangees"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="@string/hint_commentaires_classe"
+                android:inputType="number"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/commentaires_classe_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/appliquer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Appliquer" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:text="@string/txt_btn_voir" />
 
             <TextView
-                android:id="@+id/txt_tableau"
+                android:id="@+id/textView16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="tableau|devant de la salle"
+                android:text="@string/txt_exemple"
                 android:textAlignment="center"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:textSize="16sp"
+                android:textStyle="italic" />
 
-            <HorizontalScrollView
+            <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/dsc_img_exemple"
+                android:cropToPadding="false"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/salle_de_classe" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <GridView
-                        android:id="@+id/grille"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#757575"
-                        android:cacheColorHint="#777777"
-                        android:foregroundTint="#858585"
-                        android:gravity="center"
-                        android:numColumns="50"
-                        android:stretchMode="columnWidth"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <EditText
-                android:id="@+id/commentaires_classe_txt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Commentaires"
-                android:inputType="textPersonName" />
-
-            <Button
-                android:id="@+id/enregistrer_salle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Suivant"
-                android:visibility="gone"
-                tools:visibility="visible" />
         </LinearLayout>
     </ScrollView>
 

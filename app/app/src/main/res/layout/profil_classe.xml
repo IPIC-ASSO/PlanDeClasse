@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:padding="2dp"
-    android:background="#BCBCBC"
-    android:foregroundTint="#EF0C0C">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="2dp"
+        android:background="#BCBCBC"
+        android:foregroundTint="#EF0C0C"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/apercu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             app:srcCompat="@drawable/ic_launcher_foreground"
-            android:contentDescription="aperçu de la classe" />
+            android:contentDescription="@string/dsc_apercu_classe" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -26,17 +32,17 @@
             <TextView
                 android:id="@+id/nom_classe"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="CLASSE X"
+                android:text="@string/defaut_nom_classe"
                 android:textColor="#424242" />
 
             <TextView
                 android:id="@+id/nombre_eleves"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="X ELEVES"
+                android:text="@string/defaut_nb_eleves"
                 android:textColor="#424242" />
         </LinearLayout>
 
@@ -46,8 +52,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="COMMENTAIRES"
+            android:text="@string/defaut_txt_commentaires"
             android:textAlignment="center"
             android:textColor="#424242" />
 
-</LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
