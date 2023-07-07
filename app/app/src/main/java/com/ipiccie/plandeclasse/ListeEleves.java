@@ -79,7 +79,11 @@ public class ListeEleves extends AppCompatActivity {
         classe = getIntent().getStringExtra("classe");
         obtienClasse2(classe);
         phaseFinale = indices.getBoolean("phasefinale"+classe,false);
-
+        if(phaseFinale && getIntent().getBooleanExtra("debut",false)){
+            Intent intention = new Intent(this, ParametresAlgorithme.class);
+            intention.putExtra("classe",classe);
+            startActivity(intention);
+        }
         if (phaseFinale){
             Button creerPlan = findViewById(R.id.vers_realiser_plan);
             creerPlan.setText("Creer un plan de Classe");

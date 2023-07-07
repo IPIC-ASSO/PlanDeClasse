@@ -125,6 +125,7 @@ public class NouvelleClasse extends AppCompatActivity {
                         dialog.dismiss();
                         Intent intention = new Intent(this, ListeEleves.class);
                         intention.putExtra("classe",nomDeClasse.getText().toString());
+                        intention.putExtra("debut",true);
                         startActivity(intention);
                     }else{
                         Toast.makeText(this,"Veillez placer au moins trois tables dans cette classe",Toast.LENGTH_SHORT).show();

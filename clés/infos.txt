@@ -1,2 +1,0 @@
-MDP: PlandeClasse
-alias: key5
