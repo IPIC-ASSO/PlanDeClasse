@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ipiccie.plandeclasse.plan_de_classe">
+    package="com.ipiccie.plandeclasse">
    <application
-        android:label="plan_de_classe"
+        android:label="@string/label"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

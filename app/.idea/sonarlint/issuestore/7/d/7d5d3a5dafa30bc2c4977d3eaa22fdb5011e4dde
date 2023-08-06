@@ -1,35 +1,35 @@
 
-j
-java:S1192À"LDefine a constant instead of duplicating this literal "inflation: " 3 times.(•Ã€ê8šëóä’1
-d
-java:S1192O"GDefine a constant instead of duplicating this literal "classe" 6 times.(Ÿí×¨8›ëóä’1
 c
-java:S1192u"FDefine a constant instead of duplicating this literal "false" 3 times.(Ì¸çü8›ëóä’1
-|
-java:S1450A"_Remove the "boutonsPlacement" field and declare it as a local variable in the relevant methods.(ìù±Š8ìóä’1
-t
-java:S3776D"RRefactor this method to reduce its Cognitive Complexity from 34 to the 15 allowed.(¨Œşÿÿÿÿ8Œìóä’1
-]	java:S125G"<This block of commented-out lines of code should be removed.(Ù–òüøÿÿÿÿ8ìóä’1
-X	java:S125H"<This block of commented-out lines of code should be removed.(Ä½¿8ìóä’1
+java:S1192À"LDefine a constant instead of duplicating this literal "inflation: " 3 times.(•Ã€ê
+]
+java:S1192O"GDefine a constant instead of duplicating this literal "classe" 6 times.(Ÿí×¨
+\
+java:S1192u"FDefine a constant instead of duplicating this literal "false" 3 times.(Ì¸çü
 u
-java:S3776°"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(Í—¨Äûÿÿÿÿ8£ìóä’1
-p
-java:S3776ö"RRefactor this method to reduce its Cognitive Complexity from 80 to the 15 allowed.(º¯¾Ü8µìóä’1
-u
-java:S3776¢"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(‡„‚¨ÿÿÿÿÿ8èìóä’1
-s
-java:S3252²"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(õˆùÙşÿÿÿÿ8ììóä’1
-j
-java:S3252²"GUse static access with "android.widget.FrameLayout" for "LayoutParams".(õˆùÙşÿÿÿÿ8ììóä’1
-s
-java:S3252²"PUse static access with "android.view.ViewGroup$LayoutParams" for "MATCH_PARENT".(õˆùÙşÿÿÿÿ8ììóä’1
-j
-java:S3252²"GUse static access with "android.widget.FrameLayout" for "LayoutParams".(õˆùÙşÿÿÿÿ8ììóä’1
+java:S1450A"_Remove the "boutonsPlacement" field and declare it as a local variable in the relevant methods.(ìù±Š
+m
+java:S3776D"RRefactor this method to reduce its Cognitive Complexity from 34 to the 15 allowed.(¨Œşÿÿÿÿ
+V	java:S125G"<This block of commented-out lines of code should be removed.(Ù–òüøÿÿÿÿ
+Q	java:S125H"<This block of commented-out lines of code should be removed.(Ä½¿
 n
-java:S3252³"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸8íìóä’1
+java:S3776°"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(Í—¨Äûÿÿÿÿ
+i
+java:S3776ö"RRefactor this method to reduce its Cognitive Complexity from 80 to the 15 allowed.(º¯¾Ü
 n
-java:S3252³"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸8íìóä’1
-s
-java:S3252»"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(±îõüÿÿÿÿ8ïìóä’1
-å
-java:S6541ö"ÆA "Brain Method" was detected. Refactor it to reduce at least one of the following metrics: LOC from 262 to 64, Complexity from 16 to 14, Nesting Level from 4 to 2, Number of Variables from 60 to 6.(º¯¾Ü8Œíóä’1
+java:S3776¢"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(‡„‚¨ÿÿÿÿÿ
+l
+java:S3252²"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(õˆùÙşÿÿÿÿ
+c
+java:S3252²"GUse static access with "android.widget.FrameLayout" for "LayoutParams".(õˆùÙşÿÿÿÿ
+l
+java:S3252²"PUse static access with "android.view.ViewGroup$LayoutParams" for "MATCH_PARENT".(õˆùÙşÿÿÿÿ
+c
+java:S3252²"GUse static access with "android.widget.FrameLayout" for "LayoutParams".(õˆùÙşÿÿÿÿ
+g
+java:S3252³"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸
+g
+java:S3252³"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸
+l
+java:S3252»"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(±îõüÿÿÿÿ
+Ş
+java:S6541ö"ÆA "Brain Method" was detected. Refactor it to reduce at least one of the following metrics: LOC from 262 to 64, Complexity from 16 to 14, Nesting Level from 4 to 2, Number of Variables from 60 to 6.(º¯¾Ü

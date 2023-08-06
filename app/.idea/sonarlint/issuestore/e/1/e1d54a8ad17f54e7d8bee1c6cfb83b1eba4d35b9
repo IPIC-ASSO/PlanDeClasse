@@ -1,12 +1,12 @@
 
-e
-java:S11925"HDefine a constant instead of duplicating this literal "classe" 11 times.(ÁõÂ”8Š¡å¤ç0
-t
-java:S3776("RRefactor this method to reduce its Cognitive Complexity from 41 to the 15 allowed.(¨Œşÿÿÿÿ8¤å¤ç0
-]	java:S125,"<This block of commented-out lines of code should be removed.(Ù–òüøÿÿÿÿ8”¤å¤ç0
+^
+java:S11925"HDefine a constant instead of duplicating this literal "classe" 11 times.(ÁõÂ”
 m
-java:S3252I"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸8¬¤å¤ç0
-m
-java:S3252I"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸8­¤å¤ç0
-^	java:S125¤"<This block of commented-out lines of code should be removed.(Öõİ™ùÿÿÿÿ8Õ¤å¤ç0
-D	java:S131È""Add a default case to this switch.(øå´¡ÿÿÿÿÿ8ß¤å¤ç0
+java:S3776("RRefactor this method to reduce its Cognitive Complexity from 41 to the 15 allowed.(¨Œşÿÿÿÿ
+V	java:S125,"<This block of commented-out lines of code should be removed.(Ù–òüøÿÿÿÿ
+f
+java:S3252I"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸
+f
+java:S3252I"PUse static access with "android.view.ViewGroup$LayoutParams" for "WRAP_CONTENT".(¾¸¸
+W	java:S125¤"<This block of commented-out lines of code should be removed.(Öõİ™ùÿÿÿÿ
+=	java:S131È""Add a default case to this switch.(øå´¡ÿÿÿÿÿ

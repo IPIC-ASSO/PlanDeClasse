@@ -1,4 +1,4 @@
-package com.ipiccie.plandeclasse.plan_de_classe;
+package com.ipiccie.plandeclasse;
 
 import io.flutter.embedding.android.FlutterActivity;
 

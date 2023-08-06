@@ -174,7 +174,7 @@ public class AlgorithmeContraingnant extends AppCompatActivity {
         if (place[indiceEleve]!=-1){
             return(boucleRecursive(indiceEleve+1));
         }
-        for (int indicePlace=0;indicePlace<Rplace.length; indicePlace++){
+        for (int indicePlace = 0; indicePlace < Rplace.length ; indicePlace++){
             if (Objects.equals(Rplace[indicePlace], "")){  //place libre
                 float contrainteCalc = contrainte(indicePlace,indiceEleve);
                 if (contrainteAct+contrainteCalc<= maxTolere){

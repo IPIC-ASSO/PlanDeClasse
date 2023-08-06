@@ -1,19 +1,19 @@
 
 m
 java:S1192"QDefine a constant instead of duplicating this literal "doInBackground: " 4 times.(ÈÏ¯Çüÿÿÿÿ
-Q
-java:S1066t"/Merge this if statement with the enclosing one.(á‘”úÿÿÿÿ8­ÍÖ¤è0
+J
+java:S1066t"/Merge this if statement with the enclosing one.(á‘”úÿÿÿÿ
 k	java:S116<"QRename this field "Rplace" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(æîõÁøÿÿÿÿ
 s
 java:S14507"XRemove the "laMatrice" field and declare it as a local variable in the relevant methods.(»¹÷Ñşÿÿÿÿ
-t
-java:S3776O"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(¨Œşÿÿÿÿ8©ÖÖ¤è0
+m
+java:S3776O"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(¨Œşÿÿÿÿ
 V	java:S125S"<This block of commented-out lines of code should be removed.(Ù–òüøÿÿÿÿ
 Q	java:S125U"<This block of commented-out lines of code should be removed.(Ä½¿
 E
 java:S1874_"/Remove this use of "execute"; it is deprecated.(óúÆÕ
-A
-java:S1659n"Declare "f" on a separate line.(ŞÚÿ’ûÿÿÿÿ8²ÖÖ¤è0
+:
+java:S1659n"Declare "f" on a separate line.(ŞÚÿ’ûÿÿÿÿ
 G
 java:S1874‹"1Remove this use of "AsyncTask"; it is deprecated.(Ôéäz
 f

@@ -60,9 +60,7 @@ public class MainActivity extends AppCompatActivity {
             intention.putExtra("classe","-1");
             startActivity(intention);
         });
-        bouton2.setOnClickListener(v -> {
-            startActivity(new Intent(this, Gallerie.class));
-        });
+        bouton2.setOnClickListener(v -> startActivity(new Intent(this, Gallerie.class)));
     }
 
     public void obtienClasse0(){
@@ -72,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < classes.length; i++) {
             classes[i] = st.nextToken();
         }
-        Log.d(TAG, "obtienClasse"+classes.length);
     }
 
     public void inflation0(String[] classes){
