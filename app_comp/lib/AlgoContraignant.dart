@@ -1,15 +1,11 @@
 
 import 'dart:math';
-import 'dart:typed_data';
-
+import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
-import 'dart:ui' as ui;
-
 import 'menu.dart';
 
 
@@ -40,10 +36,12 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
   List<int> prioritesDeTraitement = []; //valeur: priorité du traitement de l'élève | indice: élève
   List<List<String>> affiniteElevesE = []; //valeur: [<liste des noms>] | indice: élève
   List<List<String>> affiniteElevesI = []; //valeur: [<liste des noms>] | indice: élève
-  int maxTolere = 9;  //niveau de correspondance
+  int maxTolere = 0;  //niveau de correspondance
   double contrainteAct = 0;
   final monskrolleur = ScrollController();
-  GlobalKey _cleGlobale = new GlobalKey();
+  final GlobalKey _cleGlobale = GlobalKey();
+  int variante = 0;
+  List<double> reussiteVariante = [];
 
   @override
   void initState() {
@@ -66,6 +64,8 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Padding(padding: const EdgeInsets.all(15),child: Text("Variante ${variante + 1}/${planEnregsitres.length} \nCorrespondance: ${max(100-reussiteVariante[variante],10)}%", textAlign: TextAlign.center,)),
+                    Padding(padding: const EdgeInsets.all(15),child: LinearProgressIndicator(value: max(100-reussiteVariante[variante],10),color: [Colors.green,Colors.lightGreenAccent,Colors.orange,Colors.red][min(reussiteVariante[variante]~/25,3)],)),
                     RepaintBoundary(
                       key: _cleGlobale,
                       child:
@@ -77,23 +77,31 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
                           scrollDirection: Axis.horizontal,
                           child:Table(
                             defaultColumnWidth: const FixedColumnWidth(100),
-                            children: construitGrilleDeChange(setState),
+                            children: construitGrilleDeChange(setState, planEnregsitres[variante]),
                           )),),),
-                    Padding(padding: EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: (){}, style: ElevatedButton.styleFrom(padding: EdgeInsets.all(15), backgroundColor: Colors.blue), icon:const Icon(Icons.save),label: const Text("Enregistrer"))),
+                    Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: (){}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15), backgroundColor: Colors.blue), icon:const Icon(Icons.save),label: const Text("Enregistrer"))),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                      ElevatedButton.icon(onPressed: (){}, icon:const Icon(Icons.arrow_back),label: const Text("Variante Précédente"),style: ElevatedButton.styleFrom(padding: EdgeInsets.all(15)),),
-                      ElevatedButton.icon(onPressed: (){}, icon:const Icon(Icons.arrow_forward),label: const Text("Variante Suivante"),style: ElevatedButton.styleFrom(padding: EdgeInsets.all(15)),),
+                        Visibility(
+                          visible: variante>0,
+                          child: ElevatedButton.icon(onPressed: (){setState(() {
+                            variante-=1;
+                          });}, icon:const Icon(Icons.arrow_back),label: const Text("Variante Précédente"),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15)),),),
+                        Visibility(
+                          visible: variante<planEnregsitres.length-1,
+                          child:ElevatedButton.icon(onPressed: (){setState(() {
+                            variante++;
+                          });}, icon:const Icon(Icons.arrow_forward),label: const Text("Variante Suivante"),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15)),),)
                     ],)
                   ],
                 );
               }else{
                 return Center(
                   child: Column(
-                    children: [
-                      const Padding(padding: EdgeInsets.all(15),child:Text("Chargement...")),
-                      const CircularProgressIndicator()
+                    children: const [
+                      Padding(padding: EdgeInsets.all(15),child:Text("Chargement...")),
+                      CircularProgressIndicator()
                     ],
                   ),
                 );
@@ -103,10 +111,8 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
     );
   }
 
-  construitGrilleDeChange(StateSetter setState) {
+  construitGrilleDeChange(StateSetter setState, List<int> placeAvecDesGens) {
     final List<TableRow> mesLignes = [];
-    print("configuration plane: $configurationPlane");
-    print("places occupees: $placesOccupees");
     final int lignes = ((configurationPlane.length)~/colonne);
     int comptePlaces = -1;
     for (int lin = 0; lin<lignes; lin++){
@@ -120,8 +126,8 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
           ElevatedButton(
             onPressed:
             configurationPlane[maPlaceDansLaConfig]>=0?
-            ((configurationPlane[maPlaceDansLaConfig]>=0 && placesOccupees[maPaceDansLeCompte]>=0)?()=>{
-              montreEleve(indiceEleves[placesOccupees[maPaceDansLeCompte]],placesOccupees[maPaceDansLeCompte])
+            ((configurationPlane[maPlaceDansLaConfig]>=0 && placeAvecDesGens[maPaceDansLeCompte]>=0)?()=>{
+              montreEleve(indiceEleves[placeAvecDesGens[maPaceDansLeCompte]],placeAvecDesGens[maPaceDansLeCompte])
             }
               :
             ()=> {montreEleve(-1,-1)})
@@ -133,7 +139,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
                 width: configurationPlane[maPlaceDansLaConfig]>=0?2.0:1.0,
               ),// Background color
             ),
-            child: Text((configurationPlane[maPlaceDansLaConfig]>=0 && placesOccupees[maPaceDansLeCompte]>=0)?nomsEleves[placesOccupees[maPaceDansLeCompte]]:"", style:  const TextStyle(color: Colors.black),)
+            child: Text((configurationPlane[maPlaceDansLaConfig]>=0 && placeAvecDesGens[maPaceDansLeCompte]>=0)?nomsEleves[placeAvecDesGens[maPaceDansLeCompte]]:"", style:  const TextStyle(color: Colors.black),)
           ),)
         );
       }
@@ -143,16 +149,15 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
   }
 
   Future<bool> arbreQuiGrandit() async {
-    int monCompteur = 0;
     await graine();//INITIALISATION
     while(planEnregsitres.length<5 && maxTolere<10){//CALCULE
       //print("iteration $monCompteur");
       placesOccupees.clear();
-      placesOccupees = new List<int>.from(placesOccupeesDebase);
+      placesOccupees = List<int>.from(placesOccupeesDebase);
       print("places occuppees: $placesOccupees");
       bool x = await TroncEtBranche(0);
       if(x){
-        planEnregsitres.add(new List<int>.from(placesOccupees));
+        planEnregsitres.add(List<int>.from(placesOccupees));
       }else{
        maxTolere++;
       }
@@ -187,9 +192,9 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
       nomsEleves.add(element);
       commentaireEleves.add(y[1]);
       prioritesDeTraitement.add(int.parse(donnees[indiceEleves.last][13]));
-      if(donnees[indiceEleves.last][2].split(";").toList()[0].length>0)affiniteElevesE.add(donnees[indiceEleves.last][2].split(";").toList());
+      if(donnees[indiceEleves.last][2].split(";").toList()[0].isNotEmpty)affiniteElevesE.add(donnees[indiceEleves.last][2].split(";").toList());
       else{affiniteElevesE.add([]);}
-      if(donnees[indiceEleves.last][3].split(";").toList()[0].length>0)affiniteElevesI.add(donnees[indiceEleves.last][3].split(";").toList());
+      if(donnees[indiceEleves.last][3].split(";").toList()[0].isNotEmpty)affiniteElevesI.add(donnees[indiceEleves.last][3].split(";").toList());
       else{affiniteElevesI.add([]);}
     }
   }
@@ -218,14 +223,14 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
     for(int indiceEleve =0; indiceEleve <affiniteElevesE.length;indiceEleve++){
       String nomDeEleve = nomsEleves[indiceEleve];
       for(String nomEnnemi in affiniteElevesE[indiceEleve]){
-        if (nomEnnemi.length>0 && !affiniteElevesE[nomsEleves.indexOf(nomEnnemi)].contains(nomDeEleve))affiniteElevesE[nomsEleves.indexOf(nomEnnemi)].add(nomDeEleve);
-        if(nomEnnemi.length>0 && affiniteElevesI[nomsEleves.indexOf(nomEnnemi)].contains(nomDeEleve)){
+        if (nomEnnemi.isNotEmpty && !affiniteElevesE[nomsEleves.indexOf(nomEnnemi)].contains(nomDeEleve))affiniteElevesE[nomsEleves.indexOf(nomEnnemi)].add(nomDeEleve);
+        if(nomEnnemi.isNotEmpty && affiniteElevesI[nomsEleves.indexOf(nomEnnemi)].contains(nomDeEleve)){
           affiniteElevesI[nomsEleves.indexOf(nomEnnemi)].remove(nomDeEleve);
           print("DONNEES CONTRADICTOIRES pour $nomDeEleve et $nomEnnemi");
         }
       }
       for(String nomAmi in affiniteElevesI[indiceEleve]){
-        if (nomAmi.length>0 && !affiniteElevesI[nomsEleves.indexOf(nomAmi)].contains(nomDeEleve))affiniteElevesI[nomsEleves.indexOf(nomAmi)].add(nomDeEleve);
+        if (nomAmi.isNotEmpty && !affiniteElevesI[nomsEleves.indexOf(nomAmi)].contains(nomDeEleve))affiniteElevesI[nomsEleves.indexOf(nomAmi)].add(nomDeEleve);
         //if(affiniteElevesE[nomsEleves.indexOf(nomAmi)].contains(nomDeEleve))affiniteElevesE[nomsEleves.indexOf(nomAmi)].remove(nomDeEleve);
       }
 
@@ -236,8 +241,12 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
 
   Future<bool> TroncEtBranche(int indiceDeMonEleve) async {
     if(indiceDeMonEleve==indiceEleves.length) {//Tous les élèves sont placés :)
-      if(!planEnregsitres.contains(placesOccupees)) return true;  //Nouvelle config
-      else return false; //déjà fait
+      Function eg = const ListEquality().equals;
+      for(List<int> uneConfig in planEnregsitres){
+        if(eg(uneConfig,placesOccupees))return false;
+      }
+      reussiteVariante.add(contrainteAct);
+      return true;  //Nouvelle config
     }
       if(placesOccupees.contains(indiceDeMonEleve)) {
         double x = estimationPlacement(placesOccupees.indexOf(indiceDeMonEleve),indiceDeMonEleve);
@@ -266,10 +275,10 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
     print("Calcule la cintrainte ${placesOccupees.map((e) => e>-1?nomsEleves[e]:e)} $indiceDeMonEleve $place $contrainteAct");
     double maContrainte = 0;
     int importance = prioritesDeTraitement[indiceDeMonEleve] + 1;
-    if(parametresPlan.last>0)maContrainte+=await OrdreAlpha(indiceDeMonEleve,place, parametresPlan.last);
-    if(parametresPlan[0]>0 || parametresPlan[1]>0)maContrainte+= await affineLaFonction(indiceDeMonEleve,place, parametresPlan[0],parametresPlan[1]);
-    if(parametresPlan[3]>0)maContrainte+=await laTailleCouteCher(indiceDeMonEleve,place,parametresPlan[3]);
-    if(parametresPlan[4]>0 || parametresPlan[5]>0 || parametresPlan[6]>0)maContrainte+=await alternanceProfessionnelle(indiceDeMonEleve,place,parametresPlan[4],parametresPlan[5],parametresPlan[6]);
+    if(parametresPlan.last>0)maContrainte+=OrdreAlpha(indiceDeMonEleve,place, parametresPlan.last);
+    if(parametresPlan[0]>0 || parametresPlan[1]>0)maContrainte+= affineLaFonction(indiceDeMonEleve,place, parametresPlan[0],parametresPlan[1]);
+    if(parametresPlan[3]>0)maContrainte+=laTailleCouteCher(indiceDeMonEleve,place,parametresPlan[3]);
+    if(parametresPlan[4]>0 || parametresPlan[5]>0 || parametresPlan[6]>0)maContrainte+=alternanceProfessionnelle(indiceDeMonEleve,place,parametresPlan[4],parametresPlan[5],parametresPlan[6]);
     return maContrainte*importance;
   }
 
@@ -425,9 +434,9 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
     if (indiceElev >= 0) {
       if (donnees[indiceElev][14].isNotEmpty)
         monTexte += donnees[indiceElev][14];
-      if (parametresPlan[0] > 0 && affiniteElevesE[foIndice].length>0)
+      if (parametresPlan[0] > 0 && affiniteElevesE[foIndice].isNotEmpty)
         monTexte += "Doit éviter: ${affiniteElevesE[foIndice]}\n";
-      if (parametresPlan[1] > 0 && donnees[indiceElev][3].length>0)
+      if (parametresPlan[1] > 0 && donnees[indiceElev][3].isNotEmpty)
         monTexte += "Doit se rapprocher de: ${donnees[indiceElev][3]} \n";
       if (parametresPlan[2] > 0) monTexte +=
       "A une vue: ${["Bonne", "Moyenne", "Mauvaise"][int.parse(

@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           FloatingActionButton(
             heroTag: "btn1",
-            onPressed: ()=>{},
+            onPressed: ()=>{montreAmeliorations()},
             tooltip: 'Gallerie',
             backgroundColor: Colors.yellow,
             child: const Icon(Icons.image,),
@@ -228,12 +228,28 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: IconButton(
-                  icon: Icon(Icons.delete_forever),
+                  icon: const Icon(Icons.delete_forever),
                   onPressed: (){suprClasse(classe);},
                 ),
               )),
         ],
       ))
+    ));
+  }
+
+  montreAmeliorations(){
+    return showDialog(
+      context: context,
+      builder:(BuildContext context) =>CupertinoAlertDialog(
+      title: Column(
+      children: <Widget>[
+        const Text("Avacement"),
+        const Icon(
+          Icons.directions_walk,
+        ),
+      ],
+    ),
+    content: const Text( "La gallerie n'a pas encore été implémentée.\nNous devons en effet encore ajouter la sauvegarde des plans de classe.\nSont aussi au programme l'ajout d'un placement des élève par zone dans la classe, ainsi qu'un tutoriel et un menu d'aide complet."),
     ));
   }
 

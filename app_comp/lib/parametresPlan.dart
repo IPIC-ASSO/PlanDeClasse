@@ -45,7 +45,7 @@ class _ParametrePlanState extends State<ParametrePlan> {
           children: [
             const Padding(
                 padding: EdgeInsets.all(10),
-                child:Text("Indiquez l\'importance de chaque critère dans la réalisation du plan de classe", textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),
+                child:Text("Indiquez l'importance de chaque critère dans la réalisation du plan de classe", textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),
             ),
         Row(children: const [
             Expanded(
