@@ -56,6 +56,7 @@ class _NouvelleClasseState extends State<NouvelleClasse> {
                     child:Padding(padding:const EdgeInsets.only(right: 4),child: TextField(
                       controller: rangees,
                       keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Rangées',
@@ -67,6 +68,7 @@ class _NouvelleClasseState extends State<NouvelleClasse> {
                     width: 1000,
                     child:Padding(padding:const EdgeInsets.only(right: 4),child: TextField(
                       controller: colonnes,
+                      textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -89,7 +91,7 @@ class _NouvelleClasseState extends State<NouvelleClasse> {
             Padding(padding: const EdgeInsets.all(10),child:
             ElevatedButton(
               onPressed: (){
-                if(nomClasse.text.isNotEmpty && rangees.text.isNotEmpty && colonnes.text.isNotEmpty){
+                if(nomClasse.text.isNotEmpty && rangees.text.isNotEmpty && colonnes.text.isNotEmpty && isNumeric(rangees.text) && isNumeric(colonnes.text)){
                   Navigator.push(context,
                   PageRouteBuilder(
                     pageBuilder: (_, __, ___) => ConfigClasse(rangees: int.parse(rangees.text), colonnes: int.parse(colonnes.text), nomClasse: nomClasse.text, commentaire: commentaires.text,),
@@ -122,6 +124,13 @@ class _NouvelleClasseState extends State<NouvelleClasse> {
       colonnes.text = configPI.last.toString();
       rangees.text = ((configPI.length-1)~/configPI.last).toString();
     }
+  }
+
+  bool isNumeric(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
   }
 
 }

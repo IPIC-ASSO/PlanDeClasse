@@ -57,6 +57,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
                     padding: const EdgeInsets.fromLTRB(5,10,5,2),
                     child:TextField(
                       controller: nomEleve,
+                      textInputAction: TextInputAction.next,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Nom de l\'élève',
@@ -86,6 +87,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
                           border: OutlineInputBorder(),
                           labelText: 'Commentaire (facultatif)',
                         ),
+                        textInputAction: TextInputAction.done,
                       )
                   ),
                   Padding(
