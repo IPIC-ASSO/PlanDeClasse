@@ -28,6 +28,8 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
     'Paramètres du plan de classe',
     'Gestion des élèves',
     'Calculer un plan de classe',
+    'Aide',
+    'Notes de version'
   ];
   static const _iconMenu = [
     Icons.edit_calendar,
@@ -35,13 +37,17 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
     Icons.settings_input_composite_outlined,
     Icons.manage_accounts,
     Icons.oil_barrel_rounded,
+    Icons.live_help_outlined,
+    Icons.history_edu
   ];
   static const _colorMenu = [
     Colors.blue,
-    Colors.orangeAccent,
+    Colors.lightBlueAccent,
+    Colors.orange,
+    Colors.deepOrangeAccent,
+    Colors.green,
     Colors.red,
     Colors.grey,
-    Colors.green,
   ];
 
   late  var _classes = [
@@ -49,6 +55,8 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
     ListeEleves(classe: widget.classe,),
     ParametrePlan(classe: widget.classe,),
     GestionEleves(classe: widget.classe,),
+    AlgoContraignant(classe: widget.classe,),
+    AlgoContraignant(classe: widget.classe,),
     AlgoContraignant(classe: widget.classe,),
   ];
 
@@ -154,7 +162,7 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
           children: <TextSpan>[
             TextSpan(
                 style: textStyle,
-                text: "Application développée par IPIC-ASSO, pour aider les enseignants du primaire et du secondaire."
+                text: "Application développée par IPIC-ASSO, pour aider les enseignants du primaire et du secondaire.\n"
                     'Pour en savoir plus, poser une question, effectuer une réclamation... '
                     'Ecrivez nous à l\'adresse: '),
             TextSpan(
@@ -213,8 +221,8 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
               ),
               title: Text(
                   _menuTitles[i],
-                  style: const TextStyle(
-                    fontSize: 20,
+                  style: TextStyle(
+                    fontSize: i<_menuTitles.length-1?20:16,
                     fontWeight: FontWeight.w500,
                   )),
               onTap: () async {
@@ -260,8 +268,8 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
               Icons.info,
             ),
             applicationIcon: Tab(icon: Image.asset("assets/images/IPIC_logo_petit.png",width: 40,)),
-            applicationName: 'PLan de classe',
-            applicationVersion: '2.0',
+            applicationName: 'Plan de Classe',
+            applicationVersion: '2.1.4',
             applicationLegalese: '© 2023 IPIC-ASSO',
             aboutBoxChildren: aboutBoxChildren,
             child: const Text('A propos'),

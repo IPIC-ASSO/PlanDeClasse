@@ -1,4 +1,3 @@
-
 import 'dart:isolate';
 import 'dart:math';
 import 'package:collection/collection.dart';
@@ -29,21 +28,21 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
   List<String> nomsEleves = []; //valeur:nom | indice:élève
   List<int> configurationPlane = [];
   int colonne = 0;
-  List<int> placesOccupeesDebase = [];
-  List<int> placesOccupees = []; //valeur: indice de l'élève | indice: place | -1 si vide
   List<List<int>> planEnregsitres = [];
   //List<int> indicePlaceDansEleves = [];//valeur: indice de la place | indice: élève | -1 si vide
   List<int> parametresPlan = [];  //affinites_e = 2 | affinites_i | vue  | taille  | alternanceFG  | alternanceAC  | alternanceFD  |ordre_alpha
-  List<int> prioritesDeTraitement = []; //valeur: priorité du traitement de l'élève | indice: élève
   List<List<String>> affiniteElevesE = []; //valeur: [<liste des noms>] | indice: élève
   List<List<String>> affiniteElevesI = []; //valeur: [<liste des noms>] | indice: élève
-  int maxTolere = 10;  //niveau de correspondance
-  double contrainteAct = 0;
+  int maxTolere = 0;  //niveau de correspondance
+  late DatumDeClasse monDatumDeBase;
   List<double> reussiteVariante = [];
   late Isolate isolat;
   final monskrolleur = ScrollController();
   final GlobalKey _cleGlobale = GlobalKey();
   int variante = 0;
+  double progression = 0;
+  int tempsCamcule = 5;
+  int possibilites = 0;
 
   @override
   void initState() {
@@ -54,45 +53,107 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
 
   }
 
-  Future<bool> calculus() async {
-    DatumDeClasse monDatum = await _spawnAndReceive();
-    planEnregsitres = monDatum.planEnregsitres;
-    reussiteVariante = monDatum.reussiteVariante;
-    return true;
+  Future<bool> calculus([passe=false]) async {
+    print("commence");
+    try{
+      await _spawnAndReceive(passe);
+      return false;
+    }catch( e){
+      final snackBar = SnackBar(content: Text('erreur! $e'),);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+    return false;
   }
 
-  Future<DatumDeClasse> _spawnAndReceive() async {
+   _spawnAndReceive(passe) async {
     final resultPort = ReceivePort();
-    DatumDeClasse datum  = await graine(DatumDeClasse(widget.classe));
-    isolat = await Isolate.spawn(arbreQuiGrandit, [resultPort.sendPort, datum]);
-    resultPort.listen((message) {setState(() {
-      pret = Future(() => false);
-      if (message.runtimeType == int) maxTolere = message;
-    });});
-    return (await resultPort.first) as DatumDeClasse;
+    if(!passe) monDatumDeBase  = await graine(DatumDeClasse(widget.classe));
+    monDatumDeBase.tempsDebut = DateTime.now();
+    monDatumDeBase.tempsTotalMilli = tempsCamcule*1000;
+    isolat = await Isolate.spawn(arbreQuiGrandit2, [resultPort.sendPort, monDatumDeBase]);
+    await resultPort.listen((message) {
+      if(message.runtimeType == List<int>) {
+        setState(() {
+          pret = Future(() => false);
+          maxTolere = ((message as List)[0]as int);
+          possibilites = (message as List)[1]as int;
+          progression = DateTime.now().difference(monDatumDeBase.tempsDebut).inMilliseconds/monDatumDeBase.tempsTotalMilli;
+        });
+      }else if(message.runtimeType == DatumDeClasse){
+        setState(() {
+          planEnregsitres = message.plansEnregistres;
+          reussiteVariante = message.reussiteVariante;
+          pret = Future(() => true);
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async{
-        if(isolat!=null)isolat.kill();
+      onWillPop: () async {
+        isolat.kill();
         return true;
       },
         child:Scaffold(
         appBar: AppBar(
           title: const Text("Plan de classe"),
         ),
-        body: FutureBuilder(
+        body: ListView(
+          shrinkWrap: true,
+        children:[
+          const Padding(
+            padding: EdgeInsets.all(15),
+            child:Text("Génération d'un plan de classe", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20), textAlign: TextAlign.center,)
+          ),
+          const Padding(
+            padding: EdgeInsets.all(15),
+            child:Text("Choisissez le temps de calcul: un temps plus long donnera une configuration plus optimale", style: TextStyle( fontSize: 16), textAlign: TextAlign.center,),
+          ),
+          Padding(padding: const EdgeInsets.symmetric(vertical: 15,horizontal:5),child:Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children:[
+              Column(children: const [
+                Icon(Icons.shutter_speed),
+                Text("Rapide", style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic),),
+              ],),
+              SizedBox(width:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width/2:MediaQuery.of(context).size.width*0.7,
+                  child:Slider(
+                    value: tempsCamcule.toDouble(),
+                    min:5,
+                    max:60,
+                    divisions: 11,
+                    label: "$tempsCamcule secondes",
+                    onChanged: (value){
+                      setState(() {
+                        tempsCamcule = value.toInt();
+                      });
+                    },
+                  )
+              ),
+              Column(children: const [
+                Icon(Icons.self_improvement),
+                Text("Optimal",style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),)
+              ],)
+
+            ]
+          ),),
+
+          FutureBuilder(
             future: pret,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              print("ATTTENTTTTTION ${snapshot.data} $maxTolere");
+              print("ATTTENTTTTTION ${snapshot.data}");
               if (snapshot.hasData && snapshot.data == true) {
-                return Column(
+                return Padding(
+                  padding: const EdgeInsets.all(5),
+                  child:Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(padding: const EdgeInsets.all(15),child: Text("Variante ${variante + 1}/${planEnregsitres.length} \nCorrespondance: ${max(100-reussiteVariante[variante],10)}%", textAlign: TextAlign.center,)),
-                    Padding(padding: const EdgeInsets.all(15),child: LinearProgressIndicator(value: max(100-reussiteVariante[variante],10),color: [Colors.green,Colors.lightGreenAccent,Colors.orange,Colors.red][min(reussiteVariante[variante]~/25,3)],)),
+                    Padding(padding: const EdgeInsets.all(15),child: Text("Variante ${variante + 1}/${planEnregsitres.length} \nCorrespondance: ${max(100-reussiteVariante[variante],10).toStringAsFixed(2)}% \n$possibilites configurations évaluées", textAlign: TextAlign.center,)),
+                    Padding(padding: const EdgeInsets.all(15),child:
+                      SizedBox(width:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width/2:MediaQuery.of(context).size.width*0.9,
+                      child:LinearProgressIndicator(value: max(100-reussiteVariante[variante],10),color: [Colors.green,Colors.lightGreenAccent,Colors.orange,Colors.red][min(reussiteVariante[variante]~/25,3)],))),
                     RepaintBoundary(
                       key: _cleGlobale,
                       child:
@@ -106,34 +167,42 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
                             defaultColumnWidth: const FixedColumnWidth(100),
                             children: construitGrilleDeChange(setState, planEnregsitres[variante]),
                           )),),),
-                    Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: (){}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15), backgroundColor: Colors.blue), icon:const Icon(Icons.save),label: const Text("Enregistrer"))),
+                    Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{recalcule()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.loop),label: const Text("Recalculer"))),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Visibility(
                           visible: variante>0,
-                          child: ElevatedButton.icon(onPressed: (){setState(() {
-                            variante-=1;
-                          });}, icon:const Icon(Icons.arrow_back),label: const Text("Variante Précédente"),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15)),),),
+                          child: Expanded(flex:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?0:1,child:ElevatedButton.icon(
+                            onPressed: (){setState(() {
+                              variante-=1;
+                            });},
+                            icon:const Icon(Icons.arrow_back),label: const Text("Variante Précédente", textAlign: TextAlign.center,),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10)))
+                        ,),),
                         Visibility(
                           visible: variante<planEnregsitres.length-1,
-                          child:ElevatedButton.icon(onPressed: (){setState(() {
-                            variante++;
-                          });}, icon:const Icon(Icons.arrow_forward),label: const Text("Variante Suivante"),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15)),),)
+                          child:Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Expanded(flex:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?0:1,child:ElevatedButton.icon(
+                              onPressed: (){setState(() {
+                                variante++;
+                                });},
+                              icon:const Icon(Icons.arrow_back),label: const Text("Variante Suivante", textAlign: TextAlign.center,),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10)),),)))
                     ],)
                   ],
-                );
+                ));
               }else{
                 return Center(
                   child: Column(
                     children:  [
-                      Padding(padding: EdgeInsets.all(15),child:Text("Chargement... taux de correspondance: ${100-maxTolere}%")),
-                      const CircularProgressIndicator()
+                      Padding(padding: const EdgeInsets.all(15),child:Text("Chargement... taux de correspondance: ${100-maxTolere}%")),
+                      CircularProgressIndicator(value: progression,color: Colors.lightBlueAccent, backgroundColor: Colors.redAccent,),
+                      Padding(padding: const EdgeInsets.all(15),child:Text("$possibilites configurations évaluées")),
                     ],
                   ),
                 );
               }
-            }),
+            })]),
       drawer:Menu(widget.classe),
         ));
   }
@@ -178,12 +247,15 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
   montreEleve(int indiceElev, int foIndice) {
     String monTexte = "";
     if (indiceElev >= 0) {
+      print(foIndice);
+      if(monDatumDeBase.placesOccupeesDebase.contains(foIndice))
+        monTexte += ("Cet élève est placé manuellement. \n");
       if (donnees[indiceElev][14].isNotEmpty)
         monTexte += donnees[indiceElev][14];
       if (parametresPlan[0] > 0 && affiniteElevesE[foIndice].isNotEmpty)
-        monTexte += "Doit éviter: ${affiniteElevesE[foIndice]}\n";
-      if (parametresPlan[1] > 0 && donnees[indiceElev][3].isNotEmpty)
-        monTexte += "Doit se rapprocher de: ${donnees[indiceElev][3]} \n";
+        monTexte += "Doit éviter: ${affiniteElevesE[foIndice].join(";")}\n";
+      if (parametresPlan[1] > 0 && affiniteElevesI[foIndice].isNotEmpty)
+        monTexte += "Doit se rapprocher de: ${affiniteElevesI[foIndice].join(";")} \n";
       if (parametresPlan[2] > 0) monTexte +=
       "A une vue: ${["Bonne", "Moyenne", "Mauvaise"][int.parse(
           donnees[indiceElev][5])]} \n";
@@ -230,7 +302,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
     datum = await litEleves(datum);
     datum = await litConfig(datum);
     datum = await fonctionInverse(datum);
-    print("Places occuppées au départ: ${datum.placesOccupees}");
+    print("Places occuppées au départ: ${datum.placesOccupeesDebase}");
     return datum;
   }
 
@@ -260,6 +332,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
       else{affiniteElevesI.add([]);}
     }
     datum.nomsEleves = nomsEleves;
+    print("noms elèves: ${datum.nomsEleves}");
     datum.indiceEleves = indiceEleves;
     return datum;
   }
@@ -336,28 +409,158 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
     print("Places occuppées au départ: $placesOccupeesDebase");
   }*/
 
-
   EnregistrePlan(){
     
   }
+
+  recalcule() {
+    setState(() {
+      pret = Future(()=>false);
+      pret = calculus(true);
+    });
+  }
 }
+
+Future<bool> arbreQuiGrandit2(List<dynamic> args) async {
+  final SendPort portMarchand = args[0];
+  DatumDeClasse monDatumDeClasse = args[1];
+  monDatumDeClasse.listeElevesTriee = trieEleves(monDatumDeClasse);
+  Function eg = const ListEquality().equals;
+  int compteur = 0;
+  while(DateTime.now().difference(monDatumDeClasse.tempsDebut).inMilliseconds<monDatumDeClasse.tempsTotalMilli || monDatumDeClasse.plansEnregistres.length<1){
+    monDatumDeClasse.placesOccupees = List<int>.from(monDatumDeClasse.placesOccupeesDebase);
+    monDatumDeClasse.contrainteAct = 0;
+    await placeEleve(monDatumDeClasse,0);
+    bool continuation = true;
+    for(List<int> uneConfig in monDatumDeClasse.plansEnregistres){
+      if(eg(uneConfig,monDatumDeClasse.placesOccupees)) {
+        continuation = false;
+      }
+    }
+    if(continuation){
+      monDatumDeClasse.plansEnregistres.add(monDatumDeClasse.placesOccupees);
+      monDatumDeClasse.reussitesCalculees[compteur] = monDatumDeClasse.contrainteAct;
+      portMarchand.send([monDatumDeClasse.reussitesCalculees.values.toSet().max.toInt(), compteur] as List<int>);
+      compteur++;
+    }
+  }
+  var trieParvaleurReussite = Map.fromEntries(
+      monDatumDeClasse.reussitesCalculees.entries.toList()
+        ..sort((e1, e2) => e1.value.compareTo(e2.value)));
+  monDatumDeClasse.plansEnregistres = List.generate(min(10,monDatumDeClasse.reussitesCalculees.length), (index) => monDatumDeClasse.plansEnregistres[trieParvaleurReussite.keys.toList()[index]]);
+  monDatumDeClasse.reussiteVariante = List.generate(min(10,monDatumDeClasse.reussitesCalculees.length), (index) => trieParvaleurReussite.values.toList()[index]);
+  Isolate.exit(args[0], monDatumDeClasse);
+}
+
+List<int> trieEleves(DatumDeClasse datum) {
+  Map<int,int> eleve_prio = {};
+  Map<int,int> eleve_imp = {};
+  Map<int,int> parias = {};
+  for(int indiceElv = 0; indiceElv<datum.nomsEleves.length;indiceElv++){
+    switch(datum.prioritesDeTraitement[indiceElv]){
+      case 2:
+          eleve_prio[indiceElv] = expressionContraintes(indiceElv, datum);
+          break;
+      case 1:
+        eleve_imp[indiceElv] = expressionContraintes(indiceElv, datum);
+        break;
+      default:
+        parias[indiceElv] = expressionContraintes(indiceElv, datum);
+    }
+  }
+  var trieParvaleur_prio = Map.fromEntries(
+      eleve_prio.entries.toList()
+        ..sort((e1, e2) => e1.value.compareTo(e2.value)));
+  var trieParvaleur_imp = Map.fromEntries(
+      eleve_imp.entries.toList()
+        ..sort((e1, e2) => e1.value.compareTo(e2.value)));
+  var trieParvaleur_parias = Map.fromEntries(
+      parias.entries.toList()
+        ..sort((e1, e2) => e1.value.compareTo(e2.value)));
+
+  List<int> listeElevesTriee = [];
+  listeElevesTriee.addAll(trieParvaleur_prio.keys.toList());
+  listeElevesTriee.addAll(trieParvaleur_imp.keys.toList());
+  listeElevesTriee.addAll(trieParvaleur_parias.keys.toList());
+  print("listeElèves triés: $listeElevesTriee");
+  print("noms élèves: ${datum.nomsEleves}");
+  return listeElevesTriee;
+}
+
+placeEleve(DatumDeClasse datum, int indiceIteration) async {
+  //print("Indice Itération: $indiceIteration /${datum.listeElevesTriee.length-1}");
+  double valMin = 1000;
+  List<int> indiceMin = [];
+  int indiceDeMonEleve = datum.listeElevesTriee[indiceIteration];
+
+  if(!datum.placesOccupees.contains(indiceDeMonEleve)){ //élève pas encore placé
+    for (int place = 0; place < datum.placesOccupees.length; place++) {
+      //on parcourt toutes les places de la classe
+      if (datum.placesOccupees[place] < 0) {
+        //place libre
+        double contrainte =
+            await CalculeLaContrainte(place, indiceDeMonEleve, datum);
+        if (contrainte < valMin) {
+          indiceMin = [place];
+          valMin = contrainte;
+        } else if (contrainte == valMin) {
+          indiceMin.add(place);
+        }
+      }
+    }
+    final _hasardeux = new Random();
+    datum.placesOccupees[indiceMin[_hasardeux.nextInt(indiceMin.length)]] = indiceDeMonEleve;
+    datum.contrainteAct+=valMin;
+  }
+  indiceIteration++;
+  if(indiceIteration<datum.listeElevesTriee.length)await placeEleve(datum, indiceIteration );
+  return true;
+}
+
+int expressionContraintes(int indiceElv, DatumDeClasse datum) {
+  List<int> params =  datum.parametresPlan;
+  int points = 0;
+  if(params[0] >0){
+    points+= datum.affiniteElevesE[indiceElv].length;
+  }
+  if(params[1] >0){
+    points+= datum.affiniteElevesI[indiceElv].length;
+  }
+  if(params[2] >0){
+    points+= datum.donnees[datum.indiceEleves[indiceElv]][5]==1?0:1;
+  }
+  if(params[3] >0){
+    points+= datum.donnees[datum.indiceEleves[indiceElv]][4]==1?0:1;
+  }
+  if(params[5] >0){
+    points+= datum.donnees[datum.indiceEleves[indiceElv]][8]==1?0:1;
+  }
+  if(params[6] >0){
+    points+= datum.donnees[datum.indiceEleves[indiceElv]][7]==1?0:1;
+  }
+  return points;
+
+}
+
+
+
 
 Future<bool> arbreQuiGrandit(List<dynamic> args) async {
   final SendPort portMarchand = args[0];
   DatumDeClasse monDatumDeClasse = args[1]; //INITIALISATION
 
-  while (monDatumDeClasse.planEnregsitres.length < 5 && monDatumDeClasse.maxTolere < 60) { //CALCULE
+  while (monDatumDeClasse.plansEnregistres.length < 5 && monDatumDeClasse.maxTolere < 60) { //CALCULE
     portMarchand.send(monDatumDeClasse.maxTolere);
     monDatumDeClasse.placesOccupees.clear();
     monDatumDeClasse.placesOccupees = List<int>.from(monDatumDeClasse.placesOccupeesDebase);
     bool x = await TroncEtBranche(0, monDatumDeClasse);
     if (x) {
-      monDatumDeClasse.planEnregsitres.add(List<int>.from(monDatumDeClasse.placesOccupees));
+      monDatumDeClasse.plansEnregistres.add(List<int>.from(monDatumDeClasse.placesOccupees));
     } else {
       monDatumDeClasse.maxTolere++;
     }
   }
-  print("Liste des plans ${monDatumDeClasse.planEnregsitres}");
+  print("Liste des plans ${monDatumDeClasse.plansEnregistres}");
   print("fin");
   Isolate.exit(args[0], monDatumDeClasse);
 }
@@ -365,7 +568,7 @@ Future<bool> arbreQuiGrandit(List<dynamic> args) async {
 Future<bool> TroncEtBranche(int indiceDeMonEleve, DatumDeClasse datum) async {
   if(indiceDeMonEleve==datum.indiceEleves.length) {//Tous les élèves sont placés :)
     Function eg = const ListEquality().equals;
-    for(List<int> uneConfig in datum.planEnregsitres){
+    for(List<int> uneConfig in datum.plansEnregistres){
       if(eg(uneConfig,datum.placesOccupees))return false;
     }
     datum.reussiteVariante.add(datum.contrainteAct);

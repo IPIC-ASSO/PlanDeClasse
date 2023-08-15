@@ -97,8 +97,12 @@ class _ProfilEleveState extends State<ProfilEleve> {
                       Row(children: [
                         Expanded(flex: 1, child: RadioListTile<int>(
                           title: const Text('Devant'),
+                          contentPadding: EdgeInsets.zero,
                           value: 0,
                           groupValue: placement,
+                          visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
                           onChanged: (int? value) {
                             setState(() {
                               placement = value ?? 0;
@@ -106,9 +110,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           },
                         ),),
                         Expanded(flex: 1, child: RadioListTile<int>(
+                          contentPadding: EdgeInsets.zero,
                           title: const Text('Au fond'),
                           value: 1,
                           groupValue: placement,
+                          visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
                           onChanged: (int? value) {
                             setState(() {
                               placement = value ?? 0;
@@ -117,8 +125,12 @@ class _ProfilEleveState extends State<ProfilEleve> {
                         ),),
                         Expanded(flex: 1, child: RadioListTile<int>(
                           title: const Text('Sans importance'),
+                          contentPadding: EdgeInsets.zero,
                           value: 2,
                           groupValue: placement,
+                          visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
                           onChanged: (int? value) {
                             setState(() {
                               placement = value ?? 0;
@@ -139,9 +151,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           Row(children: [
                             Expanded(flex: 1, child: RadioListTile<int>(
                               title: const Text('Bonne'),
+                              contentPadding: EdgeInsets.zero,
                               value: 0,
                               groupValue: vue,
-                              onChanged: (int? value) {
+                              visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                                 setState(() {
                                   go = Future(() => 0);
                                   vue = value ?? 0;
@@ -150,9 +166,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                             ),),
                             Expanded(flex: 1, child: RadioListTile<int>(
                               title: const Text('Moyenne'),
+                              contentPadding: EdgeInsets.zero,
                               value: 1,
                               groupValue: vue,
-                              onChanged: (int? value) {
+                              visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                                 setState(() {
                                   vue = value ?? 0;
                                 });
@@ -160,9 +180,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                             ),),
                             Expanded(flex: 1, child: RadioListTile<int>(
                               title: const Text('Mauvaise'),
+                              contentPadding: EdgeInsets.zero,
                               value: 2,
                               groupValue: vue,
-                              onChanged: (int? value) {
+                              visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                                 setState(() {
                                   vue = value ?? 0;
                                 });
@@ -182,9 +206,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                         Row(children: [
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('Grand'),
+                            contentPadding: EdgeInsets.zero,
                             value: 0,
                             groupValue: taille,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 taille = value ?? 0;
                               });
@@ -192,9 +220,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           ),),
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('Moyen'),
+                            contentPadding: EdgeInsets.zero,
                             value: 1,
                             groupValue: taille,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 taille = value ?? 0;
                               });
@@ -202,9 +234,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           ),),
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('Petit'),
+                            contentPadding: EdgeInsets.zero,
                             value: 2,
                             groupValue: taille,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 taille = value ?? 0;
                               });
@@ -224,9 +260,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                         Row(children: [
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('Garçon'),
+                            contentPadding: EdgeInsets.zero,
                             value: 0,
                             groupValue: genre,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 genre = value ?? 0;
                               });
@@ -234,9 +274,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           ),),
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('Fille'),
+                            contentPadding: EdgeInsets.zero,
                             value: 1,
                             groupValue: genre,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 genre = value ?? 0;
                               });
@@ -257,8 +301,12 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('Agité'),
                             value: 0,
+                            contentPadding: EdgeInsets.zero,
                             groupValue: attitude,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 attitude = value ?? 0;
                               });
@@ -267,8 +315,12 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('Dans la moyenne'),
                             value: 1,
+                            contentPadding: EdgeInsets.zero,
                             groupValue: attitude,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 attitude = value ?? 0;
                               });
@@ -278,7 +330,11 @@ class _ProfilEleveState extends State<ProfilEleve> {
                             title: const Text('Calme'),
                             value: 2,
                             groupValue: attitude,
-                            onChanged: (int? value) {
+                            contentPadding: EdgeInsets.zero,
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 attitude = value ?? 0;
                               });
@@ -298,9 +354,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                         Row(children: [
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('A l\'aise'),
+                            contentPadding: EdgeInsets.zero,
                             value: 0,
                             groupValue: niveau,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 niveau = value ?? 0;
                               });
@@ -308,9 +368,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           ),),
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('Dans la moyenne'),
+                            contentPadding: EdgeInsets.zero,
                             value: 1,
                             groupValue: niveau,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 niveau = value ?? 0;
                               });
@@ -318,9 +382,13 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           ),),
                           Expanded(flex: 1, child: RadioListTile<int>(
                             title: const Text('En difficultés'),
+                            contentPadding: EdgeInsets.zero,
                             value: 2,
                             groupValue: niveau,
-                            onChanged: (int? value) {
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity),
+                          onChanged: (int? value) {
                               setState(() {
                                 niveau = value ?? 0;
                               });
@@ -456,15 +524,15 @@ class _ProfilEleveState extends State<ProfilEleve> {
       if (Gens.value[1]) affinite_i.add(Gens.key);
     }
     List<String> datum = [
-      widget.classe,
-      widget.eleve,
-      affinite_e.join(';'),
-      affinite_i.join(';'),
-      taille.toString(),
-      vue.toString(),
-      placement.toString(),
-      niveau.toString(),
-      attitude.toString(),
+      widget.classe,//0
+      widget.eleve,//1
+      affinite_e.join(';'),//2
+      affinite_i.join(';'),//3
+      taille.toString(),//4
+      vue.toString(),//5
+      placement.toString(),//6
+      niveau.toString(),//7
+      attitude.toString(),//8
       genre.toString(),
       "false",
       "false",

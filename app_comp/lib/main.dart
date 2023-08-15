@@ -7,7 +7,6 @@ import 'package:plan_de_classe/listeEleves.dart';
 import 'package:plan_de_classe/parametresPlan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
-
 import 'nouvelleClasse.dart';
 
 void main() {
@@ -243,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder:(BuildContext context) =>CupertinoAlertDialog(
       title: Column(
       children: <Widget>[
-        const Text("Avacement"),
+        const Text("Avancement"),
         const Icon(
           Icons.directions_walk,
         ),
@@ -313,7 +312,6 @@ class ClassePinte extends CustomPainter{
           }
         }
       }
-
     }
   }
   @override

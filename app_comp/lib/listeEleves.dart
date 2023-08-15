@@ -1,9 +1,11 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:plan_de_classe/parametresPlan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'menu.dart';
+import 'usineDeBiscottesGrillees.dart';
 
 class ListeEleves extends StatefulWidget {
 
@@ -15,11 +17,14 @@ class ListeEleves extends StatefulWidget {
   State<ListeEleves> createState() => _ListeElevesState();
 }
 
-class _ListeElevesState extends State<ListeEleves> {
+class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin {
 
   late Future<Map<String,String>> eleves; //clé: nom | valeur: commentaire
   TextEditingController nomEleve = TextEditingController();
   TextEditingController commentaireEleve = TextEditingController();
+  TextEditingController chaineElevesImport = TextEditingController();
+  TextEditingController chaineCommentairesImport = TextEditingController();
+  TextEditingController delimiteur = TextEditingController();
   bool visible = false;
   bool btnActif = true;
   int maxConfig = 0;
@@ -98,24 +103,39 @@ class _ListeElevesState extends State<ListeEleves> {
               )
             ],
           ),
-          Visibility(
-            visible: visible,
-            child: Padding(
-            padding: const EdgeInsets.all(5),
-            child:ElevatedButton.icon(
-                onPressed: (){
-                  Enregistre();
-                  Navigator.push(context,
-                    PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => ParametrePlan(classe: widget.classe,),
-                    transitionDuration: const Duration(milliseconds: 500),
-                    transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.settings_input_composite_outlined),
-                label: const Text("Paramétrer le plan de classe"))
-          ),),
+          Row(children:[
+            Expanded(child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: ElevatedButton.icon(
+                onPressed: btnActif?()=>ImportationIllegale():null,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                icon: const Icon(Icons.import_export),
+                label: const Text("Importer des élèves"),
+              ),),),
+            Expanded(child:
+              Visibility(
+                visible: visible,
+                child: Padding(
+                padding: const EdgeInsets.all(5),
+                child:ElevatedButton.icon(
+                  onPressed: (){
+                    Enregistre();
+                    Navigator.push(context,
+                      PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => ParametrePlan(classe: widget.classe,),
+                      transitionDuration: const Duration(milliseconds: 500),
+                      transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.settings_input_composite_outlined),
+                  label: const Text("Paramétrer le plan de classe"),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                  ),)
+          ),))],),
           FutureBuilder(
             future: eleves,
             builder: (context,snapshot){
@@ -153,7 +173,6 @@ class _ListeElevesState extends State<ListeEleves> {
     List<int> configPI = configPS.map((e) => int.parse(e)).toList();
     configPI.removeLast();
     maxConfig = configPI.where((element) => element==1).length;
-    print(maxConfig);
     if (x.length==maxConfig)setState(() {
       btnActif = false;
     });
@@ -240,6 +259,105 @@ class _ListeElevesState extends State<ListeEleves> {
     if ((await eleves).length<maxConfig)setState(() {
       btnActif = true;
     });
+  }
+
+  ImportationIllegale() {
+    showDialog(
+      context: context,
+      builder:(BuildContext context) =>Theme(
+          data: ThemeData(
+              colorSchemeSeed: const Color(0xff4fc2ff), useMaterial3: true),
+          child: AlertDialog(
+      title: Column(
+        children: <Widget>[
+        Text("Importer des élèves"),
+          const Icon(
+          Icons.import_export,
+          ),
+        ],
+      ),
+      content: Column(
+        children:[
+          const Text("Entrez dans le champs la liste de vos élèves, puis indiquez le délimiteur (une virgule, un point, un espace... Les élèves importés seront ajoutés à ceux déjà entrés.", textAlign: TextAlign.center,),
+          Padding(padding:const EdgeInsets.all(7),child: TextField(
+            controller: chaineElevesImport,
+            keyboardType: TextInputType.multiline,
+            minLines: 2,
+            maxLines: 5,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Liste des élèves',
+            ),
+          )),
+          /*Padding(padding:const EdgeInsets.only(right: 4),child: TextField(
+            controller: chaineCommentairesImport,
+            keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Liste des commentaires',
+            ),
+          )),*/
+          Row(
+            children: <Widget>[
+              Flexible(flex: 1,child:
+              SizedBox(
+                  width: 1000,
+                  child:Padding(padding:const EdgeInsets.all(5),child: Text("Délimiteur: "))
+              ), ),
+              Flexible(flex: 1,child:
+              SizedBox(
+                  width: 1000,
+                  child:Padding(padding:const EdgeInsets.all(5),child: TextField(
+                    controller: delimiteur,
+                    keyboardType: TextInputType.text,
+                    maxLength: 5,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'delimiteur',
+                    ),
+                  ))
+              ), ),
+            ]
+          ),
+        ]
+      ),
+      actions: <Widget>[
+        TextButton(onPressed: ()=>{importDouane()}, child: const Text("Valider", style: TextStyle(fontWeight: FontWeight.bold),),),
+        MaterialButton(onPressed: ()=>{Navigator.of(context).pop()}, child: const Text("Annuler"),)
+      ])
+    ));
+  }
+
+  importDouane() async {
+    if (chaineElevesImport.text.isNotEmpty && delimiteur.text.isNotEmpty){
+      final x = await eleves;
+      List<String> elevesImportes = chaineElevesImport.text.split(delimiteur.text);
+      if(elevesImportes.length+x.length>maxConfig){
+        Usine.montreBiscotte(context, "Pas assez de places disponibles: $maxConfig au total, ${x.length} utilisées et ${elevesImportes.length} à importer.",this);
+      }else if(elevesImportes.toSet().length!= elevesImportes.length){
+        Usine.montreBiscotte(context, "Des élèves ont le même nom, il faudra pourtant bien pouvoir les différencier!",this);
+      }else if(elevesImportes.toSet().intersection(x.keys.toSet()).isNotEmpty){
+        Usine.montreBiscotte(context, "Des élèves importés et déjà entrés possèdent le même nom, il faudra pourtant bien pouvoir les différencier!",this);
+      }else{
+        for (String eleve in chaineElevesImport.text.split(delimiteur.text)){
+          x[eleve] = "";
+        }
+        setState(() {
+          eleves = Future(() => x);
+        });
+        if (x.length>3)setState(() {
+          visible = true;
+        });
+        if (x.length==maxConfig)setState(() {
+          btnActif = false;
+        });
+        chaineElevesImport.clear();
+        Navigator.of(context).pop();
+      }
+    }else{
+      print("erreur");
+      Usine.montreBiscotte(context, "Remplissez tous les champs",this);
+    }
   }
 
 }
