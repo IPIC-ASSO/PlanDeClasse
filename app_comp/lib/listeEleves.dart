@@ -1,9 +1,7 @@
-import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:plan_de_classe/parametresPlan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'menu.dart';
 import 'usineDeBiscottesGrillees.dart';
 
@@ -165,7 +163,9 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
   Future<Map<String, String>> litEleves() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final Map<String, String> x = {};
+    print(prefs.getStringList("\$liste_eleves\$${widget.classe}"));
     (prefs.getStringList("\$liste_eleves\$${widget.classe}")??[]).forEach((element) {
+      print(prefs.getStringList(widget.classe+element));
       x[element] = (prefs.getStringList(widget.classe+element)??["-1",""])[1];
     });
     if (x.length>3)setState(() {
@@ -194,6 +194,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
     });
     prefs.setStringList("\$liste_eleves\$${widget.classe}", mesEleves.keys.toList());
     prefs.setStringList("\$placement\$${widget.classe}", configPC);
+    print(mesEleves.entries);
     mesEleves.entries.forEach((element) {
       final x = prefs.getStringList(widget.classe+element.key)??["-1",""];
       x[1] = element.value;
@@ -331,21 +332,20 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
   }
 
   importDouane() async {
-    print('click!');
     if (chaineElevesImport.text.isNotEmpty && delimiteur.text.isNotEmpty){
-      print("1");
       final x = await eleves;
-      print("2");
       List<String> elevesImportes = chaineElevesImport.text.split(delimiteur.text);
+      for(String element in List<String>.from(elevesImportes)){
+        if(element == "")elevesImportes.remove(element);
+      }
       if(elevesImportes.length+x.length>maxConfig){
-        print("2");
         Usine.montreBiscotte(context, "Pas assez de places disponibles: $maxConfig au total, ${x.length} utilisées et ${elevesImportes.length} à importer.",this);
       }else if(elevesImportes.toSet().length!= elevesImportes.length){
         Usine.montreBiscotte(context, "Des élèves ont le même nom, il faudra pourtant bien pouvoir les différencier!",this);
       }else if(elevesImportes.toSet().intersection(x.keys.toSet()).isNotEmpty){
         Usine.montreBiscotte(context, "Des élèves importés et déjà entrés possèdent le même nom, il faudra pourtant bien pouvoir les différencier!",this);
       }else{
-        for (String eleve in chaineElevesImport.text.split(delimiteur.text)){
+        for (String eleve in elevesImportes){
           x[eleve] = "";
         }
         setState(() {

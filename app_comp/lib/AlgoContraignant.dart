@@ -81,7 +81,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
       if(message.runtimeType == List<int>) {
         setState(() {
           pret = Future(() => false);
-          maxTolere = ((message as List)[0]as int);
+          maxTolere = max((message as List)[0]as int, 0);
           possibilites = (message as List)[1]as int;
           progression = DateTime.now().difference(monDatumDeBase.tempsDebut).inMilliseconds/monDatumDeBase.tempsTotalMilli;
         });
@@ -474,7 +474,6 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
         Usine.montreBiscotte(context, "Enregistré: ${imagePath.path}",this, true);
       });
     }catch(e){
-
       Usine.montreBiscotte(context, "Erreur: $e",this);
       print(e);
     }
@@ -517,8 +516,9 @@ Future<bool> arbreQuiGrandit2(List<dynamic> args) async {
     }
     if(continuation){
       monDatumDeClasse.plansEnregistres.add(monDatumDeClasse.placesOccupees);
-      monDatumDeClasse.reussitesCalculees[compteur] = monDatumDeClasse.contrainteAct;
+      monDatumDeClasse.reussitesCalculees[compteur] = max(0,monDatumDeClasse.contrainteAct);
       portMarchand.send([monDatumDeClasse.reussitesCalculees.values.toSet().max.toInt(), compteur] as List<int>);
+
       compteur++;
     }
   }

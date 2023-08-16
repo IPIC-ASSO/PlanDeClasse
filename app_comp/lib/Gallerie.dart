@@ -36,11 +36,12 @@ class _NouvelleClasseState extends State<NouvelleClasse> {
       body: Column(
         children:[
           const Padding(padding: EdgeInsets.all(15),child:const Text("Plans de classe enregistrés")),
-          ListView(
-              shrinkWrap: true,
-              children: [
-
-              ])
+          FutureBuilder(builder:  future: pret,
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData && snapshot.data == true) {
+                return Padding(padding: Edg);
+            }else
+          }),
         ]
       ));
   }
