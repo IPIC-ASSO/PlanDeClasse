@@ -5,9 +5,13 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:plan_de_classe/datumDeClasse.dart';
+import 'package:plan_de_classe/gestionEleves.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'menu.dart';
+import 'usineDeBiscottesGrillees.dart';
+
 
 
 class AlgoContraignant extends StatefulWidget {
@@ -20,7 +24,7 @@ class AlgoContraignant extends StatefulWidget {
   State<AlgoContraignant> createState() => _AlgoContraignantState();
 }
 
-class _AlgoContraignantState extends State<AlgoContraignant> {
+class _AlgoContraignantState extends State<AlgoContraignant> with TickerProviderStateMixin {
 
   late Future<bool> pret;
   List<List<String>> donnees= [];
@@ -39,10 +43,12 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
   late Isolate isolat;
   final monskrolleur = ScrollController();
   final GlobalKey _cleGlobale = GlobalKey();
+  final ScreenshotController conduiteDeTir = ScreenshotController();
   int variante = 0;
   double progression = 0;
   int tempsCamcule = 5;
   int possibilites = 0;
+  TextEditingController nomImage = TextEditingController();
 
   @override
   void initState() {
@@ -143,7 +149,6 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
           FutureBuilder(
             future: pret,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              print("ATTTENTTTTTION ${snapshot.data}");
               if (snapshot.hasData && snapshot.data == true) {
                 return Padding(
                   padding: const EdgeInsets.all(5),
@@ -154,20 +159,25 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
                     Padding(padding: const EdgeInsets.all(15),child:
                       SizedBox(width:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width/2:MediaQuery.of(context).size.width*0.9,
                       child:LinearProgressIndicator(value: max(100-reussiteVariante[variante],10),color: [Colors.green,Colors.lightGreenAccent,Colors.orange,Colors.red][min(reussiteVariante[variante]~/25,3)],))),
-                    RepaintBoundary(
-                      key: _cleGlobale,
-                      child:
+
                     Scrollbar(
                       thumbVisibility: true,
                       controller: monskrolleur,
                       child:SingleChildScrollView(
                           controller: monskrolleur,
                           scrollDirection: Axis.horizontal,
-                          child:Table(
+                          child:Screenshot(
+                              controller: conduiteDeTir,
+                              child:Table(
                             defaultColumnWidth: const FixedColumnWidth(100),
                             children: construitGrilleDeChange(setState, planEnregsitres[variante]),
                           )),),),
-                    Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{recalcule()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.loop),label: const Text("Recalculer"))),
+                    Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(flex:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?0:1,child:Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{recalcule()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.loop),label: const Text("Recalculer")))),
+                      Expanded(flex:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?0:1,child:Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{versEleves()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.manage_accounts),label: const Text("Modifier les élèves")))),
+                    ]),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -188,7 +198,8 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
                                 variante++;
                                 });},
                               icon:const Icon(Icons.arrow_back),label: const Text("Variante Suivante", textAlign: TextAlign.center,),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10)),),)))
-                    ],)
+                    ],),
+                    Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{EnregistrePlan()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.save),label: const Text("Enregistrer"))),
                   ],
                 ));
               }else{
@@ -410,7 +421,63 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
   }*/
 
   EnregistrePlan(){
-    
+    showDialog(
+      context: context,
+      builder:(BuildContext context) =>Theme(
+          data: ThemeData(
+              colorSchemeSeed: const Color(0xff4fc2ff), useMaterial3: true),
+          child: AlertDialog(
+          title: Column(
+          children: <Widget>[
+          Text("Enregistrer le plan"),
+          const Icon(
+            Icons.save_as,
+          ),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+          children:[
+        Padding(padding: EdgeInsets.all(0),child: const Text("Indiquez le nom de l'image (sans extension). Le fichier sera sauvegardé dans les téléchargements.")),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child:TextField(
+            controller: nomImage,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Nom de l\'image'
+            ),
+          )
+        )
+
+      ]),
+      actions: [
+        TextButton(onPressed: ()=>{if(nomImage.text.isNotEmpty)sauvegardePlan()else Usine.montreBiscotte(context, "Indiquez le nom de l'image",this)}, child: const Text("Valider", style: TextStyle(fontWeight: FontWeight.bold),),),
+        MaterialButton(onPressed: ()=>{Navigator.of(context).pop()}, child: const Text("Annuler"),)
+      ],)));
+  }
+
+  sauvegardePlan() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+    try{
+      conduiteDeTir.capture().then((img) async {
+        final image = img;
+        final Directory dir;
+        if(Platform.isAndroid)dir = Directory('/storage/emulated/0/Download');
+        else dir = (await getDownloadsDirectory())!;
+        final imagePath = await File('${dir.path}/plans de classe/${nomImage.text}.png').create(recursive: true);
+        await imagePath.writeAsBytes(image!);
+        Navigator.of(context).pop();
+        Usine.montreBiscotte(context, "Enregistré: ${imagePath.path}",this, true);
+      });
+    }catch(e){
+
+      Usine.montreBiscotte(context, "Erreur: $e",this);
+      print(e);
+    }
   }
 
   recalcule() {
@@ -418,6 +485,17 @@ class _AlgoContraignantState extends State<AlgoContraignant> {
       pret = Future(()=>false);
       pret = calculus(true);
     });
+  }
+
+  versEleves() {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => GestionEleves(classe: widget.classe),
+        transitionDuration: const Duration(milliseconds: 500),
+        transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+      ),
+    );
   }
 }
 

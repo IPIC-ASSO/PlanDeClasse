@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode (SystemUiMode.manual, overlays: []);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Plan De Classe',
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),      home: const MyHomePage(),

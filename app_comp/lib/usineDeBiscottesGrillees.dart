@@ -7,28 +7,26 @@ class Usine {
   static Timer TempsgrillePain = Timer(Duration(seconds: 2), () { });
 
 
-  static void montreBiscotte(BuildContext context, String message, TickerProvider ticket) {
+  static void montreBiscotte(BuildContext context, String message, TickerProvider ticket, [bool positif = false]) {
+    print("appel");
     OverlayEntry _overlayEntry;
-    if (TempsgrillePain == null || !TempsgrillePain.isActive) {
-      _overlayEntry = createOverlayEntry(context, message, ticket);
-      Overlay.of(context).insert(_overlayEntry);
-      TempsgrillePain = Timer(Duration(seconds: 3), () {
-        if (_overlayEntry != null) {
-          _overlayEntry.remove();
-        }
-      });
-    }
-
+    _overlayEntry = createOverlayEntry(context, message, ticket, positif);
+    Overlay.of(context).insert(_overlayEntry);
+    TempsgrillePain = Timer(Duration(seconds: 4), () {
+      if (_overlayEntry != null) {
+        _overlayEntry.remove();
+      }
+    });
   }
 
   static OverlayEntry createOverlayEntry(BuildContext context,
-      String message, TickerProvider ticket) {
+      String message, TickerProvider ticket,bool positif) {
     AnimationController _controller = AnimationController(
       vsync: ticket,
       duration: Duration(milliseconds: 500),
     ); // <-- Se
     _controller.forward()..whenComplete(() async {
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(seconds: 3));
       _controller.reverse();
     } );
     return OverlayEntry(
@@ -49,7 +47,7 @@ class Usine {
               EdgeInsets.only(left: 10, right: 10,
                   top: 13, bottom: 10),
               decoration: BoxDecoration(
-                  color: Color(0xffe53e3f),
+                  color: positif?Colors.green:Color(0xffe53e3f),
                   borderRadius: BorderRadius.circular(10)),
               child: Align(
                 alignment: Alignment.center,

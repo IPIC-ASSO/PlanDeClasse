@@ -44,7 +44,7 @@ class _ConfigClasseState extends State<ConfigClasse> {
               return ListView(
                 children: [
                   const Padding(padding: EdgeInsets.all(8), child:
-                  Text("Cochez les case correspondant aux tables.", textAlign: TextAlign.center,),),
+                  Text("Cochez les case correspondant aux tables (les couloirs sont matérialisés par des places vides)", textAlign: TextAlign.center,),),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(child:Scrollbar(
