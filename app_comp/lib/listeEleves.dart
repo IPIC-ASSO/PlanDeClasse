@@ -331,10 +331,14 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
   }
 
   importDouane() async {
+    print('click!');
     if (chaineElevesImport.text.isNotEmpty && delimiteur.text.isNotEmpty){
+      print("1");
       final x = await eleves;
+      print("2");
       List<String> elevesImportes = chaineElevesImport.text.split(delimiteur.text);
       if(elevesImportes.length+x.length>maxConfig){
+        print("2");
         Usine.montreBiscotte(context, "Pas assez de places disponibles: $maxConfig au total, ${x.length} utilisées et ${elevesImportes.length} à importer.",this);
       }else if(elevesImportes.toSet().length!= elevesImportes.length){
         Usine.montreBiscotte(context, "Des élèves ont le même nom, il faudra pourtant bien pouvoir les différencier!",this);
