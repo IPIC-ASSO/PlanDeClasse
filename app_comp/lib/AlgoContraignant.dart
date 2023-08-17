@@ -74,6 +74,14 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
    _spawnAndReceive(passe) async {
     final resultPort = ReceivePort();
     if(!passe) monDatumDeBase  = await graine(DatumDeClasse(widget.classe));
+    if(monDatumDeBase.indiceEleves.contains(-1)){
+      Usine.montreBiscotte(context, "Cerains élèves n'ont pas été paramétrés", this);
+      return;
+    }
+    if(monDatumDeBase.indiceEleves.length<3) {
+      Usine.montreBiscotte(context, "Trop peu d'élèves ont été paramétrés", this);
+      return;
+    }
     monDatumDeBase.tempsDebut = DateTime.now();
     monDatumDeBase.tempsTotalMilli = tempsCamcule*1000;
     isolat = await Isolate.spawn(arbreQuiGrandit2, [resultPort.sendPort, monDatumDeBase]);
@@ -311,6 +319,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
     donnees = await litBD();
     datum.donnees = donnees;
     datum = await litEleves(datum);
+    if(datum.indiceEleves.contains(-1))return datum;
     datum = await litConfig(datum);
     datum = await fonctionInverse(datum);
     print("Places occuppées au départ: ${datum.placesOccupeesDebase}");
@@ -334,6 +343,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     for (var element in (prefs.getStringList("\$liste_eleves\$${datum.classe}") ?? [])) {
       final y = prefs.getStringList(datum.classe + element) ?? ["-1", ""];
+      if(y[0]=="-1")return datum;
       indiceEleves.add(int.parse(y[0]));
       nomsEleves.add(element);
       datum.prioritesDeTraitement.add(int.parse(datum.donnees[indiceEleves.last][13]));
@@ -471,7 +481,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
         final imagePath = await File('${dir.path}/plans de classe/${nomImage.text}.png').create(recursive: true);
         await imagePath.writeAsBytes(image!);
         Navigator.of(context).pop();
-        Usine.montreBiscotte(context, "Enregistré: ${imagePath.path}",this, true);
+        Usine.montreBiscotte(context, 'Enregistré dans les téléchargements, dans le dossier "plan de classe"',this, true);
       });
     }catch(e){
       Usine.montreBiscotte(context, "Erreur: $e",this);

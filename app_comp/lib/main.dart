@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:plan_de_classe/AlgoContraignant.dart';
 import 'package:plan_de_classe/gestionEleves.dart';
 import 'package:plan_de_classe/listeEleves.dart';
+import 'package:plan_de_classe/menu.dart';
 import 'package:plan_de_classe/parametresPlan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
+import 'Gallerie.dart';
 import 'nouvelleClasse.dart';
 
 void main() {
@@ -55,7 +57,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Plan de Classe"),
-          automaticallyImplyLeading: false
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(onPressed: (){
+              showDialog(
+                  context: context,
+                  builder:(BuildContext context) => Padding(padding: EdgeInsets.all(5),child:Apropos(context)));
+              },
+              icon: Icon(Icons.info_outline))
+          ],
       ),
       body: FutureBuilder<List<String>>(
           future: mesClasses,
@@ -83,7 +93,14 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           FloatingActionButton(
             heroTag: "btn1",
-            onPressed: ()=>{montreAmeliorations()},
+            onPressed: ()=>{Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => const Gallerie(),
+                transitionDuration: const Duration(milliseconds: 500),
+                transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+              ),
+            )},
             tooltip: 'Gallerie',
             backgroundColor: Colors.yellow,
             child: const Icon(Icons.image,),

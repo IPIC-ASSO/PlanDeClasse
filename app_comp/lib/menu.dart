@@ -7,6 +7,7 @@ import 'package:plan_de_classe/gestionEleves.dart';
 import 'package:plan_de_classe/listeEleves.dart';
 import 'package:plan_de_classe/nouvelleClasse.dart';
 import 'package:plan_de_classe/parametresPlan.dart';
+import 'package:plan_de_classe/visionneuse.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'main.dart';
 
@@ -29,7 +30,6 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
     'Gestion des élèves',
     'Calculer un plan de classe',
     'Aide',
-    'Notes de version'
   ];
   static const _iconMenu = [
     Icons.edit_calendar,
@@ -38,7 +38,6 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
     Icons.manage_accounts,
     Icons.oil_barrel_rounded,
     Icons.live_help_outlined,
-    Icons.history_edu
   ];
   static const _colorMenu = [
     Colors.blue,
@@ -55,7 +54,6 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
     ListeEleves(classe: widget.classe,),
     ParametrePlan(classe: widget.classe,),
     GestionEleves(classe: widget.classe,),
-    AlgoContraignant(classe: widget.classe,),
     AlgoContraignant(classe: widget.classe,),
     AlgoContraignant(classe: widget.classe,),
   ];
@@ -153,45 +151,6 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
   }
 
   List<Widget> _buildListItems() {
-    final ThemeData theme = Theme.of(context);
-    final TextStyle textStyle = theme.textTheme.bodyMedium!;
-    final List<Widget> aboutBoxChildren = <Widget>[
-      const SizedBox(height: 24),
-      RichText(
-        text: TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-                style: textStyle,
-                text: "Application développée par IPIC-ASSO, pour aider les enseignants du primaire et du secondaire.\n"
-                    'Pour en savoir plus, poser une question, effectuer une réclamation... '
-                    'Ecrivez nous à l\'adresse: '),
-            TextSpan(
-              text: 'contact@ipic-asso.fr',
-              style: const TextStyle(color: Colors.blue),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  await Clipboard.setData(const ClipboardData(text: "contact@ipic-asso.fr"));
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('copié !'),
-                  ));
-                },
-            ),
-            TextSpan(
-              text: ' ou visitez notre site: ',
-              style: textStyle,
-            ),
-            TextSpan(
-              text: 'https://www.ipic-asso.fr',
-              style: const TextStyle(color: Colors.blue),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  launchUrl(Uri.parse('https://www.ipic-asso.fr'));
-                },
-            ),
-          ],
-        ),
-      ),
-    ];
     final listItems = <Widget>[];
     for (var i = 0; i < _menuTitles.length; ++i) {
       listItems.add(
@@ -263,17 +222,7 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 36.0, vertical: 16),
-          child: AboutListTile(
-            icon: const Icon(
-              Icons.info,
-            ),
-            applicationIcon: Tab(icon: Image.asset("assets/images/IPIC_logo_petit.png",width: 40,)),
-            applicationName: 'Plan de Classe',
-            applicationVersion: '2.1.4',
-            applicationLegalese: '© 2023 IPIC-ASSO',
-            aboutBoxChildren: aboutBoxChildren,
-            child: const Text('A propos'),
-          ),
+          child: Apropos(context)
         ),
       ),
     );
@@ -327,4 +276,75 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
       ),
     );
   }
+}
+
+Widget Apropos(BuildContext context){
+
+  final ThemeData theme = Theme.of(context);
+  final TextStyle textStyle = theme.textTheme.bodyMedium!;
+  final List<Widget> aboutBoxChildren = <Widget>[
+    const SizedBox(height: 24),
+    RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+              style: textStyle,
+              text: "Application développée par IPIC-ASSO, pour aider les enseignants du primaire et du secondaire.\n"
+                  'Pour en savoir plus, poser une question, effectuer une réclamation... '
+                  'Ecrivez nous à l\'adresse: '),
+          TextSpan(
+            text: 'contact@ipic-asso.fr',
+            style: const TextStyle(color: Colors.blue),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () async {
+                await Clipboard.setData(const ClipboardData(text: "contact@ipic-asso.fr"));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('copié !'),
+                ));
+              },
+          ),
+          TextSpan(
+            text: ' ou visitez notre site: ',
+            style: textStyle,
+          ),
+          TextSpan(
+            text: 'https://www.ipic-asso.fr',
+            style: const TextStyle(color: Colors.blue),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                launchUrl(Uri.parse('https://www.ipic-asso.fr'));
+              },
+          ),
+
+          TextSpan(
+            text: '\n\nNotes de version',
+            style: const TextStyle(color: Colors.blue),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => NotesDeVersion(),
+                    transitionDuration: const Duration(milliseconds: 500),
+                    transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+                  ),
+                );
+              },
+          ),
+        ],
+      ),
+    ),
+  ];
+
+  return AboutListTile(
+    icon: const Icon(
+      Icons.info,
+    ),
+    applicationIcon: Tab(icon: Image.asset("assets/images/IPIC_logo_petit.png",width: 40,)),
+    applicationName: 'Plan de Classe',
+    applicationVersion: '2.1.4',
+    applicationLegalese: '© 2023 IPIC-ASSO',
+    aboutBoxChildren: aboutBoxChildren,
+    child: const Text('A propos'),
+  );
 }
