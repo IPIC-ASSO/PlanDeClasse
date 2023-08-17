@@ -62,9 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(onPressed: (){
               showDialog(
                   context: context,
-                  builder:(BuildContext context) => Padding(padding: EdgeInsets.all(5),child:Apropos(context)));
+                  builder:(BuildContext context) => Padding(padding: const EdgeInsets.all(5),child:Apropos(context)));
               },
-              icon: Icon(Icons.info_outline))
+              icon: const Icon(Icons.info_outline))
           ],
       ),
       body: FutureBuilder<List<String>>(
@@ -256,16 +256,16 @@ class _MyHomePageState extends State<MyHomePage> {
   montreAmeliorations(){
     return showDialog(
       context: context,
-      builder:(BuildContext context) =>CupertinoAlertDialog(
+      builder:(BuildContext context) =>const CupertinoAlertDialog(
       title: Column(
       children: <Widget>[
-        const Text("Avancement"),
-        const Icon(
+        Text("Avancement"),
+        Icon(
           Icons.directions_walk,
         ),
       ],
     ),
-    content: const Text( "La gallerie n'a pas encore été implémentée.\nNous devons en effet encore ajouter la sauvegarde des plans de classe.\nSont aussi au programme l'ajout d'un placement des élève par zone dans la classe, ainsi qu'un tutoriel et un menu d'aide complet."),
+    content: Text( "La gallerie n'a pas encore été implémentée.\nNous devons en effet encore ajouter la sauvegarde des plans de classe.\nSont aussi au programme l'ajout d'un placement des élève par zone dans la classe, ainsi qu'un tutoriel et un menu d'aide complet."),
     ));
   }
 

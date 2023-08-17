@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'usineDeBiscottesGrillees.dart';
@@ -24,69 +25,67 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Configuration de la classe"),
+        title: const Text("Plans enregistrés", textAlign: TextAlign.center,),
       ),
-      body: Column(
-        children:[
-          const Padding(padding: EdgeInsets.all(15),child:const Text("Plans de classe enregistrés")),
+      body:
           FutureBuilder<Map<String,String>>(
             future: litPhotos(),
             builder: (BuildContext context, AsyncSnapshot<Map<String,String>> snapshot) {
               if (snapshot.hasData) {
                 if(snapshot.data!.isNotEmpty){
-                  return Padding(
-                      padding: EdgeInsets.all(10),
-                      child:GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
-                        ),
-                        itemBuilder: (context, index) {
-                          return RawMaterialButton(
-                            child: Column(
-                              children:[
-                                Expanded(flex:1,child: Image.file(
-                                  File(snapshot.data!.values.toList()[index]),
-                                  height: 300,
-                                  fit: BoxFit.contain,
-                                )),
-                                Text(snapshot.data!.keys.toList()[index])
-                              ]
-                            ),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Dialog(
-                                    child:
-                                      Container(
-                                          child: PhotoView(
-                                            backgroundDecoration: BoxDecoration(color: Colors.white),
-                                            imageProvider: FileImage(File(snapshot.data!.values.toList()[index])),
-                                          )
-                                      )
-                                  );
-                                });
-                            },
-                          );
-                        },
-                        itemCount: snapshot.data!.length,
-                      )
-                  );
+                  print(snapshot.data!.keys.length);
+                  return GridView.builder(
+                      padding: EdgeInsets.all(15),
+                      primary: true,
+                      physics: ScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 15,
+                        mainAxisSpacing: 15,
+                      ),
+                      itemBuilder: (context, index) {
+                        return RawMaterialButton(
+                          child: Column(
+                            children:[
+                              Expanded(flex:1,child: Image.file(
+                                File(snapshot.data!.values.toList()[index]),
+                                height: 300,
+                                fit: BoxFit.contain,
+                              )),
+                              Text(snapshot.data!.keys.toList()[index])
+                            ]
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  child:
+                                    Container(
+                                        child: PhotoView(
+                                          backgroundDecoration: const BoxDecoration(color: Colors.white),
+                                          imageProvider: FileImage(File(snapshot.data!.values.toList()[index])),
+                                        )
+                                    )
+                                );
+                              });
+                          },
+                        );
+                      },
+                      itemCount: snapshot.data!.length,
+                      );
                 }else{
-                  return Center(child: const Text("Auncun plan enregistré"),);
+                  return const Center(child: Text("Auncun plan enregistré"),);
                 }
                   
               }else{
-                return Center(child: CircularProgressIndicator(),);
+                return const Center(child: CircularProgressIndicator(),);
               }
             }
           ),
-        ]
-      ),
+
     );
   }
 

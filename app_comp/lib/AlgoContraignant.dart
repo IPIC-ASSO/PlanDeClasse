@@ -42,7 +42,6 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
   List<double> reussiteVariante = [];
   late Isolate isolat;
   final monskrolleur = ScrollController();
-  final GlobalKey _cleGlobale = GlobalKey();
   final ScreenshotController conduiteDeTir = ScreenshotController();
   int variante = 0;
   double progression = 0;
@@ -128,7 +127,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
           Padding(padding: const EdgeInsets.symmetric(vertical: 15,horizontal:5),child:Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children:[
-              Column(children: const [
+              const Column(children: [
                 Icon(Icons.shutter_speed),
                 Text("Rapide", style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic),),
               ],),
@@ -146,7 +145,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                     },
                   )
               ),
-              Column(children: const [
+              const Column(children: [
                 Icon(Icons.self_improvement),
                 Text("Optimal",style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),)
               ],)
@@ -437,10 +436,10 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
           data: ThemeData(
               colorSchemeSeed: const Color(0xff4fc2ff), useMaterial3: true),
           child: AlertDialog(
-          title: Column(
+          title: const Column(
           children: <Widget>[
           Text("Enregistrer le plan"),
-          const Icon(
+          Icon(
             Icons.save_as,
           ),
         ],
@@ -448,9 +447,9 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
       content: Column(
         mainAxisSize: MainAxisSize.min,
           children:[
-        Padding(padding: EdgeInsets.all(0),child: const Text("Indiquez le nom de l'image (sans extension). Le fichier sera sauvegardé dans les téléchargements.")),
+        const Padding(padding: EdgeInsets.all(0),child: Text("Indiquez le nom de l'image (sans extension). Le fichier sera sauvegardé dans les téléchargements.")),
         Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child:TextField(
             controller: nomImage,
             decoration: const InputDecoration(

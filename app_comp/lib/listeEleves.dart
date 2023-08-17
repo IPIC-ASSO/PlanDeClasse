@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:plan_de_classe/parametresPlan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -271,10 +270,10 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
           data: ThemeData(
               colorSchemeSeed: const Color(0xff4fc2ff), useMaterial3: true),
           child: AlertDialog(
-      title: Column(
+      title: const Column(
         children: <Widget>[
         Text("Importer des élèves"),
-          const Icon(
+          Icon(
           Icons.import_export,
           ),
         ],
@@ -302,10 +301,10 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
           )),*/
           Row(
             children: <Widget>[
-              Flexible(flex: 1,child:
+              const Flexible(flex: 1,child:
               SizedBox(
                   width: 1000,
-                  child:Padding(padding:const EdgeInsets.all(5),child: Text("Délimiteur: "))
+                  child:Padding(padding:EdgeInsets.all(5),child: Text("Délimiteur: "))
               ), ),
               Flexible(flex: 1,child:
               SizedBox(
