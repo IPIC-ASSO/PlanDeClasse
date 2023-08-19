@@ -282,7 +282,10 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
           ),
         ],
       ),
-      content: Column(
+      content: SizedBox(
+          width: double.maxFinite,
+          child:ListView(
+        shrinkWrap: true,
         children:[
           const Text("Entrez dans le champs la liste de vos élèves, puis indiquez le délimiteur (une virgule, un point, un espace... Les élèves importés seront ajoutés à ceux déjà entrés.", textAlign: TextAlign.center,),
           Padding(padding:const EdgeInsets.all(7),child: TextField(
@@ -295,14 +298,6 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
               labelText: 'Liste des élèves',
             ),
           )),
-          /*Padding(padding:const EdgeInsets.only(right: 4),child: TextField(
-            controller: chaineCommentairesImport,
-            keyboardType: TextInputType.multiline,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Liste des commentaires',
-            ),
-          )),*/
           Row(
             children: <Widget>[
               const Flexible(flex: 1,child:
@@ -326,7 +321,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
             ]
           ),
         ]
-      ),
+      )),
       actions: <Widget>[
         TextButton(onPressed: ()=>{importDouane()}, child: const Text("Valider", style: TextStyle(fontWeight: FontWeight.bold),),),
         MaterialButton(onPressed: ()=>{Navigator.of(context).pop()}, child: const Text("Annuler"),)

@@ -439,32 +439,34 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
       context: context,
       builder:(BuildContext context) =>Theme(
           data: ThemeData(
-              colorSchemeSeed: const Color(0xff4fc2ff), useMaterial3: true),
-          child: AlertDialog(
-          title: const Column(
-          children: <Widget>[
-          Text("Enregistrer le plan"),
-          Icon(
-            Icons.save_as,
+            colorSchemeSeed: const Color(0xff4fc2ff), useMaterial3: true),
+              child: AlertDialog(
+              title: const Column(
+              children: <Widget>[
+              Text("Enregistrer le plan"),
+              Icon(
+                Icons.save_as,
+              ),
+            ],
           ),
-        ],
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-          children:[
-        const Padding(padding: EdgeInsets.all(0),child: Text("Indiquez le nom de l'image (sans extension). Le fichier sera sauvegardé dans les téléchargements.")),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child:TextField(
-            controller: nomImage,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Nom de l\'image'
-            ),
-          )
-        )
+          content: SizedBox(
+            width: double.maxFinite,
+            child:ListView(
+              shrinkWrap: true,
+              children:[
+            const Padding(padding: EdgeInsets.all(0),child: Text("Indiquez le nom de l'image (sans extension). Le fichier sera sauvegardé dans les téléchargements.")),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child:TextField(
+                controller: nomImage,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Nom de l\'image'
+                ),
+              )
+            )
 
-      ]),
+      ])),
       actions: [
         TextButton(onPressed: ()=>{if(nomImage.text.isNotEmpty)sauvegardePlan()else Usine.montreBiscotte(context, "Indiquez le nom de l'image",this)}, child: const Text("Valider", style: TextStyle(fontWeight: FontWeight.bold),),),
         MaterialButton(onPressed: ()=>{Navigator.of(context).pop()}, child: const Text("Annuler"),)
