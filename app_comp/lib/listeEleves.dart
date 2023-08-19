@@ -37,6 +37,10 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
     return Scaffold(
       appBar: AppBar(
       title: const Text("Création des élèves"),
+        actions: [
+          IconButton(onPressed: ()=>{montrePropos(context, 2)},
+              icon: const Icon(Icons.info_outline))
+        ],
       ),
       body:SingleChildScrollView(
         physics: const ScrollPhysics(),

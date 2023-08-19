@@ -112,6 +112,10 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
         child:Scaffold(
         appBar: AppBar(
           title: const Text("Plan de classe"),
+          actions: [
+            IconButton(onPressed: ()=>{montrePropos(context, 3)},
+                icon: const Icon(Icons.info_outline))
+          ],
         ),
         body: ListView(
           shrinkWrap: true,
@@ -206,7 +210,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                                 });},
                               icon:const Icon(Icons.arrow_back),label: const Text("Variante Suivante", textAlign: TextAlign.center,),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10)),),)))
                     ],),
-                    Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{EnregistrePlan()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.save),label: const Text("Enregistrer"))),
+                    Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{EnregistrePlan()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15), backgroundColor: Colors.green), icon:const Icon(Icons.save),label: const Text("Enregistrer"))),
                   ],
                 ));
               }else{
@@ -373,6 +377,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
     }
     List<String> configPC = (prefs.getStringList("\$placement\$${datum.classe}")??[]).isEmpty?List<String>.generate(nombrePlaces, (index) => ""):prefs.getStringList("\$placement\$${datum.classe}")??[];
     List<int> placesOccupeesDebase = configPC.map((e) => datum.nomsEleves.contains(e)?datum.nomsEleves.indexOf(e):-1).toList();
+    placesOccupeesDebase.map((e) => e>=nombrePlaces?-1:e);
     final coefsS = prefs.getStringList("\$critères\$${datum.classe}")??["2","1","0","0","0","0","0","1"];
     parametresPlan = coefsS.map((e) => int.parse(e)).toList();
     datum.configurationPlane = configurationPlane;
@@ -585,8 +590,7 @@ placeEleve(DatumDeClasse datum, int indiceIteration) async {
       //on parcourt toutes les places de la classe
       if (datum.placesOccupees[place] < 0) {
         //place libre
-        double contrainte =
-            await CalculeLaContrainte(place, indiceDeMonEleve, datum);
+        double contrainte = await CalculeLaContrainte(place, indiceDeMonEleve, datum);
         if (contrainte < valMin) {
           indiceMin = [place];
           valMin = contrainte;
@@ -627,61 +631,6 @@ int expressionContraintes(int indiceElv, DatumDeClasse datum) {
   }
   return points;
 
-}
-
-
-
-
-Future<bool> arbreQuiGrandit(List<dynamic> args) async {
-  final SendPort portMarchand = args[0];
-  DatumDeClasse monDatumDeClasse = args[1]; //INITIALISATION
-
-  while (monDatumDeClasse.plansEnregistres.length < 5 && monDatumDeClasse.maxTolere < 60) { //CALCULE
-    portMarchand.send(monDatumDeClasse.maxTolere);
-    monDatumDeClasse.placesOccupees.clear();
-    monDatumDeClasse.placesOccupees = List<int>.from(monDatumDeClasse.placesOccupeesDebase);
-    bool x = await TroncEtBranche(0, monDatumDeClasse);
-    if (x) {
-      monDatumDeClasse.plansEnregistres.add(List<int>.from(monDatumDeClasse.placesOccupees));
-    } else {
-      monDatumDeClasse.maxTolere++;
-    }
-  }
-  print("Liste des plans ${monDatumDeClasse.plansEnregistres}");
-  print("fin");
-  Isolate.exit(args[0], monDatumDeClasse);
-}
-
-Future<bool> TroncEtBranche(int indiceDeMonEleve, DatumDeClasse datum) async {
-  if(indiceDeMonEleve==datum.indiceEleves.length) {//Tous les élèves sont placés :)
-    Function eg = const ListEquality().equals;
-    for(List<int> uneConfig in datum.plansEnregistres){
-      if(eg(uneConfig,datum.placesOccupees))return false;
-    }
-    datum.reussiteVariante.add(datum.contrainteAct);
-    return true;  //Nouvelle config
-  }
-  if(datum.placesOccupees.contains(indiceDeMonEleve)) {
-    double x = estimationPlacement(datum.placesOccupees.indexOf(indiceDeMonEleve),indiceDeMonEleve, datum);
-    datum.maxTolere = max(datum.maxTolere,(datum.contrainteAct+x).toInt());
-    return TroncEtBranche(indiceDeMonEleve + 1, datum); //Eleve déjà placé :)
-  }
-  for (int place = 0; place<datum.placesOccupees.length;place++){ //on parcourt toutes les places de la classe
-    if(datum.placesOccupees[place]<0){ //place libre
-      double poidsDeLaBranche = await CalculeLaContrainte(place,indiceDeMonEleve, datum);
-      if(datum.contrainteAct + poidsDeLaBranche <= datum.maxTolere){
-        datum.contrainteAct += poidsDeLaBranche;
-        datum.placesOccupees[place] = indiceDeMonEleve;
-        if(await TroncEtBranche(indiceDeMonEleve + 1,datum)){
-          return true;
-        }else{
-          datum.contrainteAct-=poidsDeLaBranche;
-          datum.placesOccupees[place]=-1;
-        }
-      }
-    }
-  }
-  return false;
 }
 
 Future<double> CalculeLaContrainte(int place, int indiceDeMonEleve, DatumDeClasse datum) async {

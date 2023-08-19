@@ -59,11 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text("Plan de Classe"),
           automaticallyImplyLeading: false,
           actions: [
-            IconButton(onPressed: (){
-              showDialog(
-                  context: context,
-                  builder:(BuildContext context) => Padding(padding: const EdgeInsets.all(5),child:Apropos(context)));
-              },
+            IconButton(onPressed: ()=>{montrePropos(context)},
               icon: const Icon(Icons.info_outline))
           ],
       ),

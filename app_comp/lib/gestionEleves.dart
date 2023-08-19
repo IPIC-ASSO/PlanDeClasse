@@ -38,6 +38,10 @@ class _GestionElevesState extends State<GestionEleves> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Paramétrage des élèves"),
+          actions: [
+            IconButton(onPressed: ()=>{montrePropos(context, 2)},
+                icon: const Icon(Icons.info_outline))
+          ],
         ),
         body: FutureBuilder(
             future: eleves,

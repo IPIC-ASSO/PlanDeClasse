@@ -31,17 +31,20 @@ class _NotesDeVersionState extends State<NotesDeVersion> {
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.arrow_back)),
       ),
-      body: const Column(
+      body: Container(
+        width: double.infinity,
+    child:Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("Version 2.1.4 ALPHA",
+          Text("Version 2.1.5 ALPHA",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,),
-          Text("mise en ligne le 17/08",
+          Text("mise en ligne le 19/08",
             style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
             textAlign: TextAlign.center,),
-          Padding(padding: EdgeInsets.all(15),child:Text("• Ajout de la gallerie et de l'enregistrement des plans de classe\n• Nouvel algorithme de création de plans de classe\n• Possibilité d'importer une liste d'élèves. \n• Résolution de bugs mineurs et amélioration de l'interface."))
+          Padding(padding: EdgeInsets.all(15),child:Text("• Nouveau logo et élémnets graphiques\n• Menu d'aide\n• Résolution de bugs mineurs"))
         ],
-      ),
+      ),)
     );
   }
 }

@@ -39,6 +39,10 @@ class _ParametrePlanState extends State<ParametrePlan> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Création des élèves"),
+          actions: [
+            IconButton(onPressed: ()=>{montrePropos(context, 3)},
+                icon: const Icon(Icons.info_outline))
+          ],
         ),
         body: ListView(
           shrinkWrap: true,

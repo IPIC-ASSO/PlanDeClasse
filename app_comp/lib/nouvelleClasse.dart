@@ -32,6 +32,10 @@ class _NouvelleClasseState extends State<NouvelleClasse> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Configuration de la classe"),
+          actions: [
+            IconButton(onPressed: ()=>{montrePropos(context, 1)},
+                icon: const Icon(Icons.info_outline))
+          ],
         ),
         body:ListView(
           shrinkWrap: true,

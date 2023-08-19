@@ -20,7 +20,9 @@ class _ConfigClasseState extends State<ConfigClasse> {
   final String libre = "assets/images/place_vide.png";
   final String occupe = "assets/images/place_occup_e.png";
   late Future<List<int>> configuration;
+  int compteur = 0;
   final monskrolleur = ScrollController();
+  bool modif = false;
   
   @override
   void initState() {
@@ -106,7 +108,9 @@ class _ConfigClasseState extends State<ConfigClasse> {
     if (configPS.isNotEmpty){
       List<int> configPI = configPS.map((e) => int.parse(e)).toList();
       if(configPI.last==widget.colonnes&& (configPI.length-1)/widget.colonnes==widget.rangees)configuration = Future(() => configPI);
+      else modif =true;
     }
+    configPS.forEach((element) {if(element=="1")compteur++;});
     setState(() {
       configuration;
     });
@@ -121,7 +125,11 @@ class _ConfigClasseState extends State<ConfigClasse> {
     }
     prefs.setString(widget.nomClasse, widget.commentaire);
     final x = await configuration;
+    int compteur2 = 0;
+    x.forEach((element) { if(element==1)compteur2++;});
+    if(compteur!=compteur2)modif=true;
     final y = x.map((i) => i.toString()).toList();
+    if(modif)if(prefs.containsKey("\$placement\$${widget.nomClasse}"))prefs.remove("\$placement\$${widget.nomClasse}");
     prefs.setStringList("\$config\$${widget.nomClasse}",y).then((value) => {
       Navigator.push(
         context,

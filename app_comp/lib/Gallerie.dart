@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
+import 'menu.dart';
 import 'usineDeBiscottesGrillees.dart';
 
 class Gallerie extends StatefulWidget {
@@ -26,6 +27,10 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Plans enregistrés", textAlign: TextAlign.center,),
+        actions: [
+          IconButton(onPressed: ()=>{montrePropos(context)},
+              icon: const Icon(Icons.info_outline))
+        ],
       ),
       body:
           FutureBuilder<Map<String,String>>(
