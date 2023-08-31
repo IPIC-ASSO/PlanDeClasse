@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             }else{
               return const Center(
-                  child:Text('Aucune classe enregistrée, appuyez sur le petit bouton vert pour commencer', textAlign: TextAlign.center,)
+                  child:Padding(padding: EdgeInsets.all(15),child:Text('Aucune classe enregistrée, appuyez sur le petit bouton vert pour commencer', textAlign: TextAlign.center,))
               );
             }
           },

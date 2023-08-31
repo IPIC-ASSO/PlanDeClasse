@@ -137,6 +137,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
                   label: const Text("Paramétrer le plan de classe"),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
+                    backgroundColor: Color(0xFF3086E8)
                   ),)
           ),))],),
           FutureBuilder(
@@ -166,9 +167,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
   Future<Map<String, String>> litEleves() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final Map<String, String> x = {};
-    print(prefs.getStringList("\$liste_eleves\$${widget.classe}"));
     (prefs.getStringList("\$liste_eleves\$${widget.classe}")??[]).forEach((element) {
-      print(prefs.getStringList(widget.classe+element));
       x[element] = (prefs.getStringList(widget.classe+element)??["-1",""])[1];
     });
     if (x.length>3)setState(() {
@@ -197,7 +196,6 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
     });
     prefs.setStringList("\$liste_eleves\$${widget.classe}", mesEleves.keys.toList());
     prefs.setStringList("\$placement\$${widget.classe}", configPC);
-    print(mesEleves.entries);
     mesEleves.entries.forEach((element) {
       final x = prefs.getStringList(widget.classe+element.key)??["-1",""];
       x[1] = element.value;
@@ -210,7 +208,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
 
   Widget profilEleve(String nom, String commentaire) {
     return Padding(padding: const EdgeInsets.all(5),child:Container(
-      color: Colors.lightBlueAccent,
+      color: Colors.black12,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -230,11 +228,9 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
   NouvEleve() async {
     final x = await eleves;
     if (nomEleve.text.isEmpty){
-      const snackBar = SnackBar(content: Text('Un élève fantôme?'),);
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else if(x.entries.contains(nomEleve.text)){
-      const snackBar = SnackBar(content: Text('Un élève du même nom existe déjà!'),);
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Usine.montreBiscotte(context,'Remplissez d\'abord le nom de l\'élève!',this);
+    } else if(x.entries.toList().any((element) => element.key.contains(nomEleve.text))){
+      Usine.montreBiscotte(context,'Un élève du même nom existe déjà!',this);
     }else {
       x[nomEleve.text] = commentaireEleve.text;
       setState(() {
@@ -359,7 +355,6 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
         Navigator.of(context).pop();
       }
     }else{
-      print("erreur");
       Usine.montreBiscotte(context, "Remplissez tous les champs",this);
     }
   }

@@ -1,5 +1,6 @@
 import 'dart:isolate';
 import 'dart:math';
+import 'dart:developer' as dev;
 import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
   }
 
   Future<bool> calculus([passe=false]) async {
-    print("commence");
+    dev.log("commence");
     try{
       await _spawnAndReceive(passe);
       return false;
@@ -84,12 +85,12 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
     monDatumDeBase.tempsDebut = DateTime.now();
     monDatumDeBase.tempsTotalMilli = tempsCamcule*1000;
     isolat = await Isolate.spawn(arbreQuiGrandit2, [resultPort.sendPort, monDatumDeBase]);
-    await resultPort.listen((message) {
+    resultPort.listen((message) {
       if(message.runtimeType == List<int>) {
         setState(() {
           pret = Future(() => false);
           maxTolere = max((message as List)[0]as int, 0);
-          possibilites = (message as List)[1]as int;
+          possibilites = (message)[1]as int;
           progression = DateTime.now().difference(monDatumDeBase.tempsDebut).inMilliseconds/monDatumDeBase.tempsTotalMilli;
         });
       }else if(message.runtimeType == DatumDeClasse){
@@ -166,7 +167,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                   child:Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(padding: const EdgeInsets.all(15),child: Text("Variante ${variante + 1}/${planEnregsitres.length} \nCorrespondance: ${max(100-reussiteVariante[variante],10).toStringAsFixed(2)}% \n$possibilites configurations évaluées", textAlign: TextAlign.center,)),
+                    Padding(padding: const EdgeInsets.all(15),child: Text("Variante ${variante + 1}/${planEnregsitres.length} \nCorrespondance: ${max(min(100-reussiteVariante[variante],100),10).toStringAsFixed(2)}% \n$possibilites configurations évaluées", textAlign: TextAlign.center,)),
                     Padding(padding: const EdgeInsets.all(15),child:
                       SizedBox(width:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width/2:MediaQuery.of(context).size.width*0.9,
                       child:LinearProgressIndicator(value: max(100-reussiteVariante[variante],10),color: [Colors.green,Colors.lightGreenAccent,Colors.orange,Colors.red][min(reussiteVariante[variante]~/25,3)],))),
@@ -269,11 +270,11 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
   montreEleve(int indiceElev, int foIndice) {
     String monTexte = "";
     if (indiceElev >= 0) {
-      print(foIndice);
       if(monDatumDeBase.placesOccupeesDebase.contains(foIndice))
         monTexte += ("Cet élève est placé manuellement. \n");
       if (donnees[indiceElev][14].isNotEmpty)
         monTexte += donnees[indiceElev][14];
+      if(donnees[indiceElev][6]!= "2") monTexte +="Doit être placé: ${["devant","au fond"][int.parse(donnees[indiceElev][6])]}\n";
       if (parametresPlan[0] > 0 && affiniteElevesE[foIndice].isNotEmpty)
         monTexte += "Doit éviter: ${affiniteElevesE[foIndice].join(";")}\n";
       if (parametresPlan[1] > 0 && affiniteElevesI[foIndice].isNotEmpty)
@@ -325,7 +326,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
     if(datum.indiceEleves.contains(-1))return datum;
     datum = await litConfig(datum);
     datum = await fonctionInverse(datum);
-    print("Places occuppées au départ: ${datum.placesOccupeesDebase}");
+    dev.log("Places occuppées au départ: ${datum.placesOccupeesDebase}");
     return datum;
   }
 
@@ -337,7 +338,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
       final csvFichier = await fichier.readAsString().onError((error, stackTrace) => (error).toString());
       donnees = const CsvToListConverter().convert(csvFichier, fieldDelimiter: ',').map((e) => e.map((f) => f.toString()).toList()).toList();
     }else{
-      print("pas de donnees");
+      dev.log("pas de donnees");
     }
     return donnees;
   }
@@ -483,7 +484,11 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
         final image = img;
         final Directory dir;
         if(Platform.isAndroid)dir = Directory('/storage/emulated/0/Download');
-        else dir = (await getDownloadsDirectory())!;
+        else if(Platform.isMacOS) {
+          dir = Directory("${(await getApplicationDocumentsDirectory()).path.split("/").sublist(0,3).join("/")}/Downloads");
+        }else if(Platform.isIOS){
+          dir = (await getApplicationDocumentsDirectory());
+        }else dir = (await getDownloadsDirectory())!;
         final imagePath = await File('${dir.path}/plans de classe/${nomImage.text}.png').create(recursive: true);
         await imagePath.writeAsBytes(image!);
         Navigator.of(context).pop();
@@ -491,7 +496,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
       });
     }catch(e){
       Usine.montreBiscotte(context, "Erreur: $e",this);
-      print(e);
+      dev.log(e.toString());
     }
   }
 
@@ -520,7 +525,7 @@ Future<bool> arbreQuiGrandit2(List<dynamic> args) async {
   monDatumDeClasse.listeElevesTriee = trieEleves(monDatumDeClasse);
   Function eg = const ListEquality().equals;
   int compteur = 0;
-  while(DateTime.now().difference(monDatumDeClasse.tempsDebut).inMilliseconds<monDatumDeClasse.tempsTotalMilli || monDatumDeClasse.plansEnregistres.length<1){
+  while(DateTime.now().difference(monDatumDeClasse.tempsDebut).inMilliseconds<monDatumDeClasse.tempsTotalMilli || monDatumDeClasse.plansEnregistres.length<1){//!!!!!!!!
     monDatumDeClasse.placesOccupees = List<int>.from(monDatumDeClasse.placesOccupeesDebase);
     monDatumDeClasse.contrainteAct = 0;
     await placeEleve(monDatumDeClasse,0);
@@ -532,8 +537,8 @@ Future<bool> arbreQuiGrandit2(List<dynamic> args) async {
     }
     if(continuation){
       monDatumDeClasse.plansEnregistres.add(monDatumDeClasse.placesOccupees);
-      monDatumDeClasse.reussitesCalculees[compteur] = max(0,monDatumDeClasse.contrainteAct);
-      portMarchand.send([monDatumDeClasse.reussitesCalculees.values.toSet().max.toInt(), compteur] as List<int>);
+      monDatumDeClasse.reussitesCalculees[compteur] = monDatumDeClasse.contrainteAct;
+      portMarchand.send([monDatumDeClasse.reussitesCalculees.values.toSet().max.toInt(), compteur]);
 
       compteur++;
     }
@@ -586,7 +591,6 @@ placeEleve(DatumDeClasse datum, int indiceIteration) async {
   double valMin = 1000;
   List<int> indiceMin = [];
   int indiceDeMonEleve = datum.listeElevesTriee[indiceIteration];
-
   if(!datum.placesOccupees.contains(indiceDeMonEleve)){ //élève pas encore placé
     for (int place = 0; place < datum.placesOccupees.length; place++) {
       //on parcourt toutes les places de la classe
@@ -601,7 +605,7 @@ placeEleve(DatumDeClasse datum, int indiceIteration) async {
         }
       }
     }
-    final _hasardeux = new Random();
+    final _hasardeux = Random();
     datum.placesOccupees[indiceMin[_hasardeux.nextInt(indiceMin.length)]] = indiceDeMonEleve;
     datum.contrainteAct+=valMin;
   }
@@ -646,6 +650,7 @@ Future<double> CalculeLaContrainte(int place, int indiceDeMonEleve, DatumDeClass
   if(parametresPlan[0]>0 || parametresPlan[1]>0)maContrainte+= affineLaFonction(indiceDeMonEleve,place, parametresPlan[0],parametresPlan[1], datum, placesOccupees, nomsEleves);
   if(parametresPlan[3]>0)maContrainte+=laTailleCouteCher(indiceDeMonEleve,place,parametresPlan[3], datum, placesOccupees);
   if(parametresPlan[4]>0 || parametresPlan[5]>0 || parametresPlan[6]>0)maContrainte+=alternanceProfessionnelle(indiceDeMonEleve,place,parametresPlan[4],parametresPlan[5],parametresPlan[6],datum, placesOccupees);
+  maContrainte+=placementFinancier(indiceDeMonEleve, place, datum);
   return maContrainte*importance;
 }
 
@@ -787,14 +792,22 @@ double alternanceProfessionnelle(int indiceDeMonEleve, int place, int importance
   return points;
 }
 
-/*double placementFinancier(int indiceDeMonEleve, int place, int importance){
-  double points = 0;
+double placementFinancier(int indiceDeMonEleve, int place, DatumDeClasse datum) {
+  List<List<String>> donnees = datum.donnees;
+  List<int> configurationPlane = datum.configurationPlane;
+  List<int> indiceEleves = datum.indiceEleves;
+  int colonne = datum.colonne;
   final int indiceDansConfgPlane = configurationPlane.indexOf(place);
-  for (int placeAvant = 0; placeAvant<indiceDansConfgPlane;placeAvant++){
-
+  final int nombreRangees = configurationPlane.length ~/ colonne;
+  if(donnees[indiceEleves[indiceDeMonEleve]][6] == "0") { //devant
+    return 10 * (indiceDansConfgPlane ~/ colonne/ nombreRangees);
   }
-  return points;
-}*/
+  else if (donnees[indiceEleves[indiceDeMonEleve]][6] == "1") { //fond
+    return 10 * ((nombreRangees - (indiceDansConfgPlane~/colonne+1))/nombreRangees);
+  }
+  return 0;
+
+}
 
 double estimationPlacement(int place, int indiceDeMonEleve, DatumDeClasse datum) {
   double points = 0;
