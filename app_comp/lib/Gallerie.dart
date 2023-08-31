@@ -66,11 +66,33 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
                               context: context,
                               builder: (BuildContext context) {
                                 return Dialog(
-                                  child:
-                                    PhotoView(
-                                      backgroundDecoration: const BoxDecoration(color: Colors.white),
-                                      imageProvider: FileImage(File(snapshot.data!.values.toList()[index])),
-                                    )
+                                  elevation: 0,
+                                  backgroundColor: Colors.transparent,
+                                  child:Stack(
+                                    children: [
+                                      Container(child:
+                                        PhotoView(
+                                          backgroundDecoration: const BoxDecoration(color: Colors.transparent),
+                                          imageProvider: FileImage(File(snapshot.data!.values.toList()[index])),
+                                        )
+                                      ),Positioned(
+                                        right: 0.0,
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Align(
+                                            alignment: Alignment.topRight,
+                                            child: CircleAvatar(
+                                              radius: 14.0,
+                                              backgroundColor: Colors.white,
+                                              child: Icon(Icons.close, color: Colors.red),
+                                          ),
+                                        ),
+                                      )
+                                      )
+                                    ],
+                                  )
                                 );
                               });
                           },

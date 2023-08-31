@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -119,7 +121,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                         text: " lorsque vous quittez la page!"
                     ),
                     const TextSpan(
-                        style: TextStyle(fontWeight: FontWeight.w200),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                         text: "\n\nPour s'y retrouver: "
                     ),
                     const TextSpan(
@@ -139,7 +141,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                       text:". Vous pourrez alors coller votre liste, puis spécifier le délimiteur, le ou les caractères qui séparent vos élèves. Il est à noter que vous ne pouvez pas associer à ce moment de commentaire à vos élèves, mais vous pourrez le faire plus tard, sur la page «Gestion des élèves», ce qui est d'ailleurs la deuxième étape de la confguration de vos élèves."
                     ),
                     const TextSpan(
-                        style: TextStyle(fontWeight: FontWeight.w200),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                         text: "\n\nConfigurer les élèves: "
                     ),
                     const TextSpan(
@@ -196,7 +198,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                     text: "Dans le cas où des contraintes équivalentes s'appliquent sur un élève, celui-ci sera placé «au hasard», ce qui fait que l'application vous proposera plusieurs varaiantes du plan de classe."
                 ),
                 const TextSpan(
-                    style: TextStyle(fontWeight: FontWeight.w200),
+                    style: TextStyle(fontWeight: FontWeight.w600),
                     text: "\n\nVoir le plan de classe: "
                 ),
                 const TextSpan(
@@ -260,21 +262,21 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                 style: textStyle,
               children: const [
                 TextSpan(
-                    style: TextStyle(fontWeight: FontWeight.w200),
+                    style: TextStyle(fontWeight: FontWeight.w600),
                     text: "\nQue signifie le pourcentage de correspondance?"
                 ),
                 TextSpan(
                     text: "\nIl s'agit d'un indicateur du nombre de contraintes respectées.\nIl n'est en effet pas toujours possible de satisfaire toutes les contraintes, c'est pourquoi cet indicateur peut ne pas être à 100%.\nIl ne descendra également pas en dessous de 10%, niveau auquel le plan de classe a perdu beaucoup de sa pertinence au regard du nombre de contraintes non respectées.\nIl est à noter que le critère «Affinités inclusive» est comptabilisé d'une manière particulière sur l'indicateur: si deux élèves n'ont pas pu être rapproché, l'indicateur ne le prendra pas en compte, mais si deux élèves ont pu être rapprochés, il le comptera positivement (il est ainsi possible d'atteindre les 100% en ayant certaines contraites non satisfaites)."
                 ),
                 TextSpan(
-                    style: TextStyle(fontWeight: FontWeight.w200),
+                    style: TextStyle(fontWeight: FontWeight.w600),
                     text: "\n\nConcrètement, comment fonctionne l'algorithme?"
                 ),
                 TextSpan(
                     text: "\nL'algorithme fonctionne de manière séquenciel et récursive: Tout d'abord, il trie les élèves en fonctions de leur priorité de traitement, puis du nombre de contraintes qui s'appliquent sur eux. Ensuite, pour chaque élève, il évalue quelle place serait la plus intéressante (la place où le plus de contraintes seraient respectées), place l'élève, et place de la même manière le suivant, en tenant compte du placement du précédent, et ainsi de suite.\nLorsque plusieurs chois sont possibles, l'algorithme choisit aléatoirement le placement de l'élèves entre les places les plus intéressantes."
                 ),
                 TextSpan(
-                    style: TextStyle(fontWeight: FontWeight.w200),
+                    style: TextStyle(fontWeight: FontWeight.w600),
                     text: "\n\nL'application récolte-t-elle des données?"
                 ),
                 TextSpan(

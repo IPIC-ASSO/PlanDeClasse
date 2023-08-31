@@ -108,99 +108,86 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                   )
                 );
                 return Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ElevatedButton.icon(
-                        onPressed: ()async{
-                          await finitEleves();
-                          await Enregistre(context, true);
-                          Navigator.push(context,
-                            PageRouteBuilder(
-                              pageBuilder: (_, __, ___) => AlgoContraignant(classe: widget.classe,),
-                              transitionDuration: const Duration(milliseconds: 500),
-                              transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+                    Visibility(
+                      visible: compteElevesRemplis>2,
+                      child:Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: ElevatedButton.icon(
+                          onPressed: ()async{
+                            await finitEleves();
+                            await Enregistre(context, true);
+                            Navigator.push(context,
+                              PageRouteBuilder(
+                                pageBuilder: (_, __, ___) => AlgoContraignant(classe: widget.classe,),
+                                transitionDuration: const Duration(milliseconds: 500),
+                                transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+                              ),
+                            );
+                          },
+                          label: const Text('Créer un plan de classe'),
+                          icon: const Icon(Icons.oil_barrel_rounded),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF3086E8),
+                            minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)
                             ),
-                          );
-                        },
-                        label: const Text('Créer un plan de classe'),
-                        icon: const Icon(Icons.oil_barrel_rounded),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF3086E8),
-                          minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)
                           ),
                         ),
                       ),
                     ),
-                  TabBarView(
-                    controller: controleTable,
-                    children: [
-                      ListView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        children: mesBeauxEleves,
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(flex:0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: IconButton(
-                                    onPressed: indiceCriter==0?null: (){
-                                          setState(() {
-                                            indiceCriter -= 1;
-                                          });},
-                                    icon: const Icon(Icons.arrow_back_ios)),
-                                )),
-                              Expanded(flex:1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(criteres[indiceCriter], textAlign: TextAlign.center,style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                                )),
-                              Expanded(flex:0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: IconButton(onPressed: indiceCriter==criteres.length-1?null: (){
-                                    setState(() {
-                                      indiceCriter++;
-                                    });}, icon: const Icon(Icons.arrow_forward_ios)),
-                                ))
-                            ],
-                          ),Expanded(child:
-                          ListView(
-                            shrinkWrap: true,
-                            children: mesMochesEleves,
-                          ),)
-                        ],
-                      )
-                    ]
-                  ),
+                  Expanded(
+                    child:TabBarView(
+                      controller: controleTable,
+                      children: [
+                        ListView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: mesBeauxEleves,
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(flex:0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: IconButton(
+                                      onPressed: indiceCriter==0?null: (){
+                                            setState(() {
+                                              indiceCriter -= 1;
+                                            });},
+                                      icon: const Icon(Icons.arrow_back_ios)),
+                                  )),
+                                Expanded(flex:1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(criteres[indiceCriter], textAlign: TextAlign.center,style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                                  )),
+                                Expanded(flex:0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: IconButton(onPressed: indiceCriter==criteres.length-1?null: (){
+                                      setState(() {
+                                        indiceCriter++;
+                                      });}, icon: const Icon(Icons.arrow_forward_ios)),
+                                  ))
+                              ],
+                            ),Expanded(child:
+                            ListView(
+                              shrinkWrap: true,
+                              children: mesMochesEleves,
+                            ),)
+                          ],
+                        )
+                      ]
+                    )),
               ]);
               }
             }),
-      floatingActionButton: Visibility(
-        visible: compteElevesRemplis>2,
-        child: FloatingActionButton.extended(
-          onPressed: () async {
-            await finitEleves();
-            Navigator.push(context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => AlgoContraignant(classe: widget.classe,),
-                transitionDuration: const Duration(milliseconds: 500),
-                transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-              ),
-            );
-          },
-          label: const Text('Créer un plan de classe'),
-          icon: const Icon(Icons.oil_barrel_rounded),
-          backgroundColor: Colors.green[400],
-        ),
-      ),
       drawer:Menu(widget.classe),
     );
   }
