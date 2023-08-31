@@ -23,7 +23,7 @@ class Usine {
       vsync: ticket,
       duration: const Duration(milliseconds: 500),
     ); // <-- Se
-    _controller.forward()..whenComplete(() async {
+    _controller.forward().whenComplete(() async {
       await Future.delayed(const Duration(seconds: 3));
       _controller.reverse();
     } );
@@ -45,7 +45,7 @@ class Usine {
               const EdgeInsets.only(left: 10, right: 10,
                   top: 13, bottom: 10),
               decoration: BoxDecoration(
-                  color: positif?Colors.green:const Color(0xffe53e3f),
+                  color: positif?Colors.blueAccent:const Color(0xffe53e3f),
                   borderRadius: BorderRadius.circular(10)),
               child: Align(
                 alignment: Alignment.center,

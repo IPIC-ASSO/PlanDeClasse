@@ -72,7 +72,11 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           Expanded(flex: 1, child: Padding(
                               padding: const EdgeInsets.all(3), child:
                           ElevatedButton(
-                              onPressed: () => dialogonsGentillement(true),
+                              onPressed: () => showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) =>
+                                   dialogonsGentillement(context,true,mesEleves)).then((value) => value!=null?mesEleves = value:null),
                               child: const Text("(LISTE))")))),
                         ],)),
                     Visibility(
@@ -84,7 +88,11 @@ class _ProfilEleveState extends State<ProfilEleve> {
                           Expanded(flex: 1, child: Padding(
                               padding: const EdgeInsets.all(3), child:
                           ElevatedButton(
-                              onPressed: () => dialogonsGentillement(false),
+                              onPressed: () => showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) =>
+                                      dialogonsGentillement(context,false,mesEleves)).then((value) => value!=null?mesEleves = value:null),
                               child: const Text("(LISTE)")))),
                         ],)
                     ),
@@ -533,11 +541,11 @@ class _ProfilEleveState extends State<ProfilEleve> {
       placement.toString(),//6
       niveau.toString(),//7
       attitude.toString(),//8
-      genre.toString(),
-      "false",
-      "false",
-      "false",
-      importance.toString(),
+      genre.toString(),//9
+      "false",//10
+      "false",//11
+      "false",//12
+      importance.toString(),//13
       commentaireEleve.text
     ];
     int indice = widget.indice;
@@ -568,52 +576,7 @@ class _ProfilEleveState extends State<ProfilEleve> {
     }
   }
 
-  Future<void> dialogonsGentillement(bool evite) async {
-    final List<String> listee = mesEleves.keys.toList();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("L'élève doit ${evite ? "éviter" : "être avec"}:"),
-          content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return SizedBox(
-                    width: double.maxFinite,
-                    child: ListView.builder(
-                        itemCount: mesEleves.keys.length,
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return CheckboxListTile(
-                            title: Text(listee[index]),
-                            value: (mesEleves[listee[index]] ?? [
-                              false,
-                              false
-                            ])[evite ? 0 : 1],
-                            enabled: !(mesEleves[listee[index]] ??
-                                [false, false])[!evite ? 0 : 1],
-                            onChanged: (bool? value) {
-                              setState(() {
-                                (mesEleves[listee[index]] ??
-                                    [false, false])[evite ? 0 : 1] =
-                                    value ?? false;
-                              });
-                            },
-                          );
-                        }));
-              }),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Terminer'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+
 
   Future<void> parlonsArgentParlonsPlacement() async {
     return showDialog<void>(
@@ -729,4 +692,45 @@ class _ProfilEleveState extends State<ProfilEleve> {
     }
     return mesLignes;
   }
+}
+
+Widget dialogonsGentillement(BuildContext context,bool evite,Map<String, List<bool>> mesEleves) {
+  final List<String> listee = mesEleves.keys.toList();
+    return AlertDialog(
+      title: Text("L'élève doit ${evite ? "éviter" : "être avec"}:"),
+      content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return SizedBox(
+                width: double.maxFinite,
+                child: ListView.builder(
+                    itemCount: mesEleves.keys.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return CheckboxListTile(
+                        title: Text(listee[index]),
+                        value: (mesEleves[listee[index]] ?? [
+                          false,
+                          false
+                        ])[evite ? 0 : 1],
+                        enabled: !(mesEleves[listee[index]] ??
+                            [false, false])[!evite ? 0 : 1],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            (mesEleves[listee[index]] ??
+                                [false, false])[evite ? 0 : 1] =
+                                value ?? false;
+                          });
+                        },
+                      );
+                    }));
+          }),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('Terminer'),
+          onPressed: () {
+            Navigator.pop(context,mesEleves);
+          },
+        ),
+      ],
+    );
 }

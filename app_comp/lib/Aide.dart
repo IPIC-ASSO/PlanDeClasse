@@ -25,7 +25,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final TextStyle textStyle = theme.textTheme.bodyMedium!;
+    final TextStyle textStyle = theme.textTheme.bodyLarge!;
     return Scaffold(
       appBar: AppBar(
         bottom: TabBar(
@@ -143,7 +143,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                         text: "\n\nConfigurer les élèves: "
                     ),
                     const TextSpan(
-                      text:"Vous avez maintenant la liste des élèves de votre classe. Il vous faut indiquer quels sont leurs carctéristiques, et quelles contraintes s'appliqueront sur eux lors de leur placement.\nLes élèves, lorsqu'ils n'ont pas été configurés, apparaissent sur fond bleu. Il est nécessaire de configurer au moins "
+                      text:"Vous avez maintenant la liste des élèves de votre classe. Il vous faut indiquer quels sont leurs caractéristiques, et quelles contraintes s'appliqueront sur eux lors de leur placement.\nVous pouvez soit configurer les élèves en entrant successivement, pour chaque élève, toutes ses caractéristiques, soit, pour chaque critère configurer les élèves. Les élèves, lorsqu'ils n'ont pas été configurés, apparaissent sur fond bleu. Il est nécessaire de configurer au moins "
                     ),
                     const TextSpan(
                         style: TextStyle(fontWeight: FontWeight.w800),
@@ -168,7 +168,14 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                         text: "\nRemarques: "
                     ),
                     const TextSpan(
-                        text: "Il n'est pas nécessaire de configurer tous les élèves. Vous pouvez également définir la priorité de traitement de vos élèves pour que les contraintes qui s'appliquent sur eux soient respectées en priorité, ou alors les placer vous-même.\nLe placement manuel des élèves a priorité absolue sur tous les autres critères et sera toujours respecté."
+                        text: "Il n'est pas nécessaire de configurer tous les élèves. Vous pouvez également définir la priorité de traitement de vos élèves pour que les contraintes qui s'appliquent sur eux soient respectées en priorité, ou alors les placer vous-même.\nLe placement manuel des élèves a priorité absolue sur tous les autres critères et sera toujours respecté. Le placement général (au fond ou devat) a un niveau de priorité directement inférieur, et l'importance des critères dépend ensuite de vos choix sur la page «Paramètres du plan de classe»."
+                    ),
+                    const TextSpan(
+                        style: TextStyle(fontWeight: FontWeight.w500, color: Colors.lightGreen),
+                        text: "\nAstuce: "
+                    ),
+                    const TextSpan(
+                        text: "Une petite pastille de couleur s'affiche a côté du nom de l'élève lorsque vous remplissez ses caractéristiques. Un élève que vous avez défini comme ayant un bon niveau ou étant calme aura une pastille verte, et à l'inverse un élève agité et/ou en difficultés aura une pastille rouge."
                     ),
                   ]
               )
@@ -254,7 +261,14 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
               children: const [
                 TextSpan(
                     style: TextStyle(fontWeight: FontWeight.w200),
-                    text: "\nConcrètement, comment fonctionne l'algorithme?"
+                    text: "\nQue signifie le pourcentage de correspondance?"
+                ),
+                TextSpan(
+                    text: "\nIl s'agit d'un indicateur du nombre de contraintes respectées.\nIl n'est en effet pas toujours possible de satisfaire toutes les contraintes, c'est pourquoi cet indicateur peut ne pas être à 100%.\nIl ne descendra également pas en dessous de 10%, niveau auquel le plan de classe a perdu beaucoup de sa pertinence au regard du nombre de contraintes non respectées.\nIl est à noter que le critère «Affinités inclusive» est comptabilisé d'une manière particulière sur l'indicateur: si deux élèves n'ont pas pu être rapproché, l'indicateur ne le prendra pas en compte, mais si deux élèves ont pu être rapprochés, il le comptera positivement (il est ainsi possible d'atteindre les 100% en ayant certaines contraites non satisfaites)."
+                ),
+                TextSpan(
+                    style: TextStyle(fontWeight: FontWeight.w200),
+                    text: "\n\nConcrètement, comment fonctionne l'algorithme?"
                 ),
                 TextSpan(
                     text: "\nL'algorithme fonctionne de manière séquenciel et récursive: Tout d'abord, il trie les élèves en fonctions de leur priorité de traitement, puis du nombre de contraintes qui s'appliquent sur eux. Ensuite, pour chaque élève, il évalue quelle place serait la plus intéressante (la place où le plus de contraintes seraient respectées), place l'élève, et place de la même manière le suivant, en tenant compte du placement du précédent, et ainsi de suite.\nLorsque plusieurs chois sont possibles, l'algorithme choisit aléatoirement le placement de l'élèves entre les places les plus intéressantes."
@@ -264,7 +278,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                     text: "\n\nL'application récolte-t-elle des données?"
                 ),
                 TextSpan(
-                    text: "\nNon! L'application ne communique aucune donnée d'aucun type à un tiers: rien ne sort de votre terminal. Cependant, nous apprécierons de recevoir vos retours. Allez dans la section «A propos» pour voir comment nous contacter."
+                    text: "\nNon! L'application ne communique aucune donnée d'aucun type à un tiers: rien ne sort de votre terminal. Cependant, nous apprécierons recevoir vos retours. Allez dans la section «A propos» pour voir comment nous contacter."
                 ),
               ]
             )

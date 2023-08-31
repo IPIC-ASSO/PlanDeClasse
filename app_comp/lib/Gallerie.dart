@@ -1,6 +1,6 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'menu.dart';
@@ -38,11 +38,10 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
             builder: (BuildContext context, AsyncSnapshot<Map<String,String>> snapshot) {
               if (snapshot.hasData) {
                 if(snapshot.data!.isNotEmpty){
-                  print(snapshot.data!.keys.length);
                   return GridView.builder(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       primary: true,
-                      physics: ScrollPhysics(),
+                      physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       gridDelegate:
                       const SliverGridDelegateWithFixedCrossAxisCount(
@@ -68,11 +67,9 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
                               builder: (BuildContext context) {
                                 return Dialog(
                                   child:
-                                    Container(
-                                        child: PhotoView(
-                                          backgroundDecoration: const BoxDecoration(color: Colors.white),
-                                          imageProvider: FileImage(File(snapshot.data!.values.toList()[index])),
-                                        )
+                                    PhotoView(
+                                      backgroundDecoration: const BoxDecoration(color: Colors.white),
+                                      imageProvider: FileImage(File(snapshot.data!.values.toList()[index])),
                                     )
                                 );
                               });
@@ -99,6 +96,11 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
     try{
         final Directory dir;
         if(Platform.isAndroid)dir = Directory('/storage/emulated/0/Download');
+        else if(Platform.isMacOS) {
+        dir = Directory("${(await getApplicationDocumentsDirectory()).path.split("/").sublist(0,3).join("/")}/Downloads");
+        }else if(Platform.isIOS){
+          dir = (await getApplicationDocumentsDirectory());
+        }
         else dir = (await getDownloadsDirectory())!;
         final Directory directoire = Directory("${dir.path}/plans de classe");
         if (!await directoire.exists()){
@@ -113,7 +115,7 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
 
     }catch(e){
       Usine.montreBiscotte(context, "Erreur: $e",this);
-      print(e);
+      log(e.toString());
     }
     return planPhotos;
   }

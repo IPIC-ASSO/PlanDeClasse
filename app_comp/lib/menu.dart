@@ -352,7 +352,7 @@ Widget Apropos(BuildContext context){
     ),
     applicationIcon: Tab(icon: Image.asset("assets/images/IPIC_logo_petit.png",width: 40,)),
     applicationName: 'Plan de Classe',
-    applicationVersion: '2.1.5',
+    applicationVersion: '2.1.6',
     applicationLegalese: '© 2023 IPIC-ASSO',
     aboutBoxChildren: aboutBoxChildren,
     child: const Text('A propos'),
@@ -447,11 +447,11 @@ montreCodeBonus(context) {
       StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
         return AlertDialog(
-        title: Text("Activation d'un code"),
+        title: const Text("Activation d'un code"),
         content:Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Visibility(visible:visible, child:Text("Code invalide", style:TextStyle(color: Colors.red))),
+            Visibility(visible:visible, child:const Text("Code invalide", style:TextStyle(color: Colors.red))),
             Padding(
               padding: const EdgeInsets.all(15),
               child: TextField(
