@@ -143,7 +143,6 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                       controller: controleTable,
                       children: [
                         ListView(
-                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           children: mesBeauxEleves,
                         ),
@@ -178,6 +177,7 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                               ],
                             ),Expanded(child:
                             ListView(
+                              physics: ScrollPhysics(),
                               shrinkWrap: true,
                               children: mesMochesEleves,
                             ),)

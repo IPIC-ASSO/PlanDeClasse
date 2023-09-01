@@ -84,7 +84,7 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
                                           child: Align(
                                             alignment: Alignment.topRight,
                                             child: CircleAvatar(
-                                              radius: 14.0,
+                                              radius: 18.0,
                                               backgroundColor: Colors.white,
                                               child: Icon(Icons.close, color: Colors.red),
                                           ),

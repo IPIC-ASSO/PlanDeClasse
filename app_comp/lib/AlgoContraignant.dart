@@ -181,7 +181,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                           child:Screenshot(
                               controller: conduiteDeTir,
                               child:Table(
-                            defaultColumnWidth: const FixedColumnWidth(100),
+                            defaultColumnWidth: FixedColumnWidth(MediaQuery.of(context).size.aspectRatio>1?100:70),
                             children: construitGrilleDeChange(setState, planEnregsitres[variante]),
                           )),),),
                     Row(
@@ -250,7 +250,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
             }
               :
             ()=> {montreEleve(-1,-1)})
-                :null,
+                :(){},
             style:ElevatedButton.styleFrom(
               backgroundColor: configurationPlane[maPlaceDansLaConfig]>=0?Colors.white:Colors.grey,
               side: BorderSide(
