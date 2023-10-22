@@ -43,24 +43,45 @@ class _ConfigClasseState extends State<ConfigClasse> {
           future:configuration,
           builder: (context, snapshot){
             if(snapshot.hasData && snapshot.data!=null){
-              return ListView(
+              return Column(
                 children: [
-                  const Padding(padding: EdgeInsets.all(8), child:
-                  Text("Cochez les case correspondant aux tables (les couloirs sont matérialisés par des places vides)", textAlign: TextAlign.center,),),
+                  Expanded(child:
+                    ListView(
+                      children: [
+                        const Padding(padding: EdgeInsets.all(8), child:
+                        Text("Cochez les case correspondant aux tables (les couloirs sont matérialisés par des places vides)", textAlign: TextAlign.center,),),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(child:Scrollbar(
+                            thumbVisibility: true,
+                            controller: monskrolleur,
+                            child:SingleChildScrollView(
+                              controller: monskrolleur,
+                              scrollDirection: Axis.horizontal,
+                              child:Table(
+                                defaultColumnWidth: const FixedColumnWidth(50),
+                                children: construitGrille(widget.colonnes, widget.rangees, snapshot.data!),
+                                )),))
+                        )
+                      ],
+                    )
+                  ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(child:Scrollbar(
-                      thumbVisibility: true,
-                      controller: monskrolleur,
-                      child:SingleChildScrollView(
-                        controller: monskrolleur,
-                        scrollDirection: Axis.horizontal,
-                        child:Table(
-                          defaultColumnWidth: const FixedColumnWidth(50),
-                          children: construitGrille(widget.colonnes, widget.rangees, snapshot.data!),
-                          )),))
-                  )
-                ],
+                    padding: EdgeInsets.all(15),
+                    child:ElevatedButton.icon(
+                      onPressed: ()=>enregistreConfig(),
+                      label: const Text('Enregistrer'),
+                      icon: const Icon(Icons.check_circle_outline),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green[700],
+                        minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)
+                        ),
+                      ),
+                    ),
+                  ),
+                ]
               );
             }else{
               return SizedBox(width:MediaQuery.of(context).size.width, child:const LinearProgressIndicator());
@@ -68,12 +89,6 @@ class _ConfigClasseState extends State<ConfigClasse> {
           },
 
         ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: ()=>enregistreConfig(),
-        label: const Text('Enregistrer'),
-        icon: const Icon(Icons.check_circle_outline),
-        backgroundColor: Colors.green[700],
-      ),
     );
   }
 

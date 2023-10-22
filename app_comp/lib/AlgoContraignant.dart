@@ -181,37 +181,56 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                           child:Screenshot(
                               controller: conduiteDeTir,
                               child:Table(
-                            defaultColumnWidth: FixedColumnWidth(MediaQuery.of(context).size.aspectRatio>1?100:70),
+                            defaultColumnWidth: FixedColumnWidth(MediaQuery.of(context).size.aspectRatio>1?100:MediaQuery.of(context).size.width/5),
                             children: construitGrilleDeChange(setState, planEnregsitres[variante]),
                           )),),),
                     Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Expanded(flex:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?0:1,child:Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{recalcule()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.loop),label: const Text("Recalculer")))),
-                      Expanded(flex:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?0:1,child:Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{versEleves()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.manage_accounts),label: const Text("Modifier les élèves")))),
+                      Expanded(flex:1,child:Padding(padding: MediaQuery.of(context).size.aspectRatio>1?EdgeInsets.symmetric(vertical: 5,horizontal: 20):EdgeInsets.symmetric(vertical:5,horizontal:5),child:ElevatedButton.icon(onPressed: ()=>{recalcule()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.loop),label: const Text("Recalculer")))),
+                      Expanded(flex:1,child:Padding(padding: MediaQuery.of(context).size.aspectRatio>1?EdgeInsets.symmetric(vertical: 5,horizontal: 20):EdgeInsets.symmetric(vertical:5,horizontal:5),child:ElevatedButton.icon(onPressed: ()=>{versEleves()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.manage_accounts),label: const Text("Modifier les élèves")))),
                     ]),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Visibility(
-                          visible: variante>0,
-                          child: Expanded(flex:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?0:1,child:ElevatedButton.icon(
-                            onPressed: (){setState(() {
-                              variante-=1;
-                            });},
-                            icon:const Icon(Icons.arrow_back),label: const Text("Variante Précédente", textAlign: TextAlign.center,),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10)))
+                        Expanded(flex:1,
+                          child:Padding(
+                            padding:MediaQuery.of(context).size.aspectRatio>1?EdgeInsets.symmetric(vertical: 0,horizontal: 20):EdgeInsets.symmetric(vertical:0,horizontal:5),
+                            child: ElevatedButton.icon(
+                              onPressed: variante==0?null:(){setState(() {
+                                variante-=1;
+                              });},
+                              icon:const Icon(Icons.arrow_back),label: const Text("Variante Précédente", textAlign: TextAlign.center,),
+                                style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(10)))
                         ,),),
-                        Visibility(
-                          visible: variante<planEnregsitres.length-1,
-                          child:Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: Expanded(flex:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?0:1,child:ElevatedButton.icon(
-                              onPressed: (){setState(() {
-                                variante++;
-                                });},
-                              icon:const Icon(Icons.arrow_back),label: const Text("Variante Suivante", textAlign: TextAlign.center,),style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10)),),)))
-                    ],),
-                    Padding(padding: const EdgeInsets.all(5),child:ElevatedButton.icon(onPressed: ()=>{EnregistrePlan()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(15), backgroundColor: Colors.green), icon:const Icon(Icons.save),label: const Text("Enregistrer"))),
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: Expanded(flex:1,
+                            child:Padding(
+                              padding:MediaQuery.of(context).size.aspectRatio>1 ?EdgeInsets.symmetric(vertical: 0,horizontal: 20): EdgeInsets.symmetric(vertical:0,horizontal:5),
+                              child:ElevatedButton.icon(
+                                onPressed: variante>=planEnregsitres.length-1?null:(){setState(() {
+                                  variante++;
+                                  });},
+                                icon:const Icon(Icons.arrow_back),label: const Text("Variante Suivante", textAlign: TextAlign.center,),
+                                style: ElevatedButton.styleFrom(padding: EdgeInsets.all(10),)
+                            ))))
+                      ],),
+                    Padding(
+                      padding: const EdgeInsets.all(5),child:
+                        ElevatedButton.icon(
+                          onPressed: ()=>{
+                            EnregistrePlan()
+                          },
+                          style: ElevatedButton.styleFrom(
+                              minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
+                              padding: const EdgeInsets.all(15),
+                              backgroundColor: Colors.green),
+                          icon:const Icon(Icons.save),
+                          label: const Text("Enregistrer")
+                        )
+                    ),
                   ],
                 ));
               }else{
@@ -252,6 +271,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
             ()=> {montreEleve(-1,-1)})
                 :(){},
             style:ElevatedButton.styleFrom(
+              minimumSize: const Size(80, 50),
               backgroundColor: configurationPlane[maPlaceDansLaConfig]>=0?Colors.white:Colors.grey,
               side: BorderSide(
                 color: Colors.black,

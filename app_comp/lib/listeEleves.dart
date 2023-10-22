@@ -22,6 +22,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
   TextEditingController chaineElevesImport = TextEditingController();
   TextEditingController chaineCommentairesImport = TextEditingController();
   TextEditingController delimiteur = TextEditingController();
+  final GlobalKey<TooltipState> cleOutilConseil = GlobalKey<TooltipState>();
   bool visible = false;
   bool btnActif = true;
   int maxConfig = 0;
@@ -94,13 +95,12 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
                   Padding(
                     padding: const EdgeInsets.all(5),
                     child: ElevatedButton.icon(
-                      onPressed: ()=>Enregistre(),
+                      onPressed: btnActif?()=>ImportationIllegale():null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        minimumSize: const Size.fromHeight(50), // NEW
+                        minimumSize: const Size.fromHeight(50),
                       ),
-                      icon: const Icon(Icons.save),
-                      label: const Text("Enregistrer"),
+                      icon: const Icon(Icons.import_export),
+                      label: const Text("Importer des élèves"),
                     ),)
                 ]
               )
@@ -110,20 +110,24 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
             Expanded(child: Padding(
               padding: const EdgeInsets.all(5),
               child: ElevatedButton.icon(
-                onPressed: btnActif?()=>ImportationIllegale():null,
+                onPressed: ()=>Enregistre(),
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(50),
+                  backgroundColor: Colors.green,
+                  minimumSize: const Size.fromHeight(50), // NEW
                 ),
-                icon: const Icon(Icons.import_export),
-                label: const Text("Importer des élèves"),
+                icon: const Icon(Icons.save),
+                label: const Text("Enregistrer"),
               ),),),
             Expanded(child:
-              Visibility(
-                visible: visible,
-                child: Padding(
+            Tooltip(
+              key: cleOutilConseil,
+              triggerMode: TooltipTriggerMode.tap,
+              showDuration: visible?Duration(seconds: 2):Duration(seconds: 0),
+              message: 'Ajoutez davantage d\'élèves',
+              child: Padding(
                 padding: const EdgeInsets.all(5),
                 child:ElevatedButton.icon(
-                  onPressed: (){
+                  onPressed: visible?(){
                     Enregistre();
                     Navigator.push(context,
                       PageRouteBuilder(
@@ -132,7 +136,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
                       transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
                       ),
                     );
-                  },
+                  }:null,
                   icon: const Icon(Icons.settings_input_composite_outlined),
                   label: const Text("Paramétrer le plan de classe"),
                   style: ElevatedButton.styleFrom(

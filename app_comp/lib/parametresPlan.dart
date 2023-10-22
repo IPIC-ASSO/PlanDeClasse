@@ -78,10 +78,10 @@ class _ParametrePlanState extends State<ParametrePlan> {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: ()=>{
-                      dialogons(context, "Affinités (exclusion)", "Correspond aux élèves qui devront être éloignés")
+                      dialogons(context, "Affinités (éloigner)", "Correspond aux élèves qui devront être éloignés")
                     },
                     style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
-                    child: const Text("Affinités (exclusion)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+                    child: const Text("Affinités (éloigner)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
                 Padding(
@@ -113,10 +113,10 @@ class _ParametrePlanState extends State<ParametrePlan> {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: ()=>{
-                      dialogons(context, "Affinités (inclusion)", "Correspond aux élèves qui devront être réunis")
+                      dialogons(context, "Affinités (rapprocher)", "Correspond aux élèves qui devront être réunis")
                     },
                     style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
-                    child: const Text("Affinités (inclusion)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+                    child: const Text("Affinités (rapprocher)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
                 Padding(
@@ -358,8 +358,6 @@ class _ParametrePlanState extends State<ParametrePlan> {
             Padding(
               padding: const EdgeInsets.all(5),
               child:ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,),
                 onPressed: (){
                   enregistreGlisseurs();
                   Navigator.push(context,
@@ -371,7 +369,11 @@ class _ParametrePlanState extends State<ParametrePlan> {
                   );
                 },
                 icon: const Icon(Icons.check_circle_outline),
-                label: const Text("VALIDER"))
+                label: const Text("VALIDER"),
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                    backgroundColor: Colors.green
+                ),)
             ),
             const Padding(
               padding: EdgeInsets.all(10),

@@ -26,7 +26,7 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
   int compteElevesRemplis = 0;
   late TabController controleTable;
   List<List<String>> textesCriteres = [["Devant","Au fond", "Sans importance"],["Grand","Moyen","Petit"],["Bonne","Moyenne","Mauvaise"],["Garçon","Fille"],["Agité","Dans la moyenne","Calme"],["A l'aise","Dans la moyenne","En difficultés"]];
-  List<String> criteresDeBase = ["Placement","Affinités (inclusion)", "Affinités (exclusion)", "Taille", "Vue", "Genre", "Attitude", "Niveau", "Importance"];
+  List<String> criteresDeBase = ["Placement","Affinités (éloigner)", "Affinités (rapprocher)", "Taille", "Vue", "Genre", "Attitude", "Niveau", "Importance"];
   List<int> controlesCritereDebase = [2,1,1,0,1,1,1];
   List<List<int>> controlesCritere = [];
   Map<String,Map<String,List<bool>>> affinitesMesEleves = {}; //Nom_eleve:chaque_autre:{aime,aime pas}}
@@ -73,9 +73,6 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                   "Aucun élève disponible.", textAlign: TextAlign.center,),);
               } else {
                 List<Widget> mesBeauxEleves = [
-                  const Padding(padding: EdgeInsets.all(5),
-                      child: Text(
-                        "Élèves enregistrés:", textAlign: TextAlign.center,)),
                   const Padding(padding: EdgeInsets.all(5),
                       child: Text(
                         "Il n'est pas nécessaire de paramétrer tous les élèves\nN'oubliez d'enregistrer vos modifications avant de changer d'onglet ou de page.", textAlign: TextAlign.center,style: TextStyle(fontStyle: FontStyle.italic),)),
@@ -338,9 +335,9 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
   choisiCouleur(int indice) {
     if (indice >= 0) {
       if (donnees[indice][10].parseBool() || donnees[indice][11].parseBool() ||
-          int.parse(donnees[indice][7]) == 0) {
+          int.parse(donnees[indice][7]) == 2) {
         return Colors.red;
-      } else if (int.parse(donnees[indice][7]) == 2 ||
+      } else if (int.parse(donnees[indice][7]) == 0 ||
           donnees[indice][12].parseBool()) {
         return Colors.lightGreen;
       } else {
