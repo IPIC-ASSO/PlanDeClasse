@@ -113,7 +113,7 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                             icon: const Icon(Icons.oil_barrel_rounded),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF3086E8),
-                              minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
+                              minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1.5),50),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0)
                               ),
