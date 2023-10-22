@@ -22,7 +22,6 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
   TextEditingController chaineElevesImport = TextEditingController();
   TextEditingController chaineCommentairesImport = TextEditingController();
   TextEditingController delimiteur = TextEditingController();
-  final GlobalKey<TooltipState> cleOutilConseil = GlobalKey<TooltipState>();
   bool visible = false;
   bool btnActif = true;
   int maxConfig = 0;
@@ -120,10 +119,9 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
               ),),),
             Expanded(child:
             Tooltip(
-              key: cleOutilConseil,
               triggerMode: TooltipTriggerMode.tap,
-              showDuration: visible?Duration(seconds: 2):Duration(seconds: 0),
-              message: 'Ajoutez davantage d\'élèves',
+              showDuration: const Duration(seconds: 2),
+              message: visible?'Étape suivante?':'Ajoutez davantage d\'élèves',
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child:ElevatedButton.icon(
@@ -141,7 +139,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
                   label: const Text("Paramétrer le plan de classe"),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
-                    backgroundColor: Color(0xFF3086E8)
+                    backgroundColor: const Color(0xFF3086E8)
                   ),)
           ),))],),
           FutureBuilder(

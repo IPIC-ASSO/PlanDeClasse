@@ -85,56 +85,64 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                   mesMochesEleves.add(faceEleve(compte,eleve.key,eleve.value[0]));
                   compte++;
                 }
-                mesMochesEleves.add(
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: ElevatedButton.icon(
-                      onPressed: (){
-                        Enregistre(context);
-                      },
-                      icon: const Icon(Icons.save),
-                      label: const Text("Enregistrer"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)
-                        ),
-                      ),
-                    ),
-                  )
-                );
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Visibility(
-                      visible: compteElevesRemplis>2,
-                      child:Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: ElevatedButton.icon(
-                          onPressed: ()async{
-                            await finitEleves();
-                            await Enregistre(context, true);
-                            Navigator.push(context,
-                              PageRouteBuilder(
-                                pageBuilder: (_, __, ___) => AlgoContraignant(classe: widget.classe,),
-                                transitionDuration: const Duration(milliseconds: 500),
-                                transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        Tooltip(
+                          triggerMode: TooltipTriggerMode.tap,
+                          showDuration: const Duration(seconds: 2),
+                          message: compteElevesRemplis>2?'Étape finale':'Paramétrez davantage d\'élèves',
+                          child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: ElevatedButton.icon(
+                            onPressed: compteElevesRemplis<3?null:()async{
+                              await finitEleves();
+                              await Enregistre(context, true);
+                              Navigator.push(context,
+                                PageRouteBuilder(
+                                  pageBuilder: (_, __, ___) => AlgoContraignant(classe: widget.classe,),
+                                  transitionDuration: const Duration(milliseconds: 500),
+                                  transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+                                ),
+                              );
+                            },
+                            label: const Text('Créer un plan de classe'),
+                            icon: const Icon(Icons.oil_barrel_rounded),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF3086E8),
+                              minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)
                               ),
-                            );
-                          },
-                          label: const Text('Créer un plan de classe'),
-                          icon: const Icon(Icons.oil_barrel_rounded),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF3086E8),
-                            minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)
                             ),
                           ),
                         ),
                       ),
-                    ),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child:Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                              borderRadius: BorderRadius.all(Radius.circular(10))
+                          ),
+                          child: IconButton(
+                            onPressed: (){
+                              Enregistre(context);
+                            },
+                            icon: const Icon(Icons.save),
+                            tooltip: "Enregistrer",
+                            style: IconButton.styleFrom(
+
+
+                            ),
+                          ),
+                        )
+                      )]
+                  ),
                   Expanded(
                     child:TabBarView(
                       controller: controleTable,
@@ -329,6 +337,9 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
     String csv = const ListToCsvConverter().convert(donnees);
     await fichier.writeAsString(csv);
     if(!drapeau)Usine.montreBiscotte(ctx,"Enregistré !",this, true);
+    setState(() {
+      compteElevesRemplis+=3;
+    });
     return eleves;
   }
 
