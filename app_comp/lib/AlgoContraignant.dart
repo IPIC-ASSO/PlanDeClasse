@@ -715,20 +715,20 @@ double affineLaFonction(int indiceDeMonEleve, int place, int importanceE, int im
     if (nouvPlace >= 0 && placesOccupees[nouvPlace] >= 0) {
       String eleve = nomsEleves[placesOccupees[nouvPlace]];
       if (affiniteElevesE[indiceDeMonEleve].contains(eleve))
-        points += importanceE / 2;
+        points += importanceE / 1.5;
       if (affiniteElevesI[indiceDeMonEleve].contains(eleve))
-        points -= importanceI / 2;
+        points -= importanceI / 1.5;
     }
 
     if (indiceDansConfgPlane%colonne>0 && configurationPlane[indiceDansConfgPlane-colonne -1] >=0 && placesOccupees[configurationPlane[indiceDansConfgPlane-colonne -1]]>=0){   //avant - gauche
       String eleve = nomsEleves[placesOccupees[configurationPlane[indiceDansConfgPlane-colonne -1]]];
-      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/4;
-      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/4;
+      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/3;
+      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/3;
     }
     if ((indiceDansConfgPlane)%colonne<colonne -1  && configurationPlane[indiceDansConfgPlane-colonne +1] >=0 && placesOccupees[configurationPlane[indiceDansConfgPlane-colonne +1]]>=0){   //avant-droit
       String eleve = nomsEleves[placesOccupees[configurationPlane[indiceDansConfgPlane-colonne +1]]];
-      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/4;
-      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/4;
+      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/3;
+      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/3;
     }
 
   }
@@ -736,18 +736,18 @@ double affineLaFonction(int indiceDeMonEleve, int place, int importanceE, int im
     int nouvPlace = configurationPlane[indiceDansConfgPlane+colonne];
     if(nouvPlace >= 0 && placesOccupees[nouvPlace]>=0){
       String eleve = nomsEleves[placesOccupees[nouvPlace]];
-      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/2;
-      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/2;
+      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/1.5;
+      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/1.5;
     }
     if (indiceDansConfgPlane%colonne>0 && configurationPlane[indiceDansConfgPlane+colonne -1] >=0 && placesOccupees[configurationPlane[indiceDansConfgPlane+colonne -1]]>=0){   //arrière - gauche
       String eleve = nomsEleves[placesOccupees[configurationPlane[indiceDansConfgPlane+colonne -1]]];
-      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/4;
-      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/4;
+      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/3;
+      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/3;
     }
     if ((indiceDansConfgPlane)%colonne<colonne -1  && configurationPlane[indiceDansConfgPlane+colonne +1] >=0 && placesOccupees[configurationPlane[indiceDansConfgPlane+colonne +1]]>=0){   //avant-droit
       String eleve = nomsEleves[placesOccupees[configurationPlane[indiceDansConfgPlane+colonne +1]]];
-      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/4;
-      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/4;
+      if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE/3;
+      if (affiniteElevesI[indiceDeMonEleve].contains(eleve))points-=importanceI/3;
     }
   }
   return points;
