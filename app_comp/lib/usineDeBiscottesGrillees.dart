@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 
 
@@ -8,7 +9,7 @@ class Usine {
 
 
   static void montreBiscotte(BuildContext context, String message, TickerProvider ticket, [bool positif = false]) {
-    print("appel");
+    log("appel");
     OverlayEntry _overlayEntry;
     _overlayEntry = createOverlayEntry(context, message, ticket, positif);
     Overlay.of(context).insert(_overlayEntry);
@@ -29,14 +30,14 @@ class Usine {
     } );
     return OverlayEntry(
       builder: (context) => Positioned(
-        bottom: 50.0,
+        top: 50.0,
         width: MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width/2:MediaQuery.of(context).size.width*0.7,
         left: MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width*0.25:MediaQuery.of(context).size.width*0.15,
         child:AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
           return Transform.translate(
-          offset: Offset(0, -100 * _controller.value+100),
+          offset: Offset(0, 150 * _controller.value-100),
           child:  Material(
             elevation: 10.0,
             borderRadius: BorderRadius.circular(10),

@@ -167,7 +167,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                   child:Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(padding: const EdgeInsets.all(15),child: Text("Variante ${variante + 1}/${planEnregsitres.length} \nCorrespondance: ${max(min(100-reussiteVariante[variante],100),10).toStringAsFixed(2)}% \n$possibilites configurations évaluées", textAlign: TextAlign.center,)),
+
                     Padding(padding: const EdgeInsets.all(15),child:
                       SizedBox(width:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width/2:MediaQuery.of(context).size.width*0.9,
                       child:LinearProgressIndicator(value: max(100-reussiteVariante[variante],10),color: [Colors.green,Colors.lightGreenAccent,Colors.orange,Colors.red][min(reussiteVariante[variante]~/25,3)],))),
@@ -184,39 +184,40 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                             defaultColumnWidth: FixedColumnWidth(MediaQuery.of(context).size.aspectRatio>1?100:MediaQuery.of(context).size.width/5),
                             children: construitGrilleDeChange(setState, planEnregsitres[variante]),
                           )),),),
-                    Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(flex:1,child:Padding(padding: MediaQuery.of(context).size.aspectRatio>1?EdgeInsets.symmetric(vertical: 5,horizontal: 20):EdgeInsets.symmetric(vertical:5,horizontal:5),child:ElevatedButton.icon(onPressed: ()=>{recalcule()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.loop),label: const Text("Recalculer")))),
-                      Expanded(flex:1,child:Padding(padding: MediaQuery.of(context).size.aspectRatio>1?EdgeInsets.symmetric(vertical: 5,horizontal: 20):EdgeInsets.symmetric(vertical:5,horizontal:5),child:ElevatedButton.icon(onPressed: ()=>{versEleves()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.manage_accounts),label: const Text("Modifier les élèves")))),
-                    ]),
+                    Padding(padding: const EdgeInsets.all(15),child: Text("Correspondance: ${max(min(100-reussiteVariante[variante],100),10).toStringAsFixed(2)}% \n$possibilites configurations évaluées\nVariante ${variante + 1}/${planEnregsitres.length}", textAlign: TextAlign.center,)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(flex:1,
                           child:Padding(
-                            padding:MediaQuery.of(context).size.aspectRatio>1?EdgeInsets.symmetric(vertical: 0,horizontal: 20):EdgeInsets.symmetric(vertical:0,horizontal:5),
+                            padding:MediaQuery.of(context).size.aspectRatio>1?const EdgeInsets.symmetric(vertical: 0,horizontal: 20):const EdgeInsets.symmetric(vertical:0,horizontal:5),
                             child: ElevatedButton.icon(
-                              onPressed: variante==0?null:(){setState(() {
-                                variante-=1;
-                              });},
-                              icon:const Icon(Icons.arrow_back),label: const Text("Variante Précédente", textAlign: TextAlign.center,),
+                                onPressed: variante==0?null:(){setState(() {
+                                  variante-=1;
+                                });},
+                                icon:const Icon(Icons.arrow_back),label: const Text("Variante Précédente", textAlign: TextAlign.center,),
                                 style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.all(10)))
-                        ,),),
+                                    padding: const EdgeInsets.all(10)))
+                            ,),),
                         Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Expanded(flex:1,
-                            child:Padding(
-                              padding:MediaQuery.of(context).size.aspectRatio>1 ?EdgeInsets.symmetric(vertical: 0,horizontal: 20): EdgeInsets.symmetric(vertical:0,horizontal:5),
-                              child:ElevatedButton.icon(
-                                onPressed: variante>=planEnregsitres.length-1?null:(){setState(() {
-                                  variante++;
-                                  });},
-                                icon:const Icon(Icons.arrow_back),label: const Text("Variante Suivante", textAlign: TextAlign.center,),
-                                style: ElevatedButton.styleFrom(padding: EdgeInsets.all(10),)
-                            ))))
+                            textDirection: TextDirection.rtl,
+                            child: Expanded(flex:1,
+                                child:Padding(
+                                    padding:MediaQuery.of(context).size.aspectRatio>1 ?const EdgeInsets.symmetric(vertical: 0,horizontal: 20): const EdgeInsets.symmetric(vertical:0,horizontal:5),
+                                    child:ElevatedButton.icon(
+                                        onPressed: variante>=planEnregsitres.length-1?null:(){setState(() {
+                                          variante++;
+                                        });},
+                                        icon:const Icon(Icons.arrow_back),label: const Text("Variante Suivante", textAlign: TextAlign.center,),
+                                        style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10),)
+                                    ))))
                       ],),
+                    Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(flex:1,child:Padding(padding: MediaQuery.of(context).size.aspectRatio>1?const EdgeInsets.symmetric(vertical: 5,horizontal: 20):const EdgeInsets.symmetric(vertical:5,horizontal:5),child:ElevatedButton.icon(onPressed: ()=>{recalcule()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.loop),label: const Text("Recalculer")))),
+                      Expanded(flex:1,child:Padding(padding: MediaQuery.of(context).size.aspectRatio>1?const EdgeInsets.symmetric(vertical: 5,horizontal: 20):const EdgeInsets.symmetric(vertical:5,horizontal:5),child:ElevatedButton.icon(onPressed: ()=>{versEleves()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.manage_accounts),label: const Text("Modifier les élèves")))),
+                    ]),
                     Padding(
                       padding: const EdgeInsets.all(5),child:
                         ElevatedButton.icon(
@@ -558,10 +559,9 @@ Future<bool> arbreQuiGrandit2(List<dynamic> args) async {
     if(continuation){
       monDatumDeClasse.plansEnregistres.add(monDatumDeClasse.placesOccupees);
       monDatumDeClasse.reussitesCalculees[compteur] = monDatumDeClasse.contrainteAct;
-      portMarchand.send([monDatumDeClasse.reussitesCalculees.values.toSet().max.toInt(), compteur]);
-
       compteur++;
     }
+    portMarchand.send([monDatumDeClasse.reussitesCalculees.values.toSet().max.toInt(), compteur]);
   }
   var trieParvaleurReussite = Map.fromEntries(
       monDatumDeClasse.reussitesCalculees.entries.toList()

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan_de_classe/config_classe.dart';
+import 'package:plan_de_classe/usineDeBiscottesGrillees.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'menu.dart';
@@ -14,7 +15,7 @@ class NouvelleClasse extends StatefulWidget {
   State<NouvelleClasse> createState() => _NouvelleClasseState();
 }
 
-class _NouvelleClasseState extends State<NouvelleClasse> {
+class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStateMixin{
 
   List<String> classes = [];
   TextEditingController nomClasse = TextEditingController();
@@ -103,9 +104,8 @@ class _NouvelleClasseState extends State<NouvelleClasse> {
                     transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
                     ),
                   );
-                }else{
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Oups! Veuillez remplir tous les champs'),));
-                }
+                }else Usine.montreBiscotte(context, "Oups! Veuillez remplir tous les champs", this);
+
               },
               child: const Text("VOIR",),
             ),),

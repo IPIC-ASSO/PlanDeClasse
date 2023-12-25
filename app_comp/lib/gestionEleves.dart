@@ -7,6 +7,7 @@ import 'package:plan_de_classe/usineDeBiscottesGrillees.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
+import 'listeEleves.dart';
 import 'menu.dart';
 
 class GestionEleves extends StatefulWidget {
@@ -69,8 +70,24 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
             future: eleves,
             builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
-                return const Center(child: Text(
-                  "Aucun élève disponible.", textAlign: TextAlign.center,),);
+                return Center(child:Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                  const Text("Aucun élève disponible", textAlign: TextAlign.center,),
+                  Padding(padding: const EdgeInsets.all(15),
+                    child:ElevatedButton(
+                      onPressed: ()=>Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => ListeEleves(classe: widget.classe,),
+                        transitionDuration: const Duration(milliseconds: 500),
+                        transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+                      ),
+                    ),
+                    child: const Padding(padding: EdgeInsets.all(10),child:Text("Ajouter des élèves"))))
+
+                ]));
               } else {
                 List<Widget> mesBeauxEleves = [
                   const Padding(padding: EdgeInsets.all(5),
@@ -79,7 +96,8 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                 ];
                 List<Widget> mesMochesEleves = List<Widget>.from(mesBeauxEleves);
                 int compte=0;
-                for (MapEntry<String, List<dynamic>> eleve in snapshot.data!
+                Map<String,List<dynamic>> listeTriee = Map.fromEntries(snapshot.data!.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)));
+                for (MapEntry<String, List<dynamic>> eleve in listeTriee
                     .entries) {
                   mesBeauxEleves.add(profilEleve(eleve.key, eleve.value[1], eleve.value[0]));
                   mesMochesEleves.add(faceEleve(compte,eleve.key,eleve.value[0]));
@@ -109,7 +127,7 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                                 ),
                               );
                             },
-                            label: const Text('Créer un plan de classe'),
+                            label: const Text('Générer un plan de classe'),
                             icon: const Icon(Icons.oil_barrel_rounded),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF3086E8),
@@ -122,10 +140,10 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child:Container(
                           padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.green,
                               borderRadius: BorderRadius.all(Radius.circular(10))
                           ),
@@ -182,7 +200,7 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                               ],
                             ),Expanded(child:
                             ListView(
-                              physics: ScrollPhysics(),
+                              physics: const ScrollPhysics(),
                               shrinkWrap: true,
                               children: mesMochesEleves,
                             ),)
@@ -261,9 +279,9 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
   }
 
   metAJourValeur(Map<String, List<dynamic>> mesElv) {
-    controlesCritereDebase.forEach((element) {
+    for (var element in controlesCritereDebase) {
       controlesCritere.add(List<int>.generate(mesElv.entries.length, (index) => element));
-    });
+    }
 
     for(int i =0; i< mesElv.entries.length;i++){
       int indiceDb = mesElv.entries.toList()[i].value[0];
@@ -279,18 +297,18 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
         String aimepas = donnees[indiceDb][2];
         String aime = donnees[indiceDb][3];
         affinitesMesEleves[nomElv] = {};
-        mesElv.keys.forEach((element) {
+        for (var element in mesElv.keys) {
           if(element != nomElv){
             affinitesMesEleves[nomElv]![element] =[aimepas.contains(element),aime.contains(element)];
           }
-        });
+        }
       }else{
         affinitesMesEleves[nomElv] = {};
-        mesElv.keys.forEach((element) {
+        for (var element in mesElv.keys) {
           if(element != nomElv){
             affinitesMesEleves[nomElv]![element] =[false,false];
           }
-        });
+        }
       }
     }
   }

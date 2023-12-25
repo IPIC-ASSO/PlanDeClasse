@@ -76,12 +76,15 @@ class _ParametrePlanState extends State<ParametrePlan> {
               TableRow(children: [
                 Padding(
                   padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: ()=>{
+                  child: ListTile(
+                    onTap: ()=>{
                       dialogons(context, "Affinités (éloigner)", "Correspond aux élèves qui devront être éloignés")
                     },
-                    style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
-                    child: const Text("Affinités (éloigner)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+                    shape: Border(
+                      bottom: BorderSide(color: Colors.black, width: 1),
+                    ),
+                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    title: const Text("Affinités (éloigner)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
                 Padding(
@@ -111,12 +114,15 @@ class _ParametrePlanState extends State<ParametrePlan> {
               TableRow(children: [
                 Padding(
                   padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: ()=>{
+                  child: ListTile(
+                    onTap: ()=>{
                       dialogons(context, "Affinités (rapprocher)", "Correspond aux élèves qui devront être réunis")
                     },
-                    style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
-                    child: const Text("Affinités (rapprocher)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+                    shape: Border(
+                      bottom: BorderSide(color: Colors.black, width: 1),
+                    ),
+                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    title: const Text("Affinités (rapprocher)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
                 Padding(
@@ -182,12 +188,15 @@ class _ParametrePlanState extends State<ParametrePlan> {
               TableRow(children: [
                 Padding(
                   padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: ()=>{
+                  child: ListTile(
+                    onTap: ()=>{
                       dialogons(context, "Taille", "Le plan prendra en compte la taille des élèves, pour placer les plus petits devant et les plus grands derrière.")
                     },
-                    style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
-                    child: const Text("Taille", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+                    shape: Border(
+                      bottom: BorderSide(color: Colors.black, width: 1),
+                    ),
+                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    title: const Text("Taille", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
                 Padding(
@@ -217,12 +226,15 @@ class _ParametrePlanState extends State<ParametrePlan> {
               TableRow(children: [
                 Padding(
                   padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: ()=>{
+                  child: ListTile(
+                    onTap: ()=>{
                       dialogons(context, "Alternance filles/garçons", "Le plan présentera une alternance de filles et garçons sur chaque rang.")
                     },
-                    style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
-                    child: const Text("Alternance filles/garçons", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+                    shape: Border(
+                      bottom: BorderSide(color: Colors.black, width: 1),
+                    ),
+                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    title: const Text("Alternance filles/garçons", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
                 Padding(
@@ -252,12 +264,15 @@ class _ParametrePlanState extends State<ParametrePlan> {
               TableRow(children: [
                 Padding(
                   padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: ()=>{
+                  child: ListTile(
+                    onTap: ()=>{
                       dialogons(context, "Alternance agités/calmes", "Le plan associera les élèves calmes et agités, pour que ces derniers soient moins bavards, du fait de leur voisin calme.")
                     },
-                    style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
-                    child: const Text("Alternance agités/calmes", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+                    shape: Border(
+                      bottom: BorderSide(color: Colors.black, width: 1),
+                    ),
+                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    title: const Text("Alternance agités/calmes", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
                 Padding(
@@ -287,12 +302,15 @@ class _ParametrePlanState extends State<ParametrePlan> {
               TableRow(children: [
                 Padding(
                   padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: ()=>{
+                  child: ListTile(
+                    onTap: ()=>{
                       dialogons(context, "Alternance Fort/En difficulté", "Le plan associera les élèves en difficultés avec ceux qui sont le plus à l'aise")
                     },
-                    style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
-                    child: const Text("Alternance Fort/En difficulté", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+                    trailing: Icon(Icons.info_outline, color: Colors.black,weight: 1),
+                    shape: Border(
+                      bottom: BorderSide(color: Colors.black, width: 1),
+                    ),
+                    title: const Text("Alternance Fort/En difficulté", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
                 Padding(
@@ -322,12 +340,15 @@ class _ParametrePlanState extends State<ParametrePlan> {
               TableRow(children: [
                 Padding(
                   padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: ()=>{
+                  child: ListTile(
+                    onTap: ()=>{
                       dialogons(context, "Ordre alphabétique", "Les élèves seront classés par ordre alphabétique.")
                     },
-                    style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
-                    child: const Text("Ordre alphabétique", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
+                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    shape: Border(
+                      bottom: BorderSide(color: Colors.black, width: 1),
+                    ),
+                    title: const Text("Ordre alphabétique", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
                 Padding(
@@ -377,7 +398,7 @@ class _ParametrePlanState extends State<ParametrePlan> {
             ),
             const Padding(
               padding: EdgeInsets.all(10),
-              child:Text("Il est possible de revenir plus tard sur cette page \n \n Une description de chaque critère est disponible en appuyant quelques secondes sur le texte.", textAlign: TextAlign.center,style: TextStyle(fontStyle: FontStyle.italic),),
+              child:Text("Il est possible de revenir plus tard sur cette page \n \n Une description de chaque critère est disponible en appuyant sur le texte.", textAlign: TextAlign.center,style: TextStyle(fontStyle: FontStyle.italic),),
             ),
         ]),
       drawer:Menu(widget.classe),

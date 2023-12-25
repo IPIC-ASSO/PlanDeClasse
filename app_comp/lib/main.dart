@@ -7,11 +7,21 @@ import 'package:plan_de_classe/listeEleves.dart';
 import 'package:plan_de_classe/menu.dart';
 import 'package:plan_de_classe/parametresPlan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:window_manager/window_manager.dart';
 import 'dart:math';
 import 'Gallerie.dart';
 import 'nouvelleClasse.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //MobileAds.instance.initialize();
+  await windowManager.ensureInitialized();
+  windowManager.waitUntilReadyToShow().then((_) async {
+    await windowManager.maximize();
+    await windowManager.center();
+    await windowManager.show();
+    await windowManager.setSkipTaskbar(false);
+  });
   runApp(const MyApp());
 }
 
@@ -27,7 +37,8 @@ class MyApp extends StatelessWidget {
       title: 'Plan De Classe',
       theme: ThemeData(
         primarySwatch: Colors.red,
-      ),      home: const MyHomePage(),
+      ),
+      home: const MyHomePage(),
     );
   }
 }
@@ -41,10 +52,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  final GlobalKey<ScaffoldState> _cleDeLechaffaud = new GlobalKey<ScaffoldState>();
   Map<String, String> commentaires = {};
   Map<String, List<int>> configurations = {};
   Map<String, int> nbEleves = {};
   late Future<List<String>> mesClasses;
+  String cestlaclasse = "lalala";
 
   @override
   void initState() {
@@ -55,14 +68,16 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _cleDeLechaffaud,
       appBar: AppBar(
         title: const Text("Plan de Classe"),
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(onPressed: ()=>{montrePropos(context)},
-              icon: const Icon(Icons.info_outline))
-          ],
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(onPressed: ()=>{montrePropos(context)},
+            icon: const Icon(Icons.info_outline))
+        ],
       ),
+
       body: FutureBuilder<List<String>>(
           future: mesClasses,
           builder: (context,snapshot){
@@ -98,10 +113,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             )},
             tooltip: 'Gallerie',
-            backgroundColor: Colors.yellow,
-            child: const Icon(Icons.image,),
+            backgroundColor: Colors.orange,
+            child: const Icon(Icons.image,shadows: [Shadow(offset: Offset(1, 1), color: Colors.grey)],),
           ),
-          FloatingActionButton(
+          FloatingActionButton.extended(
             heroTag: "btn2",
             onPressed: ()=>{Navigator.push(
             context,
@@ -111,98 +126,26 @@ class _MyHomePageState extends State<MyHomePage> {
             transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
             ),
             )},
-            tooltip: 'Nouvelle classe',
+            label: Text(MediaQuery.of(context).size.aspectRatio<1?"":"Nouvelle classe"),
+            tooltip: 'Créer une nouvelle classe',
             backgroundColor: Colors.green,
-            child: const Icon(Icons.add,),
+            icon:const Icon(Icons.add,),
           ),
         ],
-      ))
+      )),
+      drawer: Menu(cestlaclasse),
     );
   }
 
-  alertAlaClasse(String classe) {
-    showDialog(
-      context: context,
-      builder:(BuildContext context) =>CupertinoAlertDialog(
-        title: Column(
-          children: <Widget>[
-            Text(classe),
-            const Icon(
-              Icons.directions_walk,
-            ),
-          ],
-        ),
-        content: const Text( "Où souhaitez vous allez?"),
-        actions: <Widget>[
-          CupertinoDialogAction(
-            textStyle: const TextStyle(color: Colors.blue),
-            child: const Text("Modifier la configuration"),
-            onPressed:()=>{Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => NouvelleClasse(classe: classe,),
-                  transitionDuration: const Duration(milliseconds: 500),
-                  transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-                ),
-              )},
-            ),
-          CupertinoDialogAction(
-            textStyle: const TextStyle(color: Colors.blue),
-            child: const Text("Liste des élèves"),
-            onPressed:()=>{Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => ListeEleves(classe: classe,),
-                transitionDuration: const Duration(milliseconds: 500),
-                transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-              ),
-            )},
-            ),
-          CupertinoDialogAction(
-            textStyle: const TextStyle(color: Colors.blue),
-            child: const Text("Paramètres du plan de classe"),
-            onPressed: () =>{
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => ParametrePlan(classe: classe,),
-                  transitionDuration: const Duration(milliseconds: 500),
-                  transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-                ),
-              )
-            },),
-          CupertinoDialogAction(
-            textStyle: const TextStyle(color: Colors.blue),
-            child: const Text("Gestion des élèves"),
-            onPressed:()=>{Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => GestionEleves(classe: classe,),
-                transitionDuration: const Duration(milliseconds: 500),
-                transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-              ),
-            )},
-          ),
-          CupertinoDialogAction(
-            textStyle: const TextStyle(color: Colors.blue),
-            child: const Text("Créer un plan de classe"),
-            onPressed:()=>{Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => AlgoContraignant(classe: classe,),
-                transitionDuration: const Duration(milliseconds: 500),
-                transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-              ),
-            )},
-          ),
-        ],
-      )
-    );
-  }
 
   Widget maBelleClasse(String classe){
     return GestureDetector(
-    onTap: ()=> alertAlaClasse(classe),
+    onTap: () {
+      setState(() {
+        cestlaclasse = classe;
+      });
+      _cleDeLechaffaud.currentState!.openDrawer();
+    },
     child:Padding(
       padding: const EdgeInsets.all(10),
       child: Container(
@@ -241,27 +184,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(5),
                 child: IconButton(
                   icon: const Icon(Icons.delete_forever),
-                  onPressed: (){suprClasse(classe);},
+                  onPressed: ()=>conf_supr(classe),
                 ),
               )),
         ],
       ))
-    ));
-  }
-
-  montreAmeliorations(){
-    return showDialog(
-      context: context,
-      builder:(BuildContext context) =>const CupertinoAlertDialog(
-      title: Column(
-      children: <Widget>[
-        Text("Avancement"),
-        Icon(
-          Icons.directions_walk,
-        ),
-      ],
-    ),
-    content: Text( "La gallerie n'a pas encore été implémentée.\nNous devons en effet encore ajouter la sauvegarde des plans de classe.\nSont aussi au programme l'ajout d'un placement des élève par zone dans la classe, ainsi qu'un tutoriel et un menu d'aide complet."),
     ));
   }
 
@@ -298,7 +225,32 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     const snackBar = SnackBar(content: Text('Supprimé !'),);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    Navigator.of(context).pop();
   }
+
+  conf_supr(String classe) {
+    return showCupertinoDialog(
+        context: context,
+        builder: (context) =>CupertinoAlertDialog(
+      title: const Text("Confirmation"),
+      content: const Text(
+          "Voulez vous vraiment supprimer cette classe?\nCette opération est irréversible."),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          isDestructiveAction: true,
+          isDefaultAction: true,
+          child: const Text("Supprimer"),
+          onPressed: ()=>suprClasse(classe),
+        ),
+        CupertinoDialogAction(
+          child: const Text("Fermer"),
+          onPressed: ()=>Navigator.of(context).pop(),
+          textStyle: const TextStyle(color: Colors.blue),
+        )
+      ],
+    ));
+  }
+
 }
 
 class ClassePinte extends CustomPainter{
@@ -331,4 +283,28 @@ class ClassePinte extends CustomPainter{
   bool shouldRepaint(covariant ClassePinte oldDelegate) {
     return configuration != oldDelegate.configuration;
   }
+
+  dialogons(BuildContext context, String titre, String message) {
+    Widget okButton = TextButton(
+      child: const Text("Fermer"),
+      onPressed: ()=> { Navigator.of(context).pop()},
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Text(titre),
+      content: Text(message),
+      actions: [
+        okButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+
 }

@@ -136,7 +136,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
                     );
                   }:null,
                   icon: const Icon(Icons.settings_input_composite_outlined),
-                  label: const Text("Paramétrer le plan de classe"),
+                  label: const Text("Suivant-paramètrage"),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                     backgroundColor: const Color(0xFF3086E8)
@@ -149,7 +149,8 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
                 return const Center(child: Text("Ajoutez vos élèves", textAlign: TextAlign.center,),);
               }else{
                 List<Widget> mesBeauxEleves = [];
-                for (MapEntry<String,String> eleve in snapshot.data!.entries){
+                Map<String,String> listeTriee = Map.fromEntries(snapshot.data!.entries.toList()..sort((e1, e2) => e2.key.compareTo(e1.key)));
+                for (MapEntry<String,String> eleve in listeTriee.entries){
                   mesBeauxEleves.add(profilEleve(eleve.key,eleve.value));
                 }
                 return ListView(
@@ -308,8 +309,9 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
                   width: 1000,
                   child:Padding(padding:const EdgeInsets.all(5),child: TextField(
                     controller: delimiteur,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.multiline,
                     maxLength: 5,
+                    maxLines: null,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'delimiteur',

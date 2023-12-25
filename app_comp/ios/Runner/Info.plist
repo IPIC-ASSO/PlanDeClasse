@@ -6,7 +6,8 @@
     <true/>
     <key>UIFileSharingEnabled</key>
     <true/>
-
+    <key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-9220805797747004~3728829159</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>

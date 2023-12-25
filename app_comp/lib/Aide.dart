@@ -138,7 +138,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                       child: Icon(Icons.import_export, size: 20, color: Colors.orange,),
                     ),
                     const TextSpan(
-                      text:". Vous pourrez alors coller votre liste, puis spécifier le délimiteur, le ou les caractères qui séparent vos élèves. Il est à noter que vous ne pouvez pas associer à ce moment de commentaire à vos élèves, mais vous pourrez le faire plus tard, sur la page «Gestion des élèves», ce qui est d'ailleurs la deuxième étape de la confguration de vos élèves."
+                      text:". Vous pourrez alors coller votre liste, puis spécifier le délimiteur, le ou les caractères qui séparent vos élèves. Il est à noter que vous ne pouvez pas associer à ce moment de commentaire à vos élèves, mais vous pourrez le faire plus tard, sur la page «Gestion des élèves», ce qui est d'ailleurs la deuxième étape de la configuration de vos élèves."
                     ),
                     const TextSpan(
                         style: TextStyle(fontWeight: FontWeight.w600),
@@ -170,7 +170,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                         text: "\nRemarques: "
                     ),
                     const TextSpan(
-                        text: "Il n'est pas nécessaire de configurer tous les élèves. Vous pouvez également définir la priorité de traitement de vos élèves pour que les contraintes qui s'appliquent sur eux soient respectées en priorité, ou alors les placer vous-même.\nLe placement manuel des élèves a priorité absolue sur tous les autres critères et sera toujours respecté. Le placement général (au fond ou devat) a un niveau de priorité directement inférieur, et l'importance des critères dépend ensuite de vos choix sur la page «Paramètres du plan de classe»."
+                        text: "Il n'est pas nécessaire de configurer tous les élèves. Vous pouvez également définir la priorité de traitement de vos élèves pour que les contraintes qui s'appliquent sur eux soient respectées en priorité, ou alors les placer vous-même.\nLe placement manuel des élèves a priorité absolue sur tous les autres critères et sera toujours respecté. Le placement général (au fond ou devant) a un niveau de priorité directement inférieur, et l'importance des critères dépend ensuite de vos choix sur la page «Paramètres du plan de classe»."
                     ),
                     const TextSpan(
                         style: TextStyle(fontWeight: FontWeight.w500, color: Colors.lightGreen),
@@ -234,14 +234,14 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                     text: "\nAstuce: "
                 ),
                 const TextSpan(
-                    text: "En cliquant sur les élèves, dans le plan de classe, vous pourrez voir pour chaque élèves quels critères ont joués dans son placement, et consulter le commentaire que vous aviez associé à votre élève."
+                    text: "En cliquant sur les élèves, dans le plan de classe, vous pourrez voir pour chaque élèves quels critères ont joué dans son placement, et consulter le commentaire que vous aviez associé à votre élève."
                 ),
                 const TextSpan(
                     style: TextStyle(fontWeight: FontWeight.w800),
                     text: "\n\nEt pour finir "
                 ),
                 const TextSpan(
-                    text: "vous avez maintenant un plan de classe. Pour pouvoir le consulter à loisir, vous pouvez l'enregistrer sous forme d'image. Il ira droit dans vos téléchargement, dans un dossier appelé «plan de classe». \nVous pouvez également consulter tous les plans de classe enregistrés depuis la gallerie, bouton jaune sur l'écran d'accueil. "
+                    text: "vous avez maintenant un plan de classe. Pour pouvoir le consulter à loisir, vous pouvez l'enregistrer sous forme d'image. Il ira droit dans vos téléchargements, dans un dossier appelé «plan de classe». \nVous pouvez également consulter tous les plans de classe enregistrés depuis la gallerie, bouton jaune sur l'écran d'accueil. "
                 ),
                 const WidgetSpan(
                   child: Icon(Icons.image, size: 20, color: Colors.yellow,),

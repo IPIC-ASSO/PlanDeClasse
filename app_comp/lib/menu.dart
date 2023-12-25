@@ -1,4 +1,7 @@
 
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +11,7 @@ import 'package:plan_de_classe/gestionEleves.dart';
 import 'package:plan_de_classe/listeEleves.dart';
 import 'package:plan_de_classe/nouvelleClasse.dart';
 import 'package:plan_de_classe/parametresPlan.dart';
+import 'package:plan_de_classe/usineDeBiscottesGrillees.dart';
 import 'package:plan_de_classe/visionneuse.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'main.dart';
@@ -24,12 +28,13 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
+
   static const _menuTitles = [
     'Modifier la configuration',
     'Liste des élèves',
     'Paramètres du plan de classe',
     'Gestion des élèves',
-    'Calculer un plan de classe',
+    'Générer un plan de classe',
     'Aide',
   ];
   static const _iconMenu = [
@@ -370,7 +375,7 @@ montrePropos(BuildContext context, [indicePage=0]){
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
             child: ListTile(
               leading: const Icon(
-                Icons.sos_sharp,
+                Icons.support,
                 color: Colors.red,
               ),
               title: const Text(
@@ -396,7 +401,7 @@ montrePropos(BuildContext context, [indicePage=0]){
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
             child: ListTile(
               leading: const Icon(
-                Icons.card_giftcard,
+                Icons.network_ping_rounded,
                 color: Colors.green,
               ),
               title: const Text(
@@ -407,6 +412,37 @@ montrePropos(BuildContext context, [indicePage=0]){
                   )),
               onTap: () {
                 montreCodeBonus(context);
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+            child: ListTile(
+              leading: const Icon(
+                Icons.card_giftcard,
+                color: Colors.green,
+              ),
+              title: const Text(
+                  "Nous soutenir",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  )),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder:(BuildContext context) =>const CupertinoAlertDialog(
+                      title: Column(
+                        children: <Widget>[
+                          Text("Merci"),
+                          Icon(
+                            Icons.apartment,
+                          ),
+                        ],
+                      ),
+                      content: Text( "Nous sommes heureux de pouvoir compter sur votre soutiens :.)"),
+                    ));
+                //pub.loadAd();
               },
             ),
           ),
@@ -436,6 +472,8 @@ montrePropos(BuildContext context, [indicePage=0]){
       ))
   );
 }
+
+
 
 montreCodeBonus(context) {
   Navigator.of(context).pop();
@@ -472,4 +510,33 @@ montreCodeBonus(context) {
       ],
         );})
   );
+}
+
+
+class pub{
+
+  static final adUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/5224354917'
+      : 'ca-app-pub-3940256099942544/1712485313';
+
+  static void loadAd() {
+    /*RewardedAd.load(
+        adUnitId: adUnitId,
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          // Called when an ad is successfully received.
+          onAdLoaded: (ad) {
+            debugPrint('$ad loaded.');
+            // Keep a reference to the ad so you can show it later.
+            ad.show(onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
+              // Reward the user for watching an ad.
+            });
+
+          },
+          // Called when an ad request failed.
+          onAdFailedToLoad: (LoadAdError error) {
+            debugPrint('RewardedAd failed to load: $error');
+          },
+        ));*/
+  }
 }
