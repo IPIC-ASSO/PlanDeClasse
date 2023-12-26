@@ -1,11 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:plan_de_classe/AlgoContraignant.dart';
-import 'package:plan_de_classe/gestionEleves.dart';
-import 'package:plan_de_classe/listeEleves.dart';
 import 'package:plan_de_classe/menu.dart';
-import 'package:plan_de_classe/parametresPlan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 import 'dart:math';
@@ -14,14 +12,14 @@ import 'nouvelleClasse.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //MobileAds.instance.initialize();
-  await windowManager.ensureInitialized();
+  //await MobileAds.instance.initialize();
+  /*await windowManager.ensureInitialized();
   windowManager.waitUntilReadyToShow().then((_) async {
     await windowManager.maximize();
     await windowManager.center();
     await windowManager.show();
     await windowManager.setSkipTaskbar(false);
-  });
+  });*/
   runApp(const MyApp());
 }
 

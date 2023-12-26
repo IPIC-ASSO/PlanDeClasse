@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:plan_de_classe/listeEleves.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -121,8 +123,8 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
       Expanded(child:
         ListView(
         children: [
-        const Padding(padding: EdgeInsets.all(8), child:
-          Text("Cochez les case correspondant aux tables (les couloirs sont matérialisés par des places vides)", textAlign: TextAlign.center,),),
+         Padding(padding: EdgeInsets.all(8), child:
+          Text("Cochez les case correspondant aux tables (les couloirs sont matérialisés par des places vides) ${Platform.isAndroid || Platform.isIOS?"\nUtilisez deux doigts pour vous déplacer dans la classe ":" "}", textAlign: TextAlign.center,),),
           Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(child:Scrollbar(

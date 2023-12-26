@@ -103,7 +103,6 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
                 }else{
                   return const Center(child: Text("Auncun plan enregistré"),);
                 }
-                  
               }else{
                 return const Center(child: CircularProgressIndicator(),);
               }

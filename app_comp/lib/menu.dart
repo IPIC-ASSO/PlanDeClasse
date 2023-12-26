@@ -11,7 +11,6 @@ import 'package:plan_de_classe/gestionEleves.dart';
 import 'package:plan_de_classe/listeEleves.dart';
 import 'package:plan_de_classe/nouvelleClasse.dart';
 import 'package:plan_de_classe/parametresPlan.dart';
-import 'package:plan_de_classe/usineDeBiscottesGrillees.dart';
 import 'package:plan_de_classe/visionneuse.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'main.dart';
@@ -357,7 +356,7 @@ Widget Apropos(BuildContext context){
     ),
     applicationIcon: Tab(icon: Image.asset("assets/images/IPIC_logo_petit.png",width: 40,)),
     applicationName: 'Plan de Classe',
-    applicationVersion: '2.1.7',
+    applicationVersion: '2.1.9',
     applicationLegalese: '© 2023 IPIC-ASSO',
     aboutBoxChildren: aboutBoxChildren,
     child: const Text('A propos'),
