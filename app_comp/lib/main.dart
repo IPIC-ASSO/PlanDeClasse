@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +33,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Plan De Classe',
       theme: ThemeData(
+        useMaterial3: false,
         primarySwatch: Colors.red,
       ),
       home: const MyHomePage(),
@@ -50,7 +50,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  final GlobalKey<ScaffoldState> _cleDeLechaffaud = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _cleDeLechaffaud = GlobalKey<ScaffoldState>();
   Map<String, String> commentaires = {};
   Map<String, List<int>> configurations = {};
   Map<String, int> nbEleves = {};

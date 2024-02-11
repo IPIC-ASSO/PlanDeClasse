@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ class Aide extends StatefulWidget {
 
   final pageDepart;
 
-  Aide({super.key, this.pageDepart = 0});
+  const Aide({super.key, this.pageDepart = 0});
 
   @override
   State<Aide> createState() => _AideState();
@@ -35,7 +34,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
           controller: controleTable,
           tabs: const [
             Tab(icon: Icon(Icons.outdoor_grill), child:Text("Général",textAlign: TextAlign.center,)),
-            Tab(icon: Icon(Icons.move_down), child:Text("Configuration de la Classe",textAlign: TextAlign.center,)),
+            Tab(icon: Icon(Icons.move_down), child:Text("Configuration de la classe",textAlign: TextAlign.center,)),
             Tab(icon: Icon(Icons.manage_accounts_outlined), child:Text("Configuration des élèves",textAlign: TextAlign.center,)),
             Tab(icon: Icon(Icons.settings_input_composite_outlined), child:Text("Configuration du plan",textAlign: TextAlign.center,)),
             Tab(icon: Icon(Icons.deblur_rounded), text:"Avancé"),
@@ -125,7 +124,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                         text: "\n\nPour s'y retrouver: "
                     ),
                     const TextSpan(
-                        text: "vous pouver ajouter un commentaire à chaque élève, une petite note qui le caractérise. Ce commentaire ne sera pas pris en compte lors de la création du plan de classe, et reste facultatif."
+                        text: "vous pouver ajouter un commentaire à chaque élève, une petite note qui le caractérise. Ce commentaire ne sera pas pris en compte lors de la création du plan de classe et reste facultatif."
                     ),
                     const TextSpan(
                         style: TextStyle(fontWeight: FontWeight.w500, color: Colors.lightGreen),
@@ -152,7 +151,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                         text: "3 élèves "
                     ),
                     const TextSpan(
-                        text: "pour pouvoir créer un plan de classe. Pour configurer un élèves, cliquez dessus, et, en fonction des critères que vous aurez définis sur la page "
+                        text: "pour pouvoir créer un plan de classe. Pour configurer un élève, cliquez dessus, et, en fonction des critères que vous aurez définis sur la page "
                     ),
                     TextSpan(
                       text: 'Paramètres du plan de classe',
@@ -177,7 +176,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                         text: "\nAstuce: "
                     ),
                     const TextSpan(
-                        text: "Une petite pastille de couleur s'affiche a côté du nom de l'élève lorsque vous remplissez ses caractéristiques. Un élève que vous avez défini comme ayant un bon niveau ou étant calme aura une pastille verte, et à l'inverse un élève agité et/ou en difficultés aura une pastille rouge."
+                        text: "Une petite pastille de couleur s'affiche à côté du nom de l'élève lorsque vous remplissez ses caractéristiques. Un élève que vous avez défini comme ayant un bon niveau ou étant calme aura une pastille verte, et à l'inverse un élève agité et/ou en difficultés aura une pastille rouge."
                     ),
                   ]
               )
@@ -213,7 +212,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                     },
                 ),
                 const TextSpan(
-                    text: " alors vous pouvez générer un plan de classe.\nEn arrivant sur la page «Calculer un plan de classe», l'application génère rapidement un plan, et vous propose jusqu'à 10 variantes.\nL'application va analyser différentes configuration et retenir celles qui correspondent le mieux aux contraintes. \nIl est possible de choisir le temps de calcule, de 5 secondes (par défaut) à 1 minutes. Plus vous donnerez de temps à l'application, plus les propositions de plan de classe seront pertinentes."
+                    text: " alors vous pouvez générer un plan de classe.\nEn arrivant sur la page «Calculer un plan de classe», l'application génère rapidement un plan, et vous propose jusqu'à 10 variantes.\nL'application va analyser différentes configuration et retenir celles qui correspondent le mieux aux contraintes. \nIl est possible de choisir le temps de calcul, de 5 secondes (par défaut) à 1 minute. Plus vous donnerez de temps à l'application, plus les propositions de plan de classe seront pertinentes."
                 ),
                 const TextSpan(
                     style: TextStyle(fontWeight: FontWeight.w500, color: Colors.lightGreen),
@@ -227,21 +226,21 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                     text: "\nRemarque:"
                 ),
                 const TextSpan(
-                    text: "Pour une plus grande efficacité, l'algorithme de génération de plan de classe utilise une part d'aléatoire: en effet, tester toutes les combinaisons possible n'est pas envisageable: on aurait alors une complexité supérieur à O(n!). Cela explique donc que, dans des conditions similaires, l'application ne vous proposera peut-être pas des plans de classe tout à fait identiques."
+                    text: "Pour une plus grande efficacité, l'algorithme de génération de plan de classe utilise une part d'aléatoire: en effet, tester toutes les combinaisons possible n'est pas envisageable: on aurait alors une complexité supérieure à O(n!). Cela explique donc que, dans des conditions similaires, l'application ne vous proposera peut-être pas des plans de classe tout à fait identiques."
                 ),
                 const TextSpan(
                     style: TextStyle(fontWeight: FontWeight.w500, color: Colors.lightGreen),
                     text: "\nAstuce: "
                 ),
                 const TextSpan(
-                    text: "En cliquant sur les élèves, dans le plan de classe, vous pourrez voir pour chaque élèves quels critères ont joué dans son placement, et consulter le commentaire que vous aviez associé à votre élève."
+                    text: "En cliquant sur les élèves, dans le plan de classe, vous pourrez voir pour chaque élève quels critères ont joué dans son placement, et consulter le commentaire que vous aviez associé à votre élève."
                 ),
                 const TextSpan(
                     style: TextStyle(fontWeight: FontWeight.w800),
                     text: "\n\nEt pour finir "
                 ),
                 const TextSpan(
-                    text: "vous avez maintenant un plan de classe. Pour pouvoir le consulter à loisir, vous pouvez l'enregistrer sous forme d'image. Il ira droit dans vos téléchargements, dans un dossier appelé «plan de classe». \nVous pouvez également consulter tous les plans de classe enregistrés depuis la gallerie, bouton jaune sur l'écran d'accueil. "
+                    text: "vous avez maintenant un plan de classe. Pour pouvoir le consulter à loisir, vous pouvez l'enregistrer sous forme d'image. Il ira droit dans vos téléchargements, dans un dossier appelé «plan de classe». \nVous pouvez également consulter tous les plans de classe enregistrés depuis la gallerie, bouton orange sur l'écran d'accueil. "
                 ),
                 const WidgetSpan(
                   child: Icon(Icons.image, size: 20, color: Colors.yellow,),
@@ -266,14 +265,14 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                     text: "\nQue signifie le pourcentage de correspondance?"
                 ),
                 TextSpan(
-                    text: "\nIl s'agit d'un indicateur du nombre de contraintes respectées.\nIl n'est en effet pas toujours possible de satisfaire toutes les contraintes, c'est pourquoi cet indicateur peut ne pas être à 100%.\nIl ne descendra également pas en dessous de 10%, niveau auquel le plan de classe a perdu beaucoup de sa pertinence au regard du nombre de contraintes non respectées.\nIl est à noter que le critère «Affinités inclusive» est comptabilisé d'une manière particulière sur l'indicateur: si deux élèves n'ont pas pu être rapproché, l'indicateur ne le prendra pas en compte, mais si deux élèves ont pu être rapprochés, il le comptera positivement (il est ainsi possible d'atteindre les 100% en ayant certaines contraites non satisfaites)."
+                    text: "\nIl s'agit d'un indicateur du nombre de contraintes respectées.\nIl n'est en effet pas toujours possible de satisfaire toutes les contraintes, c'est pourquoi cet indicateur peut ne pas être à 100%.\nIl ne descendra également pas en dessous de 10%, niveau auquel le plan de classe a perdu beaucoup de sa pertinence au regard du nombre de contraintes non respectées.\nIl est à noter que le critère «Affinités inclusive» est comptabilisé d'une manière particulière sur l'indicateur: si deux élèves n'ont pas pu être rapproché, l'indicateur ne le prendra pas en compte, mais si deux élèves ont pu être rapprochés, il le comptera positivement (il est ainsi possible d'atteindre les 100% en ayant certaines contraintes non satisfaites)."
                 ),
                 TextSpan(
                     style: TextStyle(fontWeight: FontWeight.w600),
                     text: "\n\nConcrètement, comment fonctionne l'algorithme?"
                 ),
                 TextSpan(
-                    text: "\nL'algorithme fonctionne de manière séquenciel et récursive: Tout d'abord, il trie les élèves en fonctions de leur priorité de traitement, puis du nombre de contraintes qui s'appliquent sur eux. Ensuite, pour chaque élève, il évalue quelle place serait la plus intéressante (la place où le plus de contraintes seraient respectées), place l'élève, et place de la même manière le suivant, en tenant compte du placement du précédent, et ainsi de suite.\nLorsque plusieurs chois sont possibles, l'algorithme choisit aléatoirement le placement de l'élèves entre les places les plus intéressantes."
+                    text: "\nL'algorithme fonctionne de manière séquencielle récursive: Tout d'abord, il trie les élèves en fonction de leur priorité de traitement, puis du nombre de contraintes qui s'appliquent sur eux. Ensuite, pour chaque élève, il évalue quelle place serait la plus intéressante (la place où le plus de contraintes seraient respectées), place l'élève, et place de la même manière le suivant, en tenant compte du placement du précédent, et ainsi de suite.\nLorsque plusieurs choix sont possibles, l'algorithme choisit aléatoirement le placement de l'élève parmi les places les plus intéressantes."
                 ),
                 TextSpan(
                     style: TextStyle(fontWeight: FontWeight.w600),

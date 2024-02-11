@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:plan_de_classe/gestionEleves.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,10 +79,10 @@ class _ParametrePlanState extends State<ParametrePlan> {
                     onTap: ()=>{
                       dialogons(context, "Affinités (éloigner)", "Correspond aux élèves qui devront être éloignés")
                     },
-                    shape: Border(
+                    shape: const Border(
                       bottom: BorderSide(color: Colors.black, width: 1),
                     ),
-                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    trailing: const Icon(Icons.info_outline, color: Colors.black,),
                     title: const Text("Affinités (éloigner)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
@@ -118,10 +117,10 @@ class _ParametrePlanState extends State<ParametrePlan> {
                     onTap: ()=>{
                       dialogons(context, "Affinités (rapprocher)", "Correspond aux élèves qui devront être réunis")
                     },
-                    shape: Border(
+                    shape: const Border(
                       bottom: BorderSide(color: Colors.black, width: 1),
                     ),
-                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    trailing: const Icon(Icons.info_outline, color: Colors.black,),
                     title: const Text("Affinités (rapprocher)", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
@@ -192,10 +191,10 @@ class _ParametrePlanState extends State<ParametrePlan> {
                     onTap: ()=>{
                       dialogons(context, "Taille", "Le plan prendra en compte la taille des élèves, pour placer les plus petits devant et les plus grands derrière.")
                     },
-                    shape: Border(
+                    shape: const Border(
                       bottom: BorderSide(color: Colors.black, width: 1),
                     ),
-                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    trailing: const Icon(Icons.info_outline, color: Colors.black,),
                     title: const Text("Taille", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
@@ -230,10 +229,10 @@ class _ParametrePlanState extends State<ParametrePlan> {
                     onTap: ()=>{
                       dialogons(context, "Alternance filles/garçons", "Le plan présentera une alternance de filles et garçons sur chaque rang.")
                     },
-                    shape: Border(
+                    shape: const Border(
                       bottom: BorderSide(color: Colors.black, width: 1),
                     ),
-                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    trailing: const Icon(Icons.info_outline, color: Colors.black,),
                     title: const Text("Alternance filles/garçons", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
@@ -268,10 +267,10 @@ class _ParametrePlanState extends State<ParametrePlan> {
                     onTap: ()=>{
                       dialogons(context, "Alternance agités/calmes", "Le plan associera les élèves calmes et agités, pour que ces derniers soient moins bavards, du fait de leur voisin calme.")
                     },
-                    shape: Border(
+                    shape: const Border(
                       bottom: BorderSide(color: Colors.black, width: 1),
                     ),
-                    trailing: Icon(Icons.info_outline, color: Colors.black,),
+                    trailing: const Icon(Icons.info_outline, color: Colors.black,),
                     title: const Text("Alternance agités/calmes", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
                   ),
                 ),
@@ -306,8 +305,8 @@ class _ParametrePlanState extends State<ParametrePlan> {
                     onTap: ()=>{
                       dialogons(context, "Alternance Fort/En difficulté", "Le plan associera les élèves en difficultés avec ceux qui sont le plus à l'aise")
                     },
-                    trailing: Icon(Icons.info_outline, color: Colors.black,weight: 1),
-                    shape: Border(
+                    trailing: const Icon(Icons.info_outline, color: Colors.black,weight: 1),
+                    shape: const Border(
                       bottom: BorderSide(color: Colors.black, width: 1),
                     ),
                     title: const Text("Alternance Fort/En difficulté", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
@@ -344,8 +343,8 @@ class _ParametrePlanState extends State<ParametrePlan> {
                     onTap: ()=>{
                       dialogons(context, "Ordre alphabétique", "Les élèves seront classés par ordre alphabétique.")
                     },
-                    trailing: Icon(Icons.info_outline, color: Colors.black,),
-                    shape: Border(
+                    trailing: const Icon(Icons.info_outline, color: Colors.black,),
+                    shape: const Border(
                       bottom: BorderSide(color: Colors.black, width: 1),
                     ),
                     title: const Text("Ordre alphabétique", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),

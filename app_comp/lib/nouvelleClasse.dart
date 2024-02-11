@@ -22,10 +22,24 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
   TextEditingController colonnes = TextEditingController();
   TextEditingController rangees = TextEditingController();
   TextEditingController commentaires = TextEditingController();
+  final GlobalKey<TooltipState> cleDerangee = GlobalKey<TooltipState>();
+  final GlobalKey<TooltipState> cleDecolonnes = GlobalKey<TooltipState>();
+  late FocusNode foyerDeranger;
+  late FocusNode foyerDeColonnes;
+
   @override
   void initState() {
     super.initState();
     initInfosClasse();
+    foyerDeranger = FocusNode();
+    foyerDeColonnes = FocusNode();
+  }
+
+  @override
+  void dispose(){
+    foyerDeColonnes.dispose();
+    foyerDeranger.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,28 +72,45 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
                 Flexible(flex: 1,child:
                 SizedBox(
                     width: 1000,
-                    child:Padding(padding:const EdgeInsets.only(right: 4),child: TextField(
-                      controller: rangees,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Rangées',
-                      ),
-                    ))
+                    child:Padding(padding:const EdgeInsets.only(right: 4),child: Tooltip(
+                      message: "Maximum 10",
+                      key: cleDerangee,
+                      showDuration: Duration(seconds: 5),
+                      decoration: BoxDecoration(color: Colors.red,borderRadius: BorderRadius.circular(10),),
+                      preferBelow: false,
+                      child:TextField(
+                        focusNode: foyerDeranger,
+                        controller: rangees,
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Rangées',
+                        ),
+                        onChanged: (txt){
+                          Tooltip.dismissAllToolTips();
+                        },
+                      )))
                 ), ),
                 Flexible(flex: 1,child:
                 SizedBox(
                     width: 1000,
-                    child:Padding(padding:const EdgeInsets.only(right: 4),child: TextField(
-                      controller: colonnes,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Colonnes',
-                      ),
-                    ))
+                    child:Padding(padding:const EdgeInsets.only(right: 4),child: Tooltip(
+                        message: "Maximum 20",
+                        key: cleDecolonnes,
+                        showDuration: Duration(seconds: 5),
+                        decoration: BoxDecoration(color: Colors.red,borderRadius: BorderRadius.circular(10),),
+                        preferBelow: false,
+                        child:TextField(
+                          focusNode: foyerDeColonnes,
+                          controller: colonnes,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Colonnes',
+                          ),
+                      )))
                 ), ),
               ]
             ),),
@@ -97,8 +128,16 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
             ElevatedButton(
               onPressed: (){
                 if(nomClasse.text.isNotEmpty && rangees.text.isNotEmpty && colonnes.text.isNotEmpty && isNumeric(rangees.text) && isNumeric(colonnes.text)){
-                  Navigator.push(context,
-                  PageRouteBuilder(
+                  if(int.parse(rangees.text)>10) {
+                    cleDerangee.currentState?.ensureTooltipVisible();
+                    foyerDeranger.requestFocus();
+                  }
+                  else if(int.parse(colonnes.text)>20) {
+                    cleDecolonnes.currentState?.ensureTooltipVisible();
+                    foyerDeColonnes.requestFocus();
+                  }
+                  else Navigator.push(context,
+                   PageRouteBuilder(
                     pageBuilder: (_, __, ___) => ConfigClasse(rangees: int.parse(rangees.text), colonnes: int.parse(colonnes.text), nomClasse: nomClasse.text, commentaire: commentaires.text,),
                     transitionDuration: const Duration(milliseconds: 500),
                     transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
@@ -134,7 +173,7 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
     if(s == null) {
       return false;
     }
-    return double.tryParse(s) != null;
+    return int.tryParse(s) != null;
   }
 
 }

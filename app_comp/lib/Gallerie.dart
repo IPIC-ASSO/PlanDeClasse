@@ -81,7 +81,7 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
                                           onTap: (){
                                             Navigator.of(context).pop();
                                           },
-                                          child: Align(
+                                          child: const Align(
                                             alignment: Alignment.topRight,
                                             child: CircleAvatar(
                                               radius: 18.0,

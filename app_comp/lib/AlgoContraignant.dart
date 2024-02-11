@@ -378,7 +378,6 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
       else{affiniteElevesI.add([]);}
     }
     datum.nomsEleves = nomsEleves;
-    print("noms elèves: ${datum.nomsEleves}");
     datum.indiceEleves = indiceEleves;
     return datum;
   }
@@ -416,7 +415,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
         if (nomEnnemi.isNotEmpty && !affiniteElevesE[nomsEleves.indexOf(nomEnnemi)].contains(nomDeEleve))affiniteElevesE[nomsEleves.indexOf(nomEnnemi)].add(nomDeEleve);
         if(nomEnnemi.isNotEmpty && affiniteElevesI[nomsEleves.indexOf(nomEnnemi)].contains(nomDeEleve)){
           affiniteElevesI[nomsEleves.indexOf(nomEnnemi)].remove(nomDeEleve);
-          print("DONNEES CONTRADICTOIRES pour $nomDeEleve et $nomEnnemi");
+          dev.log("DONNEES CONTRADICTOIRES pour $nomDeEleve et $nomEnnemi");
         }
       }
       for(String nomAmi in affiniteElevesI[indiceEleve]){
@@ -546,7 +545,7 @@ Future<bool> arbreQuiGrandit2(List<dynamic> args) async {
   monDatumDeClasse.listeElevesTriee = trieEleves(monDatumDeClasse);
   Function eg = const ListEquality().equals;
   int compteur = 0;
-  while(DateTime.now().difference(monDatumDeClasse.tempsDebut).inMilliseconds<monDatumDeClasse.tempsTotalMilli || monDatumDeClasse.plansEnregistres.length<1){//!!!!!!!!
+  while(DateTime.now().difference(monDatumDeClasse.tempsDebut).inMilliseconds<monDatumDeClasse.tempsTotalMilli || monDatumDeClasse.plansEnregistres.isEmpty){//!!!!!!!!
     monDatumDeClasse.placesOccupees = List<int>.from(monDatumDeClasse.placesOccupeesDebase);
     monDatumDeClasse.contrainteAct = 0;
     await placeEleve(monDatumDeClasse,0);
@@ -601,8 +600,6 @@ List<int> trieEleves(DatumDeClasse datum) {
   listeElevesTriee.addAll(trieParvaleur_prio.keys.toList());
   listeElevesTriee.addAll(trieParvaleur_imp.keys.toList());
   listeElevesTriee.addAll(trieParvaleur_parias.keys.toList());
-  print("listeElèves triés: $listeElevesTriee");
-  print("noms élèves: ${datum.nomsEleves}");
   return listeElevesTriee;
 }
 

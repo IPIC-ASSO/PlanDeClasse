@@ -123,7 +123,7 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
       Expanded(child:
         ListView(
         children: [
-         Padding(padding: EdgeInsets.all(8), child:
+         Padding(padding: const EdgeInsets.all(8), child:
           Text("Cochez les case correspondant aux tables (les couloirs sont matérialisés par des places vides) ${Platform.isAndroid || Platform.isIOS?"\nUtilisez deux doigts pour vous déplacer dans la classe ":" "}", textAlign: TextAlign.center,),),
           Padding(
               padding: const EdgeInsets.all(8.0),
@@ -140,7 +140,7 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
                     )),))
           ),
           Padding(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             child:ElevatedButton.icon(
               onPressed: ()=>enregistreConfig(),
               label: const Text('Enregistrer'),
@@ -191,8 +191,6 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
       child: GridTile(
         key: gridItemKey,
         child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 0.5)),
           child: Center(
             child: _buildGridItem(index),
           ),
