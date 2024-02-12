@@ -510,6 +510,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
           dir = (await getApplicationDocumentsDirectory());
         }else dir = (await getDownloadsDirectory())!;
         final imagePath = await File('${dir.path}/plans de classe/${nomImage.text}.png').create(recursive: true);
+        print(imagePath);
         await imagePath.writeAsBytes(image!);
         Navigator.of(context).pop();
         Usine.montreBiscotte(context, 'Enregistré dans les téléchargements, dans le dossier "plan de classe"',this, true);

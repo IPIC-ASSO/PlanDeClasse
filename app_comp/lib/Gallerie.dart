@@ -101,7 +101,7 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
                       itemCount: snapshot.data!.length,
                       );
                 }else{
-                  return const Center(child: Text("Auncun plan enregistré"),);
+                  return const Center(child: Text("Aucun plan enregistré"),);
                 }
               }else{
                 return const Center(child: CircularProgressIndicator(),);

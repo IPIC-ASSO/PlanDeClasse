@@ -124,7 +124,7 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
         ListView(
         children: [
          Padding(padding: const EdgeInsets.all(8), child:
-          Text("Cochez les case correspondant aux tables (les couloirs sont matérialisés par des places vides) ${Platform.isAndroid || Platform.isIOS?"\nUtilisez deux doigts pour vous déplacer dans la classe ":" "}", textAlign: TextAlign.center,),),
+          Text("Cochez les case correspondant aux tables (les couloirs sont matérialisés par des places vides) ${Platform.isAndroid || Platform.isIOS?"\nUtilisez deux doigts pour vous déplacer dans la classe ":" "}", textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),
           Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(child:Scrollbar(
