@@ -342,7 +342,7 @@ Widget Apropos(BuildContext context){
             style: const TextStyle(color: Colors.blue),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launchUrl(Uri.parse('https://docs.google.com/document/d/1kTMenkjTUlw1MRtu1DvRtNy4tIO3w0Q_QVbl1E-GM5c/edit?usp=sharing'));
+                launchUrl(Uri.parse('https://www.ipic-asso.fr/politique-confidentialite/PdC/planDeClasse.html'));
               },
           ),
         ],
