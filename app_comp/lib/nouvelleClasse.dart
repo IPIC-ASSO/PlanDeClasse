@@ -26,6 +26,7 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
   final GlobalKey<TooltipState> cleDecolonnes = GlobalKey<TooltipState>();
   late FocusNode foyerDeranger;
   late FocusNode foyerDeColonnes;
+  bool bloqueNom = true;
 
   @override
   void initState() {
@@ -59,6 +60,7 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
               padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
               child:TextField(
                 controller: nomClasse,
+                enabled: bloqueNom,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Nom de la classe',
@@ -166,6 +168,9 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
       List<int> configPI = configPS.map((e) => int.parse(e)).toList();
       colonnes.text = configPI.last.toString();
       rangees.text = ((configPI.length-1)~/configPI.last).toString();
+      setState(() {
+        bloqueNom=false;
+      });
     }
   }
 
@@ -175,5 +180,4 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
     }
     return int.tryParse(s) != null;
   }
-
 }

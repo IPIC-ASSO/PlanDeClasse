@@ -139,6 +139,7 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
                       children: construitGrille(widget.colonnes, widget.rangees, config),
                     )),))
           ),
+          Image.asset("assets/creation_animation.gif"),
           Padding(
             padding: const EdgeInsets.all(15),
             child:ElevatedButton.icon(

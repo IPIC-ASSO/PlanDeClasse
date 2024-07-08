@@ -125,52 +125,26 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
             padding: EdgeInsets.all(15),
             child:Text("Génération d'un plan de classe", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20), textAlign: TextAlign.center,)
           ),
-          const Padding(
-            padding: EdgeInsets.all(15),
-            child:Text("Choisissez le temps de calcul: un temps plus long donnera une configuration plus optimale", style: TextStyle( fontSize: 16), textAlign: TextAlign.center,),
-          ),
-          Padding(padding: const EdgeInsets.symmetric(vertical: 15,horizontal:5),child:Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children:[
-              const Column(children: [
-                Icon(Icons.shutter_speed),
-                Text("Rapide", style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic),),
-              ],),
-              SizedBox(width:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width/2:MediaQuery.of(context).size.width*0.7,
-                  child:Slider(
-                    value: tempsCamcule.toDouble(),
-                    min:5,
-                    max:60,
-                    divisions: 11,
-                    label: "$tempsCamcule secondes",
-                    onChanged: (value){
-                      setState(() {
-                        tempsCamcule = value.toInt();
-                      });
-                    },
-                  )
-              ),
-              const Column(children: [
-                Icon(Icons.self_improvement),
-                Text("Optimal",style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),)
-              ],)
-
-            ]
-          ),),
-
           FutureBuilder(
             future: pret,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData && snapshot.data == true) {
+                print(reussiteVariante);
+
                 return Padding(
                   padding: const EdgeInsets.all(5),
                   child:Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
+                    Padding(
+                  padding: MediaQuery.of(context).size.aspectRatio>1?const EdgeInsets.symmetric(vertical: 5,horizontal: 20):const EdgeInsets.symmetric(vertical:5,horizontal:5),child:
+                ElevatedButton.icon(onPressed: ()async{tempsCamcule= await montreTempsCalcul()??10;}, style: ElevatedButton.styleFrom(
+                  minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
+                  padding: const EdgeInsets.all(15),
+                  backgroundColor: Colors.blue), icon:const Icon(Icons.loop),label: const Text("Recalculer"))),
                     Padding(padding: const EdgeInsets.all(15),child:
                       SizedBox(width:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width/2:MediaQuery.of(context).size.width*0.9,
-                      child:LinearProgressIndicator(value: max(100-reussiteVariante[variante],10),color: [Colors.green,Colors.lightGreenAccent,Colors.orange,Colors.red][min(reussiteVariante[variante]~/25,3)],))),
+                      child:LinearProgressIndicator(value: max(100-reussiteVariante[variante],10),color: [Colors.green,Colors.lightGreenAccent,Colors.orange,Colors.red][min(max(reussiteVariante[variante],0)~/25,3)],))),
 
                     Scrollbar(
                       thumbVisibility: true,
@@ -181,7 +155,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                           child:Screenshot(
                               controller: conduiteDeTir,
                               child:Table(
-                            defaultColumnWidth: FixedColumnWidth(MediaQuery.of(context).size.aspectRatio>1?100:MediaQuery.of(context).size.width/5),
+                            defaultColumnWidth: FixedColumnWidth(MediaQuery.of(context).size.aspectRatio>1?150:MediaQuery.of(context).size.width/4),
                             children: construitGrilleDeChange(setState, planEnregsitres[variante]),
                           )),),),
                     Padding(padding: const EdgeInsets.all(15),child: Text("Correspondance: ${max(min(100-reussiteVariante[variante],100),10).toStringAsFixed(2)}% \n$possibilites configurations évaluées\nVariante ${variante + 1}/${planEnregsitres.length}", textAlign: TextAlign.center,)),
@@ -212,12 +186,11 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                                         style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10),)
                                     ))))
                       ],),
-                    Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(flex:1,child:Padding(padding: MediaQuery.of(context).size.aspectRatio>1?const EdgeInsets.symmetric(vertical: 5,horizontal: 20):const EdgeInsets.symmetric(vertical:5,horizontal:5),child:ElevatedButton.icon(onPressed: ()=>{recalcule()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.loop),label: const Text("Recalculer")))),
-                      Expanded(flex:1,child:Padding(padding: MediaQuery.of(context).size.aspectRatio>1?const EdgeInsets.symmetric(vertical: 5,horizontal: 20):const EdgeInsets.symmetric(vertical:5,horizontal:5),child:ElevatedButton.icon(onPressed: ()=>{versEleves()}, style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(10), backgroundColor: Colors.blue), icon:const Icon(Icons.manage_accounts),label: const Text("Modifier les élèves")))),
-                    ]),
+                    Padding(padding: MediaQuery.of(context).size.aspectRatio>1?const EdgeInsets.symmetric(vertical: 5,horizontal: 20):const EdgeInsets.symmetric(vertical:5,horizontal:5),child:ElevatedButton.icon(onPressed: ()=>{versEleves()}, style: ElevatedButton.styleFrom(
+              minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
+              padding: const EdgeInsets.all(15),
+              backgroundColor: Colors.blue), icon:const Icon(Icons.manage_accounts),label: const Text("Modifier les élèves"))),
+
                     Padding(
                       padding: const EdgeInsets.all(5),child:
                         ElevatedButton.icon(
@@ -339,6 +312,71 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
         });
   }
 
+  Future<int?> montreTempsCalcul() async {
+    return showDialog<int?>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        int _temps = tempsCamcule;
+        return AlertDialog(
+          title: const Text('Temps de calcul'),
+          content:  StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+        return SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.all(15),
+                  child:Text("Choisissez le temps de calcul: un temps plus long donnera une configuration plus optimale", style: TextStyle( fontSize: 16), textAlign: TextAlign.center,),
+                ),
+                Padding(padding: const EdgeInsets.symmetric(vertical: 15,horizontal:5),child:Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children:[
+                      const Column(children: [
+                        Icon(Icons.shutter_speed),
+                        Text("Rapide", style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic),),
+                      ],),
+                      SizedBox(width:MediaQuery.of(context).size.width/MediaQuery.of(context).size.height>1?MediaQuery.of(context).size.width/2:MediaQuery.of(context).size.width*0.7,
+                          child:Slider(
+                            value: _temps.toDouble(),
+                            activeColor: Color.fromARGB(255, 255-(_temps*1.3).toInt(), (_temps*1.3).toInt(), 0),
+                            min:5,
+                            max:240,
+                            divisions: 12,
+                            label: "$_temps secondes",
+                            onChanged: (value){
+                              setState(() {
+                                _temps=value.toInt();
+                                tempsCamcule = _temps;
+                              });
+                            },
+                          )
+                      ),
+                      const Column(children: [
+                        Icon(Icons.self_improvement),
+                        Text("Optimal",style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),)
+                      ],)
+
+                    ]
+                ),),
+              ],
+            ),
+          );}),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Valider'),
+              onPressed: () {
+                Navigator.pop(context,_temps);
+                recalcule();
+              },
+            ),
+          ],
+        );
+
+      },
+    );
+  }
+
 
   Future<DatumDeClasse> graine(DatumDeClasse datum) async {
     donnees = await litBD();
@@ -427,33 +465,6 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
     datum.affiniteElevesI = affiniteElevesI;
     return datum;
   }
-
-  /*Future<bool> arbreQuiGrandit() async {
-    await graine();//INITIALISATION
-    while(planEnregsitres.length<5 && maxTolere<10){//CALCULE
-      //print("iteration $monCompteur");
-      placesOccupees.clear();
-      placesOccupees = List<int>.from(placesOccupeesDebase);
-      print("places occuppees: $placesOccupees");
-      bool x = await TroncEtBranche(0);
-      if(x){
-        planEnregsitres.add(List<int>.from(placesOccupees));
-      }else{
-       maxTolere++;
-      }
-    }
-    print("Liste des plans $planEnregsitres");
-    print("fin");
-    return true;
-  }
-
-  Future<void> graine() async {
-    await litBD();
-    await litEleves();
-    await litConfig();
-    await fonctionInverse();
-    print("Places occuppées au départ: $placesOccupeesDebase");
-  }*/
 
   EnregistrePlan(){
     showDialog(
@@ -698,6 +709,13 @@ double affineLaFonction(int indiceDeMonEleve, int place, int importanceE, int im
   List<List<String>> affiniteElevesI = datum.affiniteElevesI;
   double points = 0;
   final int indiceDansConfgPlane = configurationPlane.indexOf(place);
+
+  for (int indiceami=0;indiceami<placesOccupees.length;indiceami++) {
+    if (placesOccupees[indiceami]>=0 && affiniteElevesI[indiceDeMonEleve].contains(nomsEleves[placesOccupees[indiceami]]) && distance(indiceDansConfgPlane,indiceami,colonne)>1){// on parcourt tous les elv placés, si l'un d'eux est un ami et est trop loin alors pouf
+      points+=importanceI*max(min(distance(indiceDansConfgPlane,indiceami,colonne)-1,2),0);
+    }
+  }
+
   if (place>0 && indiceDansConfgPlane%colonne>0 && configurationPlane[indiceDansConfgPlane-1] >=0 && placesOccupees[configurationPlane[indiceDansConfgPlane-1]]>=0){   //gauche
     String eleve = nomsEleves[placesOccupees[configurationPlane[indiceDansConfgPlane-1]]];
     if (affiniteElevesE[indiceDeMonEleve].contains(eleve))points+=importanceE;
@@ -851,4 +869,8 @@ double estimationPlacement(int place, int indiceDeMonEleve, DatumDeClasse datum)
     points+= deficitApres * (datum.parametresPlan.last/2);
   }
   return points;
+}
+
+double distance(indice1,indice2,colonne){
+  return pow((pow((indice2-indice1)%colonne,2)+pow((indice2-indice1)~/colonne,2)),0.5).toDouble();
 }
