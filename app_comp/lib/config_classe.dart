@@ -122,6 +122,7 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
     return Column(children: <Widget>[
       Expanded(child:
         ListView(
+          shrinkWrap: true,
         children: [
          Padding(padding: const EdgeInsets.all(8), child:
           Text("Cochez les case correspondant aux tables (les couloirs sont matérialisés par des places vides) ${Platform.isAndroid || Platform.isIOS?"\nUtilisez deux doigts pour vous déplacer dans la classe ":" "}", textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),),
@@ -129,6 +130,8 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
               padding: const EdgeInsets.all(8.0),
               child: Center(child:Scrollbar(
                 thumbVisibility: true,
+                thickness: 10,
+                interactive: true,
                 controller: monskrolleur,
                 child:SingleChildScrollView(
                     controller: monskrolleur,
@@ -139,7 +142,7 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
                       children: construitGrille(widget.colonnes, widget.rangees, config),
                     )),))
           ),
-          Image.asset("assets/creation_animation.gif"),
+          Image.asset("assets/creation_animation.gif",fit: MediaQuery.of(context).size.aspectRatio<1?BoxFit.fitWidth:BoxFit.fitHeight,),
           Padding(
             padding: const EdgeInsets.all(15),
             child:ElevatedButton.icon(

@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:plan_de_classe/menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
@@ -114,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Colors.orange,
             child: const Icon(Icons.image,shadows: [Shadow(offset: Offset(1, 1), color: Colors.grey)],),
           ),
-          FloatingActionButton.extended(
+          MediaQuery.of(context).size.aspectRatio>1?FloatingActionButton.extended(
             heroTag: "btn2",
             onPressed: ()=>{Navigator.push(
             context,
@@ -128,6 +129,19 @@ class _MyHomePageState extends State<MyHomePage> {
             tooltip: 'Créer une nouvelle classe',
             backgroundColor: Colors.green,
             icon:const Icon(Icons.add,),
+          ):FloatingActionButton(
+            heroTag: "btn2",
+            onPressed: ()=>{Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => const NouvelleClasse(classe: "",),
+                transitionDuration: const Duration(milliseconds: 500),
+                transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+              ),
+            )},
+            tooltip: 'Créer une nouvelle classe',
+            backgroundColor: Colors.green,
+            child:const Icon(Icons.add,),
           ),
         ],
       )),

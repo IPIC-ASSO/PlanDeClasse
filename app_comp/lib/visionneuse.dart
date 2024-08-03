@@ -36,13 +36,13 @@ class _NotesDeVersionState extends State<NotesDeVersion> {
     child:const Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("Version 2.2.0",
+          Text("Version 2.2.1",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,),
-          Text("mise en ligne le 10/02/24",
+          Text("mise en ligne le 03/08/24",
             style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
             textAlign: TextAlign.center,),
-          Padding(padding: EdgeInsets.all(15),child:Text("• Améliorations mineures de l'interface"))
+          Padding(padding: EdgeInsets.all(15),child:Text("• Améliorations mineures de l'interface \n• Améliorations substancielles de l'algorithme "))
         ],
       ),)
     );

@@ -252,7 +252,7 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                 width: configurationPlane[maPlaceDansLaConfig]>=0?2.0:1.0,
               ),// Background color
             ),
-            child: Text((configurationPlane[maPlaceDansLaConfig]>=0 && placeAvecDesGens[maPaceDansLeCompte]>=0)?nomsEleves[placeAvecDesGens[maPaceDansLeCompte]]:"", style:  const TextStyle(color: Colors.black),)
+            child: Text(overflow: TextOverflow.ellipsis,(configurationPlane[maPlaceDansLaConfig]>=0 && placeAvecDesGens[maPaceDansLeCompte]>=0)?nomsEleves[placeAvecDesGens[maPaceDansLeCompte]]:"", style:  const TextStyle(color: Colors.black),)
           ),)
         );
       }
@@ -621,7 +621,9 @@ placeEleve(DatumDeClasse datum, int indiceIteration) async {
   List<int> indiceMin = [];
   int indiceDeMonEleve = datum.listeElevesTriee[indiceIteration];
   if(!datum.placesOccupees.contains(indiceDeMonEleve)){ //élève pas encore placé
-    for (int place = 0; place < datum.placesOccupees.length; place++) {
+    List<int> placespossibles = placesPossiblesAffine(indiceDeMonEleve, 3, 3, datum);
+    //print(placespossibles);
+    for (int place in placespossibles) {
       //on parcourt toutes les places de la classe
       if (datum.placesOccupees[place] < 0) {
         //place libre
@@ -702,12 +704,108 @@ double OrdreAlpha(int indiceDeMonEleve, int place, int importanceParam, List<int
   return points;
 }
 
+List<int> placesPossiblesAffine(int indiceDeMonEleve,int importanceE,int importanceI,DatumDeClasse datum){
+  List<int> configurationPlane = datum.configurationPlane;
+  List<int> placesOccupees = datum.placesOccupees;
+  List<String> nomsEleves = datum.nomsEleves;
+  int colonne = datum.colonne;
+  List<String> affiniteElevesE = datum.affiniteElevesE[indiceDeMonEleve]; //on prend ses ennemis
+  List<String> affiniteElevesI = datum.affiniteElevesI[indiceDeMonEleve]; //on prend ses amis
+  List<int> places_possibles =[];
+  List<int> places_bon =[];
+  List<int> places_pas_bon =[];
+  if(importanceI>0){
+    for (String ami in affiniteElevesI){
+      if(placesOccupees.contains(nomsEleves.indexOf(ami))){// Est-ce que l'une des places a été assignée à l'ami?
+        int place_ami = placesOccupees.indexOf(nomsEleves.indexOf(ami));
+        for( int i=0;i<importanceI;i++)places_bon.addAll(carreLibre(place_ami, configurationPlane,placesOccupees,colonne));
+      }
+    }
+  }
+  if(places_possibles.isEmpty){
+    for( int i=0;i<placesOccupees.length;i++){
+      if(placesOccupees[i]<0){
+        places_possibles.add(i);
+      }
+    }
+  }
+  if(importanceE>0){
+    for (String ennemi in affiniteElevesE){
+      if(placesOccupees.contains(nomsEleves.indexOf(ennemi))){// Est-ce que l'une des places a été assignée à l'ami?
+        int place_ennemi = placesOccupees.indexOf(nomsEleves.indexOf(ennemi));
+        for( int i=0;i<importanceI;i++) {
+          places_pas_bon.addAll(carreLibre(
+              place_ennemi, configurationPlane, placesOccupees, colonne));
+        }
+      }
+    }
+  }
+  places_pas_bon.forEach((element) { places_bon.remove(element);});
+  places_possibles = places_bon;
+  places_pas_bon.toSet().toList();
+  if(places_possibles.isEmpty){
+    for( int i=0;i<placesOccupees.length;i++){
+      if(placesOccupees[i]<0 && !places_pas_bon.contains(i)){
+        places_possibles.add(i);
+      }
+    }
+  }
+
+  if(places_possibles.isEmpty){
+    for( int i=0;i<placesOccupees.length;i++){
+      if(placesOccupees[i]<0 ){
+        places_possibles.add(i);
+      }
+    }
+  }
+
+  return places_possibles;
+}
+
+List<int> carreLibre(int place,List<int> configurationPlane,List<int> placesOccupees,int colonne){//indice de la place dans placesOccupees
+  List<int> places_possibles =[];
+  final int indiceDansConfgPlane = configurationPlane.indexOf(place);
+  if(place>0 && indiceDansConfgPlane%colonne>0 && configurationPlane[indiceDansConfgPlane-1]>=0 && placesOccupees[place-1]<0){
+    places_possibles.add(place-1);
+  }
+  if(place< placesOccupees.length-1 && indiceDansConfgPlane%colonne<colonne-1 && configurationPlane[indiceDansConfgPlane+1]>=0 && placesOccupees[place+1]<0){
+    places_possibles.add(place+1);
+  }
+  if(indiceDansConfgPlane-colonne>=0) { //AVANT
+    int nouvIndiceDansConfgPlane = indiceDansConfgPlane - colonne;
+    if (configurationPlane[nouvIndiceDansConfgPlane] >= 0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane]] < 0) {
+      places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane]);
+    }
+    if(nouvIndiceDansConfgPlane>0 && configurationPlane[nouvIndiceDansConfgPlane-1]>=0 && nouvIndiceDansConfgPlane%colonne>0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane]-1]<0) {
+      places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane-1]);
+    }
+    if( configurationPlane[nouvIndiceDansConfgPlane+1]>=0 && nouvIndiceDansConfgPlane%colonne<colonne-1 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane+1]]<0){
+      places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane+1]);
+    }
+  }
+  if(indiceDansConfgPlane+colonne<configurationPlane.length) { //ARRIERE
+    int nouvIndiceDansConfgPlane = indiceDansConfgPlane + colonne;
+    if (configurationPlane[nouvIndiceDansConfgPlane] >= 0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane]] < 0) {
+      places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane]);
+    }
+    if(configurationPlane[nouvIndiceDansConfgPlane-1]>=0 && nouvIndiceDansConfgPlane%colonne>0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane]-1]<0) {
+      places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane-1]);
+    }
+    if(nouvIndiceDansConfgPlane<configurationPlane.length-1 &&configurationPlane[nouvIndiceDansConfgPlane+1]>=0 && nouvIndiceDansConfgPlane%colonne<colonne-1 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane+1]]<0){
+      places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane+1]);
+    }
+  }
+  return places_possibles;
+}
+
+
 double affineLaFonction(int indiceDeMonEleve, int place, int importanceE, int importanceI, DatumDeClasse datum, List<int> placesOccupees, List<String> nomsEleves) {
   List<int> configurationPlane = datum.configurationPlane;
   int colonne = datum.colonne;
-  List<List<String>> affiniteElevesE = datum.affiniteElevesE;
-  List<List<String>> affiniteElevesI = datum.affiniteElevesI;
+  List<List<String>> affiniteElevesE = datum.affiniteElevesE; //on prend ses ennemis
+  List<List<String>> affiniteElevesI = datum.affiniteElevesI; //on prend ses amis
   double points = 0;
+
   final int indiceDansConfgPlane = configurationPlane.indexOf(place);
 
   for (int indiceami=0;indiceami<placesOccupees.length;indiceami++) {
