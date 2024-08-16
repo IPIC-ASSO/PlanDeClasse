@@ -37,11 +37,11 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
     'Aide',
   ];
   static const _iconMenu = [
-    Icons.edit_calendar,
+    Icons.move_down,
     Icons.format_list_bulleted_outlined,
     Icons.settings_input_composite_outlined,
     Icons.manage_accounts,
-    Icons.oil_barrel_rounded,
+    Icons.view_comfy_alt_outlined,
     Icons.live_help_outlined,
   ];
   static const _colorMenu = [

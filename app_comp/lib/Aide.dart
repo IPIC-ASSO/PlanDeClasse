@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
           isScrollable: true,
           controller: controleTable,
           tabs: const [
-            Tab(icon: Icon(Icons.outdoor_grill), child:Text("Général",textAlign: TextAlign.center,)),
+            Tab(icon: Icon(Icons.looks_one_outlined), child:Text("Général",textAlign: TextAlign.center,)),
             Tab(icon: Icon(Icons.move_down), child:Text("Configuration de la classe",textAlign: TextAlign.center,)),
             Tab(icon: Icon(Icons.manage_accounts_outlined), child:Text("Configuration des élèves",textAlign: TextAlign.center,)),
             Tab(icon: Icon(Icons.settings_input_composite_outlined), child:Text("Configuration du plan",textAlign: TextAlign.center,)),
@@ -54,10 +55,21 @@ class _AideState extends State<Aide> with SingleTickerProviderStateMixin {
                   const TextSpan(
                     text: "Plan de Classe est une application qui doit vous permettre de créer des plans de classe facilement.\nLes étapes à suivre:"
                   ),
-                  TextSpan(
+                WidgetSpan(child:Container(
+                  padding:EdgeInsets.all(6),
+                    margin: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black,),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+
+
+                    child:
+                    Text(
                     style: theme.textTheme.bodyLarge,
-                    text: "\n\n1. Créer une classe, en indiquant l'agencement des tables (section Configuration)\n2. Entrez la liste des élèves (section Gestion des élèves)\n3. Indiquez quels sont les critères importants: faut-il avant tout trier les élèves par taille, respecter les affinités ou encore alterner les élèves calmes et agités... \n4. Paramétrez vos élèves: en fonction des critères que vous avez remplis, entrez les caractéristiques de chacun. \n5. C'est bon vous pouvez créer votre plan de classe: l'application vous proposera plusieurs variantes, et il est ensuite possible de modifier à nouveau les caractéristiques du plan de classe.\n 6.(bonus) Vous pouvez enregistrer le plan de classe sous la forme d'une image, sauvegardée dans les téléchargements de votre terminal. Il est également possible de voir toutes les images enregistrées depuis la Gallerie, sur la page principale."
-                  ),
+                    ""
+                        "1. Créer une classe, en indiquant l'agencement des tables (section Configuration)\n2. Entrez la liste des élèves (section Gestion des élèves)\n3. Indiquez quels sont les critères importants: faut-il avant tout trier les élèves par taille, respecter les affinités ou encore alterner les élèves calmes et agités... \n4. Paramétrez vos élèves: en fonction des critères que vous avez remplis, entrez les caractéristiques de chacun. \n5. C'est bon vous pouvez créer votre plan de classe: l'application vous proposera plusieurs variantes, et il est ensuite possible de modifier à nouveau les caractéristiques du plan de classe.\n 6.(bonus) Vous pouvez enregistrer le plan de classe sous la forme d'une image, sauvegardée dans les téléchargements de votre terminal. Il est également possible de voir toutes les images enregistrées depuis la Gallerie, sur la page principale."
+                  ),)),
                   const TextSpan(
                       text: "\n\nToutes les étapes vous seront proposées successivement par l'application: laissez vous guider! Il est également possible de naviguer entre les écrans en utilisant le bouton de menu en haut à gauche "
                   ),

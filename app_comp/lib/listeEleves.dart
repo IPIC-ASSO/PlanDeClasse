@@ -232,7 +232,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
     final x = await eleves;
     if (nomEleve.text.isEmpty){
       Usine.montreBiscotte(context,'Remplissez d\'abord le nom de l\'élève!',this);
-    } else if(x.entries.toList().any((element) => element.key.contains(nomEleve.text))){
+    } else if(x.entries.toList().any((element) => element.key==(nomEleve.text))){
       Usine.montreBiscotte(context,'Un élève du même nom existe déjà!',this);
     }else {
       x[nomEleve.text] = commentaireEleve.text;
@@ -286,7 +286,7 @@ class _ListeElevesState extends State<ListeEleves> with TickerProviderStateMixin
           child:ListView(
         shrinkWrap: true,
         children:[
-          const Text("Entrez dans le champs la liste de vos élèves, puis indiquez le délimiteur (une virgule, un point, un espace... Les élèves importés seront ajoutés à ceux déjà entrés.", textAlign: TextAlign.center,),
+          const Text("Entrez dans le champs la liste de vos élèves, puis indiquez le délimiteur (une virgule, un point, un espace...)\nLes élèves importés seront ajoutés à ceux déjà entrés.", textAlign: TextAlign.center,),
           Padding(padding:const EdgeInsets.all(7),child: TextField(
             controller: chaineElevesImport,
             keyboardType: TextInputType.multiline,

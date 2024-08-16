@@ -128,7 +128,7 @@ class _GestionElevesState extends State<GestionEleves> with TickerProviderStateM
                               );
                             },
                             label: const Text('Générer un plan de classe'),
-                            icon: const Icon(Icons.oil_barrel_rounded),
+                            icon: const Icon(Icons.view_comfy_alt_outlined),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF3086E8),
                               minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1.5),50),
