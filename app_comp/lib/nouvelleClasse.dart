@@ -75,7 +75,7 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
                 SizedBox(
                     width: 1000,
                     child:Padding(padding:const EdgeInsets.only(right: 4),child: Tooltip(
-                      message: "Maximum 10",
+                      message: "Maximum 15",
                       key: cleDerangee,
                       showDuration: Duration(seconds: 5),
                       decoration: BoxDecoration(color: Colors.red,borderRadius: BorderRadius.circular(10),),
@@ -130,7 +130,7 @@ class _NouvelleClasseState extends State<NouvelleClasse> with TickerProviderStat
             ElevatedButton(
               onPressed: (){
                 if(nomClasse.text.isNotEmpty && rangees.text.isNotEmpty && colonnes.text.isNotEmpty && isNumeric(rangees.text) && isNumeric(colonnes.text)){
-                  if(int.parse(rangees.text)>10) {
+                  if(int.parse(rangees.text)>15) {
                     cleDerangee.currentState?.ensureTooltipVisible();
                     foyerDeranger.requestFocus();
                   }

@@ -36,7 +36,7 @@ class _NotesDeVersionState extends State<NotesDeVersion> {
     child:const Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("Version 2.2.1",
+          Text("Version 2.2.2",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,),
           Text("mise en ligne le 03/08/24",
