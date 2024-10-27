@@ -37,7 +37,7 @@ class _ParametrePlanState extends State<ParametrePlan> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Création des élèves"),
+          title: const Text("Paramétrage"),
           actions: [
             IconButton(onPressed: ()=>{montrePropos(context, 3)},
                 icon: const Icon(Icons.info_outline))
@@ -303,7 +303,7 @@ class _ParametrePlanState extends State<ParametrePlan> {
                   padding: const EdgeInsets.all(5),
                   child: ListTile(
                     onTap: ()=>{
-                      dialogons(context, "Alternance Fort/En difficulté", "Le plan associera les élèves en difficulté avec ceux qui sont le plus à l'aise")
+                      dialogons(context, "Alternance fort/en difficultés", "Le plan associera les élèves en difficulté avec ceux qui sont le plus à l'aise")
                     },
                     trailing: const Icon(Icons.info_outline, color: Colors.black,weight: 1),
                     shape: const Border(

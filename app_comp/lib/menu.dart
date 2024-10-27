@@ -356,7 +356,7 @@ Widget Apropos(BuildContext context){
     ),
     applicationIcon: Tab(icon: Image.asset("assets/images/IPIC_logo_petit.png",width: 40,)),
     applicationName: 'Plan de Classe',
-    applicationVersion: '2.2.2',
+    applicationVersion: '2.2.3',
     applicationLegalese: '© 2024 IPIC-ASSO',
     aboutBoxChildren: aboutBoxChildren,
     child: const Text('A propos'),

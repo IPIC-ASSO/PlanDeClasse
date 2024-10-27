@@ -788,7 +788,7 @@ List<int> carreLibre(int place,List<int> configurationPlane,List<int> placesOccu
     if (configurationPlane[nouvIndiceDansConfgPlane] >= 0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane]] < 0) {
       places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane]);
     }
-    if(configurationPlane[nouvIndiceDansConfgPlane-1]>=0 && nouvIndiceDansConfgPlane%colonne>0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane]-1]<0) {
+    if(configurationPlane[nouvIndiceDansConfgPlane-1]>=0 && nouvIndiceDansConfgPlane%colonne>0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane-1]]<0) {
       places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane-1]);
     }
     if(nouvIndiceDansConfgPlane<configurationPlane.length-1 &&configurationPlane[nouvIndiceDansConfgPlane+1]>=0 && nouvIndiceDansConfgPlane%colonne<colonne-1 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane+1]]<0){
