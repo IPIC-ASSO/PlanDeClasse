@@ -69,6 +69,7 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
         enfants.add(_buildGridItems(context,ligne*col+lin));
       }
       mesLignes.add(TableRow(children: enfants));
+      
     }
     return mesLignes;
   }
@@ -136,11 +137,16 @@ class _ConfigClasseState extends State<ConfigClasse> with TickerProviderStateMix
                 child:SingleChildScrollView(
                     controller: monskrolleur,
                     scrollDirection: Axis.horizontal,
-                    child:Table(
-                      key: gridKey,
-                      defaultColumnWidth: const FixedColumnWidth(50),
-                      children: construitGrille(widget.colonnes, widget.rangees, config),
-                    )),))
+                    child:Column(
+                        children: [
+                        Table(
+                        key: gridKey,
+                        defaultColumnWidth: const FixedColumnWidth(50),
+                        children: construitGrille(widget.colonnes, widget.rangees, config),
+                        ),
+
+                        ],
+                        )))),
           ),
           Image.asset("assets/creation_animation.gif",fit: MediaQuery.of(context).size.aspectRatio<1?BoxFit.fitWidth:BoxFit.fitHeight,),
           Padding(

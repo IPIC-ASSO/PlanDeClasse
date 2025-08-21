@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
+import 'imprimer.dart';
 import 'menu.dart';
 import 'usineDeBiscottesGrillees.dart';
 
@@ -87,10 +88,26 @@ class _GallerieState extends State<Gallerie> with TickerProviderStateMixin {
                                               radius: 18.0,
                                               backgroundColor: Colors.white,
                                               child: Icon(Icons.close, color: Colors.red),
+                                            ),
                                           ),
                                         ),
                                       )
-                                      )
+                                      ,Positioned(
+                                          bottom: 0.0,
+                                          child: GestureDetector(
+                                            onTap:() async {
+                                              ImprimerImagePage.generatePdfWithImage(File(snapshot.data!.values.toList()[index]).readAsBytesSync());
+                                          },
+                                            child: const Align(
+                                              alignment: Alignment.topRight,
+                                              child: CircleAvatar(
+                                                radius: 18.0,
+                                                backgroundColor: Colors.white,
+                                                child: Icon(Icons.print, color: Colors.black),
+                                                ),
+                                              )
+                                            )
+                                          )
                                     ],
                                   )
                                 );

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:plan_de_classe/datumDeClasse.dart';
 import 'package:plan_de_classe/gestionEleves.dart';
+import 'package:plan_de_classe/imprimer.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
@@ -204,6 +205,20 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
                           icon:const Icon(Icons.save),
                           label: const Text("Enregistrer")
                         )
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.all(5),child:
+                    ElevatedButton.icon(
+                        onPressed: ()=>{
+                          ImprimerPlan()
+                        },
+                        style: ElevatedButton.styleFrom(
+                            minimumSize:Size(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.aspectRatio>1?2:1),50),
+                            padding: const EdgeInsets.all(15),
+                            backgroundColor: Colors.orange),
+                        icon:const Icon(Icons.print),
+                        label: const Text("Imprimer")
+                    )
                     ),
                   ],
                 ));
@@ -527,9 +542,25 @@ class _AlgoContraignantState extends State<AlgoContraignant> with TickerProvider
         Usine.montreBiscotte(context, 'Enregistré dans les téléchargements, dans le dossier "plan de classe"',this, true);
       });
     }catch(e){
-      Usine.montreBiscotte(context, "Erreur: $e",this);
+      Usine.montreBiscotte(context, "Une erreur est survenue: $e",this);
       dev.log(e.toString());
     }
+  }
+
+  ImprimerPlan(){
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+    try{
+      conduiteDeTir.capture().then((img) async {
+        await ImprimerImagePage.generatePdfWithImage(img!);
+      });
+    }catch(e){
+      Usine.montreBiscotte(context, "Une erreur est survenue: $e",this);
+      dev.log(e.toString());
+    }
+
   }
 
   recalcule() {
@@ -776,7 +807,7 @@ List<int> carreLibre(int place,List<int> configurationPlane,List<int> placesOccu
     if (configurationPlane[nouvIndiceDansConfgPlane] >= 0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane]] < 0) {
       places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane]);
     }
-    if(nouvIndiceDansConfgPlane>0 && configurationPlane[nouvIndiceDansConfgPlane-1]>=0 && nouvIndiceDansConfgPlane%colonne>0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane]-1]<0) {
+    if(nouvIndiceDansConfgPlane>0 && configurationPlane[nouvIndiceDansConfgPlane-1]>=0 && nouvIndiceDansConfgPlane%colonne>0 && configurationPlane[nouvIndiceDansConfgPlane]>=0 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane]-1]<0) { //TODO comprendre pourquoi |configurationPlane[nouvIndiceDansConfgPlane]| peut être <0
       places_possibles.add(configurationPlane[nouvIndiceDansConfgPlane-1]);
     }
     if( configurationPlane[nouvIndiceDansConfgPlane+1]>=0 && nouvIndiceDansConfgPlane%colonne<colonne-1 && placesOccupees[configurationPlane[nouvIndiceDansConfgPlane+1]]<0){

@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:plan_de_classe/menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:window_manager/window_manager.dart';
 import 'dart:math';
 import 'Gallerie.dart';
 import 'nouvelleClasse.dart';
